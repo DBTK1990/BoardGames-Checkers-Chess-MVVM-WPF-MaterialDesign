@@ -8,10 +8,10 @@
         xmlns:view="clr-namespace:Chess0.View"
         xmlns:viewModel="clr-namespace:Chess0.ViewModel"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+       
         mc:Ignorable="d"
         Title="MainWindow"
-        Width="723.704" Height="1602.356" WindowStartupLocation="CenterScreen" >
+        Width="803.612" Height="782.253" WindowStartupLocation="Manual"  ResizeMode="NoResize">
     <Window.Resources>
         <viewModel:MainWindowViewModel x:Key="mwvm"/>
     </Window.Resources>
@@ -53,6 +53,7 @@
                 <view:BoardUC />
                 
             </StackPanel>
+            <!--end chess page-->
             <!--checkers page-->
             <StackPanel Background="Aqua">
                 

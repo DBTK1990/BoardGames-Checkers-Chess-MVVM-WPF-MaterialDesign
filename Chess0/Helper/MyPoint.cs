@@ -46,9 +46,21 @@ namespace Chess0.Helper
         }
         public static bool operator !=(MyPoint a, MyPoint b)
         {
-            
-            return a.X != b.X || a.Y != b.Y ? true : false;
 
+          
+                return a.X != b.X || a.Y != b.Y ? true : false;
+          
+          
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
     

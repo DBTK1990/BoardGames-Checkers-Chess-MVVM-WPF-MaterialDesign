@@ -29,7 +29,7 @@
 
 
 
-            <ListBox ItemsSource="{Binding DeadWhite, Source={StaticResource bvm}}">
+            <ListBox MinWidth="25" MinHeight="25" ItemsSource="{Binding DeadWhite, Source={StaticResource bvm}}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel    Orientation="Vertical"/>
@@ -105,7 +105,7 @@
 
 
             
-                <ListBox  ItemsSource="{Binding DeadBlack, Source={StaticResource bvm}}">
+                <ListBox MinWidth="25" MinHeight="25" ItemsSource="{Binding DeadBlack, Source={StaticResource bvm}}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>
