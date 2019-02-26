@@ -1,0 +1,128 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ViewModel="clr-namespace:Chess0.ViewModel"
+             xmlns:Chess0="clr-namespace:Chess0"
+             xmlns:local="clr-namespace:Chess0.View"
+             x:Class="Chess0.View.BoardUC"
+             mc:Ignorable="d"
+  
+             >
+    <UserControl.Resources>
+        <ViewModel:BoardViewModel x:Key="bvm"/>
+    </UserControl.Resources>
+
+
+    <materialDesign:DialogHost  Identifier="GameOver" >
+        <materialDesign:DialogHost.DialogContentTemplate>
+            <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
+                <StackPanel>
+                    <TextBlock Text="{Binding Winner,StringFormat=player {0} is the winner}"></TextBlock>
+                    <Button Content="Restart Game" Command="{Binding RestartCommand ,Source={StaticResource bvm}}" />
+                </StackPanel>
+            </DataTemplate>
+        </materialDesign:DialogHost.DialogContentTemplate>
+        <StackPanel Orientation="Horizontal">
+
+
+
+            <ListBox ItemsSource="{Binding DeadWhite, Source={StaticResource bvm}}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel    Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Image Width="25" Height="25" Source="{Binding ImagePiece}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+
+            <ItemsControl x:Name="BoardUI" ItemsSource="{Binding Tiles, Source={StaticResource bvm}}" DockPanel.Dock="Bottom">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid HorizontalAlignment="Center" Width="640" Height="640">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+
+                            </Grid.RowDefinitions>
+
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="Border" BorderThickness="2" BorderBrush="#FF703E3E">
+                            <Canvas x:Name="Canvas"  Background="{Binding Color}">
+                                <Button Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" Command="{Binding ButtonCommand, Source={StaticResource bvm}}" CommandParameter="{Binding Pos}" Background="{Binding Color,Source={StaticResource bvm}}" >
+                                    <Image Source="{Binding Piece.ImagePiece}" RenderTransformOrigin="0.636,4.091" />
+                                </Button>
+                                <Rectangle Visibility="{Binding MarkVisibility}" Stroke="{Binding MarkColor}"  Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" StrokeThickness="2"/>
+
+
+                            </Canvas>
+                        </Border>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemContainerStyle>
+
+
+
+                    <Style>
+                        <Setter Property="Grid.Row" Value="{Binding Pos.X}"/>
+                        <Setter Property="Grid.Column" Value="{Binding Pos.Y}"/>
+
+
+                    </Style>
+
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+           
+
+
+            
+                <ListBox  ItemsSource="{Binding DeadBlack, Source={StaticResource bvm}}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Image Width="25" Height="25" Source="{Binding ImagePiece}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+
+
+          
+
+
+        </StackPanel>
+    </materialDesign:DialogHost>
+</UserControl>
