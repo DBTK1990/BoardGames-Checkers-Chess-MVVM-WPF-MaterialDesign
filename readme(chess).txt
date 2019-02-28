@@ -1,6 +1,1 @@
-need to connect resource photo to piece
-
-need to make move piece
-
-need to make simulate 
-
+NEED TO DECIDE WHAT TO DO WITH RULES CLASS TO MAKE IT COMPATBLE WITH DYNMIC USEGE OF CLASS GAMEBOARD

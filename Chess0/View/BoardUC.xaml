@@ -8,20 +8,16 @@
              xmlns:Chess0="clr-namespace:Chess0"
              xmlns:local="clr-namespace:Chess0.View"
              x:Class="Chess0.View.BoardUC"
-             mc:Ignorable="d"
-  
-             >
-    <UserControl.Resources>
-        <ViewModel:BoardViewModel x:Key="bvm"/>
-    </UserControl.Resources>
+             mc:Ignorable="d">
+
 
 
     <materialDesign:DialogHost  Identifier="GameOver" >
         <materialDesign:DialogHost.DialogContentTemplate>
-            <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
+            <DataTemplate >
                 <StackPanel>
                     <TextBlock Text="{Binding Winner,StringFormat=player {0} is the winner}"></TextBlock>
-                    <Button Content="Restart Game" Command="{Binding RestartCommand ,Source={StaticResource bvm}}" />
+                    <Button Content="Restart Game" Command="{Binding DataContext.RestartCommand,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" />
                 </StackPanel>
             </DataTemplate>
         </materialDesign:DialogHost.DialogContentTemplate>
@@ -29,7 +25,7 @@
 
 
 
-            <ListBox MinWidth="25" MinHeight="25" ItemsSource="{Binding DeadWhite, Source={StaticResource bvm}}">
+            <ListBox MinWidth="25" MinHeight="25" ItemsSource="{Binding DataContext.DeadWhite ,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel    Orientation="Vertical"/>
@@ -43,7 +39,7 @@
             </ListBox>
 
 
-            <ItemsControl x:Name="BoardUI" ItemsSource="{Binding Tiles, Source={StaticResource bvm}}" DockPanel.Dock="Bottom">
+        <ItemsControl x:Name="BoardUI" ItemsSource="{Binding DataContext.Tiles ,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" DockPanel.Dock="Bottom">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Grid HorizontalAlignment="Center" Width="640" Height="640">
@@ -77,7 +73,7 @@
                     <DataTemplate>
                         <Border x:Name="Border" BorderThickness="2" BorderBrush="#FF703E3E">
                             <Canvas x:Name="Canvas"  Background="{Binding Color}">
-                                <Button Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" Command="{Binding ButtonCommand, Source={StaticResource bvm}}" CommandParameter="{Binding Pos}" Background="{Binding Color,Source={StaticResource bvm}}" >
+                                <Button Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" Command="{Binding DataContext.ButtonCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" CommandParameter="{Binding Pos}" Background="{Binding Background ,ElementName=Canvas}">
                                     <Image Source="{Binding Piece.ImagePiece}" RenderTransformOrigin="0.636,4.091" />
                                 </Button>
                                 <Rectangle Visibility="{Binding MarkVisibility}" Stroke="{Binding MarkColor}"  Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" StrokeThickness="2"/>
@@ -93,19 +89,19 @@
 
 
                     <Style>
-                        <Setter Property="Grid.Row" Value="{Binding Pos.X}"/>
-                        <Setter Property="Grid.Column" Value="{Binding Pos.Y}"/>
+                        <Setter Property="Grid.Row" Value="{Binding Pos.X }"/>
+                        <Setter Property="Grid.Column" Value="{Binding Pos.Y }"/>
 
 
                     </Style>
 
                 </ItemsControl.ItemContainerStyle>
             </ItemsControl>
-           
 
 
-            
-                <ListBox MinWidth="25" MinHeight="25" ItemsSource="{Binding DeadBlack, Source={StaticResource bvm}}">
+
+
+            <ListBox MinWidth="25" MinHeight="25" ItemsSource="{Binding DataContext.DeadBlack ,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>
@@ -113,7 +109,7 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Image Width="25" Height="25" Source="{Binding ImagePiece}"/>
+                        <Image Width="25" Height="25" Source="{Binding ImagePiece}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

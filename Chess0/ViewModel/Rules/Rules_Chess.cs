@@ -9,11 +9,7 @@ namespace Chess0.ViewModel
 {
     public class Rules_Chess
     {
-     
-        
-
-
-
+  
         public static void SimulatePath(TileModel Me ,ref ObservableBoardCollection<TileModel> Tiles)
         {
             HashSet<MyPoint> BlockedPath = new HashSet<MyPoint>();
@@ -72,17 +68,18 @@ namespace Chess0.ViewModel
         }
 
 
-        private static void CheckQueenTherthend(State PlayerTurn,ref ObservableBoardCollection<TileModel> tiles)
+        private static void CheckQueenTherthend(State PlayerTurn,ref ObservableBoardCollection<TileModel> Tiles)
         {
 
-            foreach (TileModel tile in tiles)
+
+            for(var tileIndex = 0; tileIndex < Tiles.Count; tileIndex++) 
             {
-                if (tile.Piece != null && tile.Piece.Player == PlayerTurn)
+                if (Tiles[tileIndex].Piece != null && Tiles[tileIndex].Piece.Player == PlayerTurn)
                 {
 
-                    MyPoint Pos = tile.Piece.Pos;
+                    MyPoint Pos = Tiles[tileIndex].Piece.Pos;
                     HashSet<MyPoint> BlockedPath = new HashSet<MyPoint>();
-                    List<MyPoint> PossiablePath = tile.Piece.PossiablePath();
+                    List<MyPoint> PossiablePath = Tiles[tileIndex].Piece.PossiablePath();
 
                     for (var CheckIndex = 0; CheckIndex < PossiablePath.Count; CheckIndex++)
                     {
@@ -91,13 +88,12 @@ namespace Chess0.ViewModel
                         if (!BlockedPath.Contains(Check))
                         {
                             Pos += Check;
-                            if (tiles[Pos].Piece != null)
-                                if (tiles[Pos].Piece is Piece_Queen_M && tiles[Pos].Piece.Player != PlayerTurn)
+                            if (Tiles[Pos].Piece != null)
+                                if (Tiles[Pos].Piece is Piece_Queen_M && Tiles[Pos].Piece.Player != PlayerTurn)
                                 {
                                     BlockedPath.Add(Check);
-                                    tile.MarkColor = "Purple";
-                                    tile.MarkVisibility = "Visiable";
-                                    break;
+                                    Tiles[tileIndex].MarkColor = "Purple";
+                                    Tiles[tileIndex].MarkVisibility = "Visiable";
                                 }
                                 else
                                     BlockedPath.Add(Check);
@@ -106,7 +102,7 @@ namespace Chess0.ViewModel
 
                         if ((CheckIndex + 1) < PossiablePath.Count && PossiablePath[CheckIndex] != PossiablePath[CheckIndex + 1])
                         {
-                            Pos = tile.Pos;
+                            Pos = Tiles[tileIndex].Pos;
                         }
 
                     }

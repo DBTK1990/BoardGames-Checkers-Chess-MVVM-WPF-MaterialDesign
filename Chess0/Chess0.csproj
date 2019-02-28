@@ -80,8 +80,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ChessBoardViewModel.cs" />
+    <Compile Include="ViewModel\BoardGameViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="ViewModel\Rules_Chess.cs" />
+    <Compile Include="ViewModel\Rules\Rules_Chess.cs" />
     <Compile Include="View\BoardUC.xaml.cs">
       <DependentUpon>BoardUC.xaml</DependentUpon>
     </Compile>

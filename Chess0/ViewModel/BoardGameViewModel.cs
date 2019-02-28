@@ -10,10 +10,9 @@ using System.Collections.ObjectModel;
 
 namespace Chess0.ViewModel
 {
-    public enum CompassE { North, North_East, East, South_East, South, South_Wast, Wast, North_Wast };
-
-    class ChessBoardViewModel : NotifyPropertyChanged 
+    internal abstract class BoardGameViewModel
     {
+
         private ObservableBoardCollection<TileModel> tiles;
         public ObservableBoardCollection<TileModel> Tiles
         {
@@ -26,6 +25,7 @@ namespace Chess0.ViewModel
                 tiles = value;
             }
         }
+
         private ObservableCollection<IPieceModel> dead_white;
         public ObservableCollection<IPieceModel> DeadWhite
         {
@@ -54,7 +54,8 @@ namespace Chess0.ViewModel
         }
 
         private TileModel focus;
-        public TileModel Focus {
+        public TileModel Focus
+        {
             get
             {
                 return focus;
@@ -98,7 +99,7 @@ namespace Chess0.ViewModel
             private set
             {
                 buttoncommand = value;
-              
+
             }
         }
 
@@ -119,10 +120,10 @@ namespace Chess0.ViewModel
         }
 
 
-        public ChessBoardViewModel() 
+        public BoardGameViewModel()
         {
             Tiles = new ObservableBoardCollection<TileModel>(8);
-          
+
             Focus = null;
 
             InitBoard();
@@ -132,10 +133,11 @@ namespace Chess0.ViewModel
 
             PlayerTurn = State.Black;
 
-           // testdeadPieces();
-           
+            // testdeadPieces();
+
             ButtonCommand = new RelayCommand(MyOnClick);
             RestartCommand = new RelayCommand(RestartGame);
+           
             //setgamerules();
 
 
@@ -162,39 +164,16 @@ namespace Chess0.ViewModel
 
         }
 
-        private void RestartGame(object ob)
-        {
+        protected abstract void RestartGame(object ob);
 
-            DeadWhite.Clear();
-            DeadBlack.Clear();
+        protected abstract void InitPieces();
 
-            for (var LoopIndex = 0; LoopIndex < 64; LoopIndex++)
-            {
-                Tiles[LoopIndex].Piece = null;
-            }
+        protected abstract bool WinConditon();
 
-            InitPieces();
-
-            DialogHost.CloseDialogCommand.Execute(null, null);
-
-         }
-    
-        private void InitPieces()
-        {
-            ChessPlayer white = new ChessPlayer(State.White);
-            ChessPlayer black = new ChessPlayer(State.Black);
-
-            for (var i = 0; i < white.Pieces.Count; i++)
-            {
-                Tiles[white.Pieces[i].Pos].Piece = white.Pieces[i];
-                Tiles[black.Pieces[i].Pos].Piece = black.Pieces[i];
-
-            }
-        }
 
         private void MyOnClick(object o)
         {
-            MyPoint tileIndex= (MyPoint)o;
+            MyPoint tileIndex = (MyPoint)o;
 
 
             if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visiable")
@@ -208,55 +187,55 @@ namespace Chess0.ViewModel
                     EatPiece(Focus.Pos, tileIndex);
                 }
 
-                PlayerTurn=Rules_Chess.PlayerTurnSwitch(ref focus, ref tiles);
+                PlayerTurn = Rules_Chess.PlayerTurnSwitch(ref focus, ref tiles);
             }
-            else if (Tiles[tileIndex].Piece!=null)
-                {
+            else if (Tiles[tileIndex].Piece != null)
+            {
                 if (Focus == null && Tiles[tileIndex].Piece.Player == PlayerTurn || (Focus != null && Tiles[tileIndex].Piece.Player == PlayerTurn))
                 {
                     Focus = Tiles[tileIndex];
-                    Rules_Chess.SimulatePath(Focus,ref tiles);
+                    Rules_Chess.SimulatePath(Focus, ref tiles);
                 }
-                }
+            }
 
         }
 
 
         //rules function
 
-       
+
         /// <summary>
         ///queen is therthend????
         /// </summary>
-        
 
 
 
 
-        public void MovePiece(MyPoint point ,MyPoint moveTo)
+
+        public void MovePiece(MyPoint point, MyPoint moveTo)
         {
 
-            Tiles[moveTo].Piece= Tiles[point].Piece;
+            Tiles[moveTo].Piece = Tiles[point].Piece;
             Tiles[point].Piece.Pos = moveTo;
-            
+
             Tiles[point].Piece = null;
 
             Tiles[moveTo].Piece.MovesMade++;
 
             Focus = Tiles[moveTo];
-            
-        
+
+
         }
 
-       
-        public  void EatPiece(MyPoint point, MyPoint moveTo)
+
+        public void EatPiece(MyPoint point, MyPoint moveTo)
         {
-            if (Tiles[moveTo].Piece is Piece_Queen_M)
+            if (WinConditon())
             {
                 GameOverModel gameOver = new GameOverModel(this.PlayerTurnS);
                 DialogHost.OpenDialogCommand.Execute(gameOver, null);
-               // DialogHost.Show(gameOver, "GameOver");
-                
+                // DialogHost.Show(gameOver, "GameOver");
+
             }
 
 
@@ -271,38 +250,14 @@ namespace Chess0.ViewModel
 
             }
 
-            
-                Tiles[moveTo].Piece = Tiles[point].Piece;
-                Tiles[point].Piece.Pos = moveTo;
 
-                Tiles[point].Piece = null;
-
-                Tiles[moveTo].Piece.MovesMade++;
-
-                Focus = Tiles[moveTo];
-            
-           
+            MovePiece(point,moveTo);
 
         }
 
+        
 
 
-        #region testing chess dead
-
-        private void testdeadPieces()
-        {
-            ChessPlayer white = new ChessPlayer(State.White);
-            ChessPlayer black = new ChessPlayer(State.Black);
-
-            for (var i = 0; i < white.Pieces.Count; i++)
-            {
-                DeadWhite.Add(white.Pieces[i]);
-                DeadBlack.Add(black.Pieces[i]);
-            }
-
-        }
-
-        #endregion
 
     }
 }

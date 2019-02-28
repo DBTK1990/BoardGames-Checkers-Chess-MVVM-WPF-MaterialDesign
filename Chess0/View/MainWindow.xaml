@@ -6,14 +6,15 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Chess0"
         xmlns:view="clr-namespace:Chess0.View"
-        xmlns:viewModel="clr-namespace:Chess0.ViewModel"
+        xmlns:ViewModel="clr-namespace:Chess0.ViewModel"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
        
         mc:Ignorable="d"
         Title="MainWindow"
         Width="803.612" Height="782.253" WindowStartupLocation="Manual"  ResizeMode="NoResize">
     <Window.Resources>
-        <viewModel:MainWindowViewModel x:Key="mwvm"/>
+        <ViewModel:MainWindowViewModel x:Key="mwvm"/>
+        <ViewModel:ChessBoardViewModel x:Key="chessBVM"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -48,15 +49,19 @@
 
         <materialDesign:Transitioner SelectedIndex="{Binding SelectedGame,Source={StaticResource mwvm}}" Grid.Row="1">
             <!--chess page-->
-            <StackPanel Grid.Row="1" x:Name="mainWindow" Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0">
+            <StackPanel Grid.Row="1" x:Name="ChessWindow" Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0">
 
-                <view:BoardUC />
-                
+                <view:BoardUC DataContext="{StaticResource chessBVM}" />
+
+
+
+
             </StackPanel>
-            <!--end chess page-->
             <!--checkers page-->
-            <StackPanel Background="Aqua">
-                
+            <StackPanel Background="Purple" Grid.Row="1" x:Name="ChekersWindow" Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" >
+               
+             
+
             </StackPanel>
             
         </materialDesign:Transitioner>

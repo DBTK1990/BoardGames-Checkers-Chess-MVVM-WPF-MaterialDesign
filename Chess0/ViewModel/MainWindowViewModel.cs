@@ -26,6 +26,8 @@ namespace Chess0.ViewModel
             }
         }
 
+      
+
         private ICommand choosegame;
         public ICommand ChooseGame
         {
