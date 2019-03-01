@@ -302,9 +302,6 @@ namespace Chess0.ViewModel
 
         #endregion  Helpr Function
 
-
-
-
         #region Testing
 
         private void testdeadPieces()
@@ -321,6 +318,5 @@ namespace Chess0.ViewModel
         }
 
         #endregion
-
     }
 }
