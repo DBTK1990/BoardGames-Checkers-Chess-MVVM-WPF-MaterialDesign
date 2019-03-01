@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using Chess0.Helper;
-
+using Chess0.ViewModel;
 
 namespace Chess0.Model.Peices
 {
@@ -10,38 +10,40 @@ namespace Chess0.Model.Peices
 
     class Piece_Queen_M : Compass, IPieceModel 
     {
-        private string Path {  get; set; }
+        private string path;
+        public string Path
+        {
+            get => path;
+            private set => path = value;
+        }
 
         private MyPoint pos;
         public MyPoint Pos
         {
-            get
-            {
-                return pos;
-            }
-
-            set
-            {
-
-                pos = value;
-            }
+            get => pos;
+            set => pos = value;
         }
 
         private State player;
         public State Player
         {
-            get
-            {
-                return player;
-            }
-            set
-            {
-                player = value;
-            }
-        }
-        public int MovesMade { get; set; }
+            get => player;
+            set => player = value;
 
-        public BitmapImage ImagePiece { get; set; }
+        }
+        private int movesmade;
+        public int MovesMade
+        {
+            get => movesmade;
+            set => movesmade = value;
+        }
+
+        private BitmapImage imagepiece;
+        public BitmapImage ImagePiece
+        {
+            get => imagepiece;
+            set => imagepiece = value;
+        }
 
         public Piece_Queen_M(MyPoint pos,State player)
         {
@@ -97,39 +99,40 @@ namespace Chess0.Model.Peices
 
     class Piece_King_M : Compass, IPieceModel
     {
-        private string Path { get; set; }
+        private string path;
+        public string Path
+        {
+            get => path;
+            private set => path = value;
+        }
 
         private MyPoint pos;
         public MyPoint Pos
         {
-            get
-            {
-                return pos;
-            }
-
-            set
-            {
-  
-                pos = value;
-            }
+            get => pos;
+            set => pos = value;
         }
 
         private State player;
         public State Player
         {
-            get
-            {
-                return player;
-            }
-            set
-            {
-                player = value;
-            }
+            get => player;
+            set => player = value;
+
+        }
+        private int movesmade;
+        public int MovesMade
+        {
+            get => movesmade;
+            set => movesmade = value;
         }
 
-        public int MovesMade { get; set; }
-
-        public BitmapImage ImagePiece { get; set; }
+        private BitmapImage imagepiece;
+        public BitmapImage ImagePiece
+        {
+            get => imagepiece;
+            set => imagepiece = value;
+        }
 
         public Piece_King_M(MyPoint pos, State player)
         {
@@ -185,37 +188,40 @@ namespace Chess0.Model.Peices
 
     class Piece_Rook_M: Compass,IPieceModel
     {
-        public string Path { get; set; }
+        private string path;
+        public string Path
+        {
+            get => path;
+            private set => path = value;
+        }
 
         private MyPoint pos;
         public MyPoint Pos
         {
-            get
-            {
-                return pos;
-            }
-
-            set
-            {
-
-                pos = value;
-            }
+            get => pos;
+            set => pos = value;
         }
+
         private State player;
         public State Player
         {
-            get
-            {
-                return player;
-            }
-            set
-            {
-                player = value;
-            }
-        }
-        public int MovesMade { get; set; }
+            get => player;
+            set => player = value;
 
-        public BitmapImage ImagePiece { get; set; }
+        }
+        private int movesmade;
+        public int MovesMade
+        {
+            get => movesmade;
+            set => movesmade = value;
+        }
+
+        private BitmapImage imagepiece;
+        public BitmapImage ImagePiece
+        {
+            get => imagepiece;
+            set => imagepiece = value;
+        }
 
         public Piece_Rook_M(MyPoint pos, State player)
         {
@@ -267,39 +273,40 @@ namespace Chess0.Model.Peices
 
     class Piece_Bishop_M : Compass, IPieceModel
     {
-        public string Path { get; set; }
+        private string path;
+        public string Path
+        {
+            get => path;
+            private set => path = value;
+        }
 
         private MyPoint pos;
         public MyPoint Pos
         {
-            get
-            {
-                return pos;
-            }
-
-            set
-            {
-
-                pos = value;
-            }
+            get => pos;
+            set => pos = value;
         }
 
         private State player;
         public State Player
         {
-            get
-            {
-                return player;
-            }
-            set
-            {
-                player = value;
-            }
+            get => player;
+            set => player = value;
+
+        }
+        private int movesmade;
+        public int MovesMade
+        {
+            get => movesmade;
+            set => movesmade = value;
         }
 
-        public int MovesMade { get; set; }
-        public BitmapImage ImagePiece { get; set; }
-
+        private BitmapImage imagepiece;
+        public BitmapImage ImagePiece
+        {
+            get => imagepiece;
+            set => imagepiece = value;
+        }
         public Piece_Bishop_M(MyPoint pos, State player)
         {
             switch (player)
@@ -349,40 +356,40 @@ namespace Chess0.Model.Peices
 
     class Piece_Knight_M : Compass, IPieceModel
     {
-        public string Path { get; set; }
+        private string path;
+        public string Path
+        {
+            get => path;
+            private set => path = value;
+        }
 
         private MyPoint pos;
         public MyPoint Pos
         {
-            get
-            {
-                return pos;
-            }
-
-            set
-            {
-
-                pos = value;
-            }
+            get => pos;
+            set => pos = value;
         }
-
 
         private State player;
         public State Player
         {
-            get
-            {
-                return player;
-            }
-            set
-            {
-                player = value;
-            }
+            get => player;
+            set => player = value;
+
+        }
+        private int movesmade;
+        public int MovesMade
+        {
+            get => movesmade;
+            set => movesmade = value;
         }
 
-        public int MovesMade { get; set; }
-
-        public BitmapImage ImagePiece { get; set; }
+        private BitmapImage imagepiece;
+        public BitmapImage ImagePiece
+        {
+            get => imagepiece;
+            set => imagepiece = value;
+        }
 
         public Piece_Knight_M(MyPoint pos, State player)
         {
@@ -433,36 +440,40 @@ namespace Chess0.Model.Peices
     
    class Piece_Pawn_M : Compass, IPieceModel
     {
-        public string Path { get; set; }
+        private string path;
+        public string Path
+        {
+            get => path;
+            private set => path = value;
+        }
 
         private MyPoint pos;
         public MyPoint Pos
         {
-            get
-            {
-                return pos;
-            }
-
-            set
-            {
-                pos = value;
-            }
+            get => pos;
+            set => pos = value;
         }
+
         private State player;
         public State Player
         {
-            get
-            {
-                return player;
-            }
-            set
-            {
-                player = value;
-            }
-        } 
+            get => player;
+            set => player = value;
 
-        public int MovesMade { get; set; }
-        public BitmapImage ImagePiece { get; set; }
+        }
+        private int movesmade;
+        public int MovesMade
+        {
+            get => movesmade;
+            set => movesmade = value;
+        }
+
+        private BitmapImage imagepiece;
+        public BitmapImage ImagePiece
+        {
+            get => imagepiece;
+            set => imagepiece = value;
+        }
 
         public Piece_Pawn_M(MyPoint pos, State player)
         {

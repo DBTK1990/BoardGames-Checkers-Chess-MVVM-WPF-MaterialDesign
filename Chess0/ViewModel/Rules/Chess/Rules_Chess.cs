@@ -1,7 +1,7 @@
 ﻿using Chess0.Helper;
 using Chess0.Model;
 using Chess0.Model.Peices;
-using System;
+using Chess0.ViewModel.Rules.Chess;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 

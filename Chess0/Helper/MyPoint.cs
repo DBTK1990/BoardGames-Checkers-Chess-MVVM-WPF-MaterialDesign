@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 namespace Chess0.Helper
 {
 
-    public enum State { White = 0, Black = 1 }
-
     public class MyPoint
         {
             public double X { get; set; }

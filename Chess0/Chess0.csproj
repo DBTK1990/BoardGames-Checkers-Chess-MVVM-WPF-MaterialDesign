@@ -71,7 +71,7 @@
     <Compile Include="Helper\ObservableBoardCollection.cs" />
     <Compile Include="Model\DialogGameOverModel.cs" />
     <Compile Include="Model\Peices Chess\Compass.cs" />
-    <Compile Include="Model\Peices Chess\Pieces_Chess.cs" />
+    <Compile Include="Model\Peices Chess\Pieces.cs" />
     <Compile Include="Model\Peices Chess\IPieceModel.cs" />
     <Compile Include="Model\TileModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -81,8 +81,9 @@
     </Compile>
     <Compile Include="ViewModel\BoardViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\Rules\Chess\ChessPlayer.cs" />
     <Compile Include="ViewModel\Rules\IRules.cs" />
-    <Compile Include="ViewModel\Rules\Rules_Chess.cs" />
+    <Compile Include="ViewModel\Rules\Chess\Rules_Chess.cs" />
     <Compile Include="View\BoardUC.xaml.cs">
       <DependentUpon>BoardUC.xaml</DependentUpon>
     </Compile>

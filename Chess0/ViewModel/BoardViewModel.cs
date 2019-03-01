@@ -2,13 +2,14 @@
 using Chess0.Model;
 using Chess0.Model.Peices;
 using Chess0.ViewModel.Rules;
-using MaterialDesignThemes.Wpf;
+using Chess0.ViewModel.Rules.Chess;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Chess0.ViewModel
 {
     public enum CompassE { North, North_East, East, South_East, South, South_Wast, Wast, North_Wast };
+    public enum State { White = 0, Black = 1 }
 
     class BoardViewModel 
     {
