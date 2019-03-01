@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Chess0.Model
 {
-    public class GameOverModel
+    public class DialogGameOverModel
     {
         private string winner=string.Empty;
         public string Winner { get { return winner; }set { winner = value; } }
 
-        public GameOverModel(string player)
+        public DialogGameOverModel(string player)
         {
             Winner = player;
         }

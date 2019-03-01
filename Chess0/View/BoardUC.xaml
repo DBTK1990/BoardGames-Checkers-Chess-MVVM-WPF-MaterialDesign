@@ -15,9 +15,9 @@
     <materialDesign:DialogHost  Identifier="GameOver" >
         <materialDesign:DialogHost.DialogContentTemplate>
             <DataTemplate >
-                <StackPanel>
-                    <TextBlock Text="{Binding Winner,StringFormat=player {0} is the winner}"></TextBlock>
-                    <Button Content="Restart Game" Command="{Binding DataContext.RestartCommand,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" />
+                <StackPanel Margin="7.5">
+                    <TextBlock Text="{Binding Winner,StringFormat=player {0} is the winner}" Margin="3 3 3 3" ></TextBlock>
+                    <Button Content="Restart Game" Command="{Binding DataContext.RestartCommand,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" Margin="3 3 3 3" />
                 </StackPanel>
             </DataTemplate>
         </materialDesign:DialogHost.DialogContentTemplate>
@@ -73,7 +73,7 @@
                     <DataTemplate>
                         <Border x:Name="Border" BorderThickness="2" BorderBrush="#FF703E3E">
                             <Canvas x:Name="Canvas"  Background="{Binding Color}">
-                                <Button Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" Command="{Binding DataContext.ButtonCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" CommandParameter="{Binding Pos}" Background="{Binding Background ,ElementName=Canvas}">
+                                <Button Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" Command="{Binding DataContext.TileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" CommandParameter="{Binding Pos}" Background="{Binding Background ,ElementName=Canvas}">
                                     <Image Source="{Binding Piece.ImagePiece}" RenderTransformOrigin="0.636,4.091" />
                                 </Button>
                                 <Rectangle Visibility="{Binding MarkVisibility}" Stroke="{Binding MarkColor}"  Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" StrokeThickness="2"/>

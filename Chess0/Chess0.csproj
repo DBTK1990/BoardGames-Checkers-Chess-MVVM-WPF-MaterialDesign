@@ -69,19 +69,19 @@
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\MyPoint.cs" />
     <Compile Include="Helper\Observable2DArray.cs" />
-    <Compile Include="Model\GameOverModel.cs" />
-    <Compile Include="Model\Peices\Compass.cs" />
-    <Compile Include="Model\Peices\Pieces_Chess.cs" />
-    <Compile Include="Model\Peices\IPieceModel.cs" />
+    <Compile Include="Model\DialogGameOverModel.cs" />
+    <Compile Include="Model\Peices Chess\Compass.cs" />
+    <Compile Include="Model\Peices Chess\Pieces_Chess.cs" />
+    <Compile Include="Model\Peices Chess\IPieceModel.cs" />
     <Compile Include="Model\TileModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\ChessBoardViewModel.cs" />
-    <Compile Include="ViewModel\BoardGameViewModel.cs" />
+    <Compile Include="ViewModel\BoardViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\Rules\IRules.cs" />
     <Compile Include="ViewModel\Rules\Rules_Chess.cs" />
     <Compile Include="View\BoardUC.xaml.cs">
       <DependentUpon>BoardUC.xaml</DependentUpon>

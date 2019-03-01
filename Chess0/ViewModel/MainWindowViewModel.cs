@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Windows.Input;
 using Chess0.Helper;
+using Chess0.ViewModel.Rules;
 
 namespace Chess0.ViewModel
 {
@@ -26,7 +23,19 @@ namespace Chess0.ViewModel
             }
         }
 
-      
+        private BoardViewModel boardviewmodel;
+        public BoardViewModel BoardViewModel
+        {
+            get
+            {
+                return boardviewmodel;
+            }
+            set
+            {
+                boardviewmodel = value;
+                OnPropertyChanged("BoardViewModel");
+            }
+        }
 
         private ICommand choosegame;
         public ICommand ChooseGame
@@ -35,25 +44,38 @@ namespace Chess0.ViewModel
             set { choosegame = value; }
         }
 
-
+        private ICommand restart_game_command;
+        public ICommand RestartGameCommand
+        {
+            get
+            {
+                return restart_game_command;
+            }
+            set
+            {
+                restart_game_command = value;
+            }
+        }
 
         public MainWindowViewModel()
         {
             SelectedGame = (int)Game.Chess;
+            BoardViewModel = new BoardViewModel(new Rules_Chess());
             ChooseGame = new RelayCommand(OnChooseGame);
-        }
+            RestartGameCommand = BoardViewModel.RestartCommand;
 
+        }
 
         private void OnChooseGame(object game)
         {
             
             if (Game.Chess.ToString() == game as string)
             {
-                SelectedGame = (int)Game.Chess;
+                BoardViewModel = new BoardViewModel(new Rules_Chess());
             }
             else if (Game.Checkers.ToString() == game as string)
             {
-                SelectedGame = (int)Game.Checkers;
+                BoardViewModel = null;
             }
         }
     }

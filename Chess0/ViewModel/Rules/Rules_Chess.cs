@@ -3,14 +3,29 @@ using Chess0.Model;
 using Chess0.Model.Peices;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
-
-namespace Chess0.ViewModel
+namespace Chess0.ViewModel.Rules
 {
-    public class Rules_Chess
+    public class Rules_Chess: IRules
     {
-  
-        public static void SimulatePath(TileModel Me ,ref ObservableBoardCollection<TileModel> Tiles)
+       
+
+        public void InitPieces(ObservableBoardCollection<TileModel> Tiles)
+        {
+            ChessPlayer white = new ChessPlayer(State.White);
+            ChessPlayer black = new ChessPlayer(State.Black);
+
+            for (var i = 0; i < white.Pieces.Count; i++)
+            {
+                Tiles[white.Pieces[i].Pos].Piece = white.Pieces[i];
+                Tiles[black.Pieces[i].Pos].Piece = black.Pieces[i];
+
+            }
+
+        }
+
+        public void SimulatePath(TileModel Me , ObservableBoardCollection<TileModel> Tiles)
         {
             HashSet<MyPoint> BlockedPath = new HashSet<MyPoint>();
             List<MyPoint> PossiablePath = Me.Piece.PossiablePath();
@@ -67,12 +82,56 @@ namespace Chess0.ViewModel
 
         }
 
+        public State PlayerTurnSwitch( TileModel focus,  ObservableBoardCollection<TileModel> tiles)
+        {
 
-        private static void CheckQueenTherthend(State PlayerTurn,ref ObservableBoardCollection<TileModel> Tiles)
+            foreach (TileModel tile in tiles)
+            {
+                tile.MarkVisibility = "Hidden";
+            }
+
+
+            Rules_Chess.CheckQueenTherthend(focus.Piece.Player,tiles);
+
+           
+
+            State PlayerTurn = focus.Piece.Player;
+            switch (PlayerTurn)
+            {
+                case State.Black:
+                    PlayerTurn= State.White;
+                    break;
+                case State.White:
+                    PlayerTurn= State.Black;
+                    break;
+            }
+
+            focus = null;
+
+       
+
+            return PlayerTurn;
+
+
+        }
+
+        public bool WinCondition(object ob)
+        {
+
+            bool check = false;
+            ObservableCollection<IPieceModel> DeadPieces = (ObservableCollection<IPieceModel>)ob;
+
+            foreach(IPieceModel piece in DeadPieces)
+                check = piece is Piece_Queen_M ? true : false;
+      
+            return check;
+        }
+
+        private static void CheckQueenTherthend(State PlayerTurn, ObservableBoardCollection<TileModel> Tiles)
         {
 
 
-            for(var tileIndex = 0; tileIndex < Tiles.Count; tileIndex++) 
+            for (var tileIndex = 0; tileIndex < Tiles.Count; tileIndex++)
             {
                 if (Tiles[tileIndex].Piece != null && Tiles[tileIndex].Piece.Player == PlayerTurn)
                 {
@@ -112,42 +171,9 @@ namespace Chess0.ViewModel
 
 
             }
-            
-
-        }
-
-
-        public static State PlayerTurnSwitch(ref TileModel focus, ref ObservableBoardCollection<TileModel> tiles)
-        {
-
-
-            Rules_Chess.CheckQueenTherthend(focus.Piece.Player, ref tiles);
-
-           
-
-            State PlayerTurn = focus.Piece.Player;
-            switch (PlayerTurn)
-            {
-                case State.Black:
-                    PlayerTurn= State.White;
-                    break;
-                case State.White:
-                    PlayerTurn= State.Black;
-                    break;
-            }
-
-            focus = null;
-
-            foreach (TileModel tile in tiles)
-            {
-                tile.MarkVisibility = "Hidden";
-            }
-
-            return PlayerTurn;
 
 
         }
-
 
     }
 }

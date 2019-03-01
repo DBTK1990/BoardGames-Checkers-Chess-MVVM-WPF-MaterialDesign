@@ -14,7 +14,7 @@
         Width="803.612" Height="782.253" WindowStartupLocation="Manual"  ResizeMode="NoResize">
     <Window.Resources>
         <ViewModel:MainWindowViewModel x:Key="mwvm"/>
-        <ViewModel:ChessBoardViewModel x:Key="chessBVM"/>
+       
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -23,8 +23,8 @@
             <RowDefinition  />
 
         </Grid.RowDefinitions>
-        <WrapPanel Grid.Row="0">
-                <materialDesign:PopupBox ClipToBounds="True"  PopupMode="Click" HorizontalAlignment="Left" VerticalAlignment="Bottom"  >
+        <StackPanel Orientation="Vertical" Grid.Row="0">
+                <materialDesign:PopupBox ClipToBounds="True"  PopupMode="Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,5,0,0"  >
                     <materialDesign:PopupBox.PopupContent>
                         <Menu >
                             <Menu.ItemsPanel>
@@ -32,7 +32,7 @@
                                     <StackPanel />
                                 </ItemsPanelTemplate>
                             </Menu.ItemsPanel>
-                            <MenuItem Header="Restart Game"/>
+                        <MenuItem Header="Restart Game" Command="{Binding RestartGameCommand, Source={StaticResource mwvm}}"/>
                             <MenuItem Header="Switch Game">
                                 <MenuItem Header="Chess" Command="{Binding ChooseGame, Source={StaticResource mwvm}}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"/>
                                 <Separator/>
@@ -41,30 +41,20 @@
                         </Menu>
                     </materialDesign:PopupBox.PopupContent>
                 </materialDesign:PopupBox>
-            <TextBlock  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="274,0,0,0">Chess Game</TextBlock>
             
-        </WrapPanel>
+            <TextBlock HorizontalAlignment="Center" FlowDirection="RightToLeft">Chess Game</TextBlock>
+            
+        </StackPanel>
             
             
 
-        <materialDesign:Transitioner SelectedIndex="{Binding SelectedGame,Source={StaticResource mwvm}}" Grid.Row="1">
-            <!--chess page-->
             <StackPanel Grid.Row="1" x:Name="ChessWindow" Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0">
 
-                <view:BoardUC DataContext="{StaticResource chessBVM}" />
-
-
-
+                <view:BoardUC DataContext="{Binding BoardViewModel ,Source={StaticResource mwvm}}" />
 
             </StackPanel>
-            <!--checkers page-->
-            <StackPanel Background="Purple" Grid.Row="1" x:Name="ChekersWindow" Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" >
-               
-             
-
-            </StackPanel>
-            
-        </materialDesign:Transitioner>
+           
+       
 
 
     </Grid>
