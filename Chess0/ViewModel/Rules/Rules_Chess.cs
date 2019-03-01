@@ -84,16 +84,8 @@ namespace Chess0.ViewModel.Rules
         public State PlayerTurnSwitch( TileModel focus,  ObservableBoardCollection<TileModel> tiles)
         {
 
-            foreach (TileModel tile in tiles)
-            {
-                tile.MarkVisibility = "Hidden";
-            }
-
-
-            Rules_Chess.CheckQueenTherthend(focus.Piece.Player,tiles);
-
-           
-
+            this.CheckQueenTherthend(focus.Piece.Player,tiles);
+          
             State PlayerTurn = focus.Piece.Player;
             switch (PlayerTurn)
             {
@@ -105,12 +97,9 @@ namespace Chess0.ViewModel.Rules
                     break;
             }
 
-            focus = null;
-
-       
+            focus = null;      
 
             return PlayerTurn;
-
 
         }
 
@@ -126,7 +115,7 @@ namespace Chess0.ViewModel.Rules
             return check;
         }
 
-        private static void CheckQueenTherthend(State PlayerTurn, ObservableBoardCollection<TileModel> Tiles)
+        private void CheckQueenTherthend(State PlayerTurn, ObservableBoardCollection<TileModel> Tiles)
         {
 
 

@@ -9,14 +9,14 @@
              xmlns:local="clr-namespace:Chess0.View"
              x:Class="Chess0.View.BoardUC"
              mc:Ignorable="d">
+    <!-- DataContext.GameOver.Winner ,StringFormat=player {0} is the winner-->
 
 
-
-    <materialDesign:DialogHost  Identifier="GameOver" >
+    <materialDesign:DialogHost  IsOpen="{Binding GameOver.Open}">
         <materialDesign:DialogHost.DialogContentTemplate>
             <DataTemplate >
                 <StackPanel Margin="7.5">
-                    <TextBlock Text="{Binding Winner,StringFormat=player {0} is the winner}" Margin="3 3 3 3" ></TextBlock>
+                    <TextBlock Text="{Binding DataContext.GameOver.Winner ,StringFormat=player {0} is the winner ,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" Margin="3 3 3 3" ></TextBlock>
                     <Button Content="Restart Game" Command="{Binding DataContext.RestartCommand,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" Margin="3 3 3 3" />
                 </StackPanel>
             </DataTemplate>

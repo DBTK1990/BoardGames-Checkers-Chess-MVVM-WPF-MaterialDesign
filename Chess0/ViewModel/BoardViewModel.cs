@@ -65,6 +65,19 @@ namespace Chess0.ViewModel
             }
         }
 
+        private DialogGameOverModel gameover;
+        public DialogGameOverModel GameOver
+        {
+            get
+            {
+                return gameover;
+            }
+            set
+            {
+                gameover = value;
+            }
+        }
+
         private State playerturn;
         public State PlayerTurn
         {
@@ -75,14 +88,6 @@ namespace Chess0.ViewModel
             set
             {
                 playerturn = value;
-            }
-        }
-
-        public string PlayerTurnS
-        {
-            get
-            {
-                return playerturn.ToString();
             }
         }
 
@@ -160,6 +165,8 @@ namespace Chess0.ViewModel
             //Commant init
             TileCommand = new RelayCommand(MyOnClick);
             RestartCommand = new RelayCommand(RestartGame);
+
+            GameOver = new DialogGameOverModel("");
           
 
         }
@@ -171,8 +178,9 @@ namespace Chess0.ViewModel
 
         private void RestartGame(object ob)
         {
-           //close all dialogs if open
-            DialogHost.CloseDialogCommand.Execute(null, null);
+            //close all dialogs if open
+            if (GameOver.Open == "True")
+                GameOver.Open = "False";
 
             //clear deadPieces
             DeadWhite.Clear();
@@ -207,12 +215,16 @@ namespace Chess0.ViewModel
                     EatPiece(Focus.Pos, tileIndex);
                 }
 
-              
+                //hide all marking on the board
+                foreach (TileModel tile in Tiles)
+                {
+                    tile.MarkVisibility = "Hidden";
+                }
                 //control win and turn switch
                 if (Rules.WinCondition(dead[((int)PlayerTurn+1) % 2]))
                     ShowGameOverDialog();
                 else
-                    PlayerTurn =Rules.PlayerTurnSwitch( focus,  tiles);
+                    PlayerTurn =Rules.PlayerTurnSwitch(Focus,  Tiles);
 
 
                 
@@ -256,15 +268,8 @@ namespace Chess0.ViewModel
         private void ShowGameOverDialog()
         {
 
-
-            foreach (TileModel tile in Tiles)
-            {
-                tile.MarkVisibility = "Hidden";
-            }
-
-
-            DialogGameOverModel gameOver = new DialogGameOverModel(this.PlayerTurnS);
-            DialogHost.OpenDialogCommand.Execute(gameOver, null);
+            GameOver.Winner = PlayerTurn.ToString();
+            GameOver.Open = "True";
 
         }
 
