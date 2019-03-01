@@ -163,28 +163,11 @@ namespace Chess0.ViewModel
           
 
         }
+
+      
         #endregion Constructor
 
-
-        private void InitBoard()
-        {
-            for (var LoopIndex = 0; LoopIndex < 64; LoopIndex++)
-            {
-                TileModel tile;
-
-                int RowIndex = (int)(LoopIndex / 8);
-                int ColIndex = LoopIndex % 8;
-
-                if (RowIndex % 2 == 0)
-                    tile = (ColIndex % 2 == 0) ? new TileModel("BurlyWood", new MyPoint(RowIndex, ColIndex)) : new TileModel("#FF876539", new MyPoint(RowIndex, ColIndex));
-                else
-                    tile = (ColIndex % 2 == 0) ? new TileModel("#FF876539", new MyPoint(RowIndex, ColIndex)) : new TileModel("BurlyWood", new MyPoint(RowIndex, ColIndex));
-
-
-                Tiles.Add(tile);
-            }
-
-        }
+        #region Commands
 
         private void RestartGame(object ob)
         {
@@ -244,21 +227,58 @@ namespace Chess0.ViewModel
           
         }
 
+        #endregion Commands
+
+        #region Helpr Function
+
+        private void InitBoard()
+        {
+            for (var LoopIndex = 0; LoopIndex < 64; LoopIndex++)
+            {
+                TileModel tile;
+
+                int RowIndex = (int)(LoopIndex / 8);
+                int ColIndex = LoopIndex % 8;
+
+                if (RowIndex % 2 == 0)
+                    tile = (ColIndex % 2 == 0) ? new TileModel("BurlyWood", new MyPoint(RowIndex, ColIndex)) : new TileModel("#FF876539", new MyPoint(RowIndex, ColIndex));
+                else
+                    tile = (ColIndex % 2 == 0) ? new TileModel("#FF876539", new MyPoint(RowIndex, ColIndex)) : new TileModel("BurlyWood", new MyPoint(RowIndex, ColIndex));
 
 
-        private void MovePiece(MyPoint point ,MyPoint moveTo)
+                Tiles.Add(tile);
+            }
+
+        }
+
+        private void ShowGameOverDialog()
         {
 
-            Tiles[moveTo].Piece= Tiles[point].Piece;
+
+            foreach (TileModel tile in Tiles)
+            {
+                tile.MarkVisibility = "Hidden";
+            }
+
+
+            DialogGameOverModel gameOver = new DialogGameOverModel(this.PlayerTurnS);
+            DialogHost.OpenDialogCommand.Execute(gameOver, null);
+
+        }
+
+        private void MovePiece(MyPoint point, MyPoint moveTo)
+        {
+
+            Tiles[moveTo].Piece = Tiles[point].Piece;
             Tiles[point].Piece.Pos = moveTo;
-            
+
             Tiles[point].Piece = null;
 
             Tiles[moveTo].Piece.MovesMade++;
 
             Focus = Tiles[moveTo];
-            
-        
+
+
         }
 
         private void EatPiece(MyPoint point, MyPoint moveTo)
@@ -276,38 +296,16 @@ namespace Chess0.ViewModel
             }
 
             MovePiece(point, moveTo);
-           
+
 
         }
 
-
-        
-        #region helper Function
-
-
-        private void ShowGameOverDialog()
-        {
-
-
-            foreach (TileModel tile in Tiles)
-            {
-                tile.MarkVisibility = "Hidden";
-            }
-
-
-            DialogGameOverModel gameOver = new DialogGameOverModel(this.PlayerTurnS);
-            DialogHost.OpenDialogCommand.Execute(gameOver, null);
-
-        }
-    
-        
-        
-        #endregion
+        #endregion  Helpr Function
 
 
 
 
-        #region testing chess dead
+        #region Testing
 
         private void testdeadPieces()
         {

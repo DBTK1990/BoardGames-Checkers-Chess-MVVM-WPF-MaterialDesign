@@ -68,7 +68,7 @@
     <Compile Include="Helper\NotifyPropertyChanged.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\MyPoint.cs" />
-    <Compile Include="Helper\Observable2DArray.cs" />
+    <Compile Include="Helper\ObservableBoardCollection.cs" />
     <Compile Include="Model\DialogGameOverModel.cs" />
     <Compile Include="Model\Peices Chess\Compass.cs" />
     <Compile Include="Model\Peices Chess\Pieces_Chess.cs" />

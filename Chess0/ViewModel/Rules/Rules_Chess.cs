@@ -10,7 +10,6 @@ namespace Chess0.ViewModel.Rules
     public class Rules_Chess: IRules
     {
        
-
         public void InitPieces(ObservableBoardCollection<TileModel> Tiles)
         {
             ChessPlayer white = new ChessPlayer(State.White);

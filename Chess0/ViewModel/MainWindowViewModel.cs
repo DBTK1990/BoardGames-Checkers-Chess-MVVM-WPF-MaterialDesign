@@ -9,6 +9,8 @@ namespace Chess0.ViewModel
 
     class MainWindowViewModel : NotifyPropertyChanged
     {
+
+        #region Proprties
         private int selectedgame;
         public int SelectedGame
         {
@@ -57,6 +59,9 @@ namespace Chess0.ViewModel
             }
         }
 
+        #endregion
+
+        #region constructor
         public MainWindowViewModel()
         {
             SelectedGame = (int)Game.Chess;
@@ -66,6 +71,9 @@ namespace Chess0.ViewModel
 
         }
 
+        #endregion constructor
+
+        #region Command
         private void OnChooseGame(object game)
         {
             
@@ -78,5 +86,6 @@ namespace Chess0.ViewModel
                 BoardViewModel = null;
             }
         }
+        #endregion Command
     }
 }
