@@ -11,19 +11,6 @@ namespace Chess0.ViewModel
     {
 
         #region Proprties
-        private int selectedgame;
-        public int SelectedGame
-        {
-            get
-            {
-                return selectedgame;
-            }
-            set
-            {
-                selectedgame = value;
-                OnPropertyChanged("SelectedGame");
-            }
-        }
 
         private BoardViewModel boardviewmodel;
         public BoardViewModel BoardViewModel
@@ -64,7 +51,7 @@ namespace Chess0.ViewModel
         #region constructor
         public MainWindowViewModel()
         {
-            SelectedGame = (int)Game.Chess;
+       
             BoardViewModel = new BoardViewModel(new Rules_Chess());
             ChooseGame = new RelayCommand(OnChooseGame);
             RestartGameCommand = BoardViewModel.RestartCommand;

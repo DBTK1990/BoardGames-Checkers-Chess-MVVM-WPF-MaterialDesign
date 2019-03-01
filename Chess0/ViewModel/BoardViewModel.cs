@@ -186,6 +186,8 @@ namespace Chess0.ViewModel
 
             //initNewGame
             Rules.InitPieces(Tiles);
+
+            PlayerTurn = State.Black;
         }
 
         private void MyOnClick(object o)
@@ -194,7 +196,7 @@ namespace Chess0.ViewModel
 
             object[] dead = { DeadWhite, DeadBlack };
 
-            if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visiable")
+            if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visible")
             {
                 if (Tiles[tileIndex].MarkColor == "Green")
                 {

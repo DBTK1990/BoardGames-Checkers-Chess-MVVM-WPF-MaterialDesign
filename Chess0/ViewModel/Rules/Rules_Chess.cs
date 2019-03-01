@@ -53,7 +53,7 @@ namespace Chess0.ViewModel.Rules
                         else
                         {
                             Tiles[Pos].MarkColor = "Green";
-                            Tiles[Pos].MarkVisibility = "Visiable";
+                            Tiles[Pos].MarkVisibility = "Visible";
 
                         }
 
@@ -68,7 +68,7 @@ namespace Chess0.ViewModel.Rules
                         {
                             BlockedPath.Add(Check);
                             Tiles[Pos].MarkColor = "Red";
-                            Tiles[Pos].MarkVisibility = "Visiable";
+                            Tiles[Pos].MarkVisibility = "Visible";
                         }
                     }
                 }
@@ -151,7 +151,7 @@ namespace Chess0.ViewModel.Rules
                                 {
                                     BlockedPath.Add(Check);
                                     Tiles[tileIndex].MarkColor = "Purple";
-                                    Tiles[tileIndex].MarkVisibility = "Visiable";
+                                    Tiles[tileIndex].MarkVisibility = "Visible";
                                 }
                                 else
                                     BlockedPath.Add(Check);
