@@ -2,15 +2,12 @@
 
 namespace Chess0.Model
 {
-    public class DialogGameOverModel : NotifyPropertyChanged
+     class DialogGameOverModel : NotifyPropertyChanged
     {
         private string winner=string.Empty;
         public string Winner
         {
-            get
-            {
-                return winner;
-            }
+            get => winner;
             set
             {
                 winner = value;
@@ -21,10 +18,7 @@ namespace Chess0.Model
         private string open;
         public string Open
         {
-            get
-            {
-                return open;
-            }
+            get => open;
             set
             {
                 if (value == "True" || value == "False")

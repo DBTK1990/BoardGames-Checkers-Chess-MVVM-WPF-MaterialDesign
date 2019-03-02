@@ -6,13 +6,13 @@ using Chess0.Model.Peices;
 
 namespace Chess0.Model
 {
-    public class TileModel : NotifyPropertyChanged
+     class TileModel : NotifyPropertyChanged
 
     {
         private string color;
         public string Color
         {
-            get { return color; }
+            get => color;
             set
             {
                 color = value;
@@ -24,11 +24,7 @@ namespace Chess0.Model
         private MyPoint pos;
         public MyPoint Pos
         {
-            get
-            {
-                return pos;
-            }
-
+            get => pos;
             set
             {
                 pos = value;
@@ -38,13 +34,10 @@ namespace Chess0.Model
         }
 
 
-        private IPieceModel piece;
-        public IPieceModel Piece
+        private IPiece piece;
+        public IPiece Piece
         {
-            get
-            {
-                return piece;
-            }
+            get => piece;
             set
             {
                 piece = value;
@@ -56,10 +49,7 @@ namespace Chess0.Model
         private string markcolor;
         public string MarkColor
         {
-            get
-            {
-                return markcolor;
-            }
+            get => markcolor;
             set
             {
                 markcolor = value;
@@ -70,10 +60,7 @@ namespace Chess0.Model
         private string markvisibility;
         public string MarkVisibility
         {
-            get
-            {
-                return markvisibility;
-            }
+            get => markvisibility;
             set
             {
                 markvisibility = value;
@@ -82,7 +69,7 @@ namespace Chess0.Model
         }
 
 
-        public TileModel(string color,MyPoint pos, IPieceModel piece=null)
+        public TileModel(string color,MyPoint pos, IPiece piece=null)
         {
             Piece = piece;
             Color = color;

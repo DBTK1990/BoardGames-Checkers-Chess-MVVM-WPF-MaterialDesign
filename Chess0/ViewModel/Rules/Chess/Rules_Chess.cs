@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Chess0.ViewModel.Rules
 {
-    public class Rules_Chess: IRules
+    class Rules_Chess: Compass, IRules 
     {
        
         public void InitPieces(ObservableBoardCollection<TileModel> Tiles)
@@ -46,7 +46,7 @@ namespace Chess0.ViewModel.Rules
                     if (Tiles[Pos].Piece == null)
                     {
 
-                        if (Tiles[Me.Pos].Piece is Piece_Pawn_M && (Check == Compass.Direction[(int)CompassE.South_Wast] || Check == Compass.Direction[(int)CompassE.South_East] || Check == Compass.Direction[(int)CompassE.North_East] || Check == Compass.Direction[(int)CompassE.North_Wast]))
+                        if (Tiles[Me.Pos].Piece is Piece_Pawn_M && (Check == Direction[(int)CompassE.South_Wast] || Check == Direction[(int)CompassE.South_East] || Check == Direction[(int)CompassE.North_East] || Check == Direction[(int)CompassE.North_Wast]))
                         {
                             BlockedPath.Add(Check);
                         }
@@ -107,9 +107,9 @@ namespace Chess0.ViewModel.Rules
         {
 
             bool check = false;
-            ObservableCollection<IPieceModel> DeadPieces = (ObservableCollection<IPieceModel>)ob;
+            ObservableCollection<IPiece> DeadPieces = (ObservableCollection<IPiece>)ob;
 
-            foreach(IPieceModel piece in DeadPieces)
+            foreach(IPiece piece in DeadPieces)
                 check = piece is Piece_Queen_M ? true : false;
       
             return check;

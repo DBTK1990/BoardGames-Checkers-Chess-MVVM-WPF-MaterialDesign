@@ -27,8 +27,8 @@ namespace Chess0.ViewModel
             }
         }
 
-        private ObservableCollection<IPieceModel> dead_white;
-        public ObservableCollection<IPieceModel> DeadWhite
+        private ObservableCollection<IPiece> dead_white;
+        public ObservableCollection<IPiece> DeadWhite
         {
             get
             {
@@ -41,8 +41,8 @@ namespace Chess0.ViewModel
         }
 
 
-        private ObservableCollection<IPieceModel> dead_black;
-        public ObservableCollection<IPieceModel> DeadBlack
+        private ObservableCollection<IPiece> dead_black;
+        public ObservableCollection<IPiece> DeadBlack
         {
             get
             {
@@ -157,8 +157,8 @@ namespace Chess0.ViewModel
             Rules.InitPieces(Tiles);
 
             //lists of dead pieces
-            DeadBlack = new ObservableCollection<IPieceModel>();
-            dead_white = new ObservableCollection<IPieceModel>();
+            DeadBlack = new ObservableCollection<IPiece>();
+            dead_white = new ObservableCollection<IPiece>();
 
             //who starts the game
             PlayerTurn = State.Black;

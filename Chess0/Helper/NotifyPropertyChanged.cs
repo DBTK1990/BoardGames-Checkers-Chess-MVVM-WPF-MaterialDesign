@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chess0.Helper
 {
-    public class NotifyPropertyChanged : INotifyPropertyChanged
+    class NotifyPropertyChanged : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -7,7 +7,7 @@ namespace Chess0.ViewModel
 {
     enum Game {Chess,Checkers}
 
-    class MainWindowViewModel : NotifyPropertyChanged
+    class MainWindowViewModel :  NotifyPropertyChanged
     {
 
         #region Proprties
@@ -75,4 +75,6 @@ namespace Chess0.ViewModel
         }
         #endregion Command
     }
+
+
 }

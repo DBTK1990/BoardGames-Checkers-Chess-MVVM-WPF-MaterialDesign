@@ -3,10 +3,10 @@ using Chess0.Helper;
 
 namespace Chess0.Model.Peices
 {
-    abstract class Compass
+    class Compass
     {
-        public enum CompassE { North, North_East,East,South_East ,South,South_Wast,Wast,North_Wast};
-        public static readonly MyPoint[] Direction =
+        protected enum CompassE { North, North_East,East,South_East ,South,South_Wast,Wast,North_Wast};
+        protected static readonly MyPoint[] Direction =
        {
         new MyPoint(-1,0),
         new MyPoint(-1,1),

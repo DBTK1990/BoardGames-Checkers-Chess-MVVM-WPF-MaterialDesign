@@ -11,9 +11,9 @@ namespace Chess0.ViewModel.Rules.Chess
     public class ChessPlayer
     {
 
-        private List<IPieceModel> pieces = new List<IPieceModel>();
+        private List<IPiece> pieces = new List<IPiece>();
 
-        public List<IPieceModel> Pieces { get => pieces; }
+        public List<IPiece> Pieces { get => pieces; }
 
         public ChessPlayer(State state)
         {
