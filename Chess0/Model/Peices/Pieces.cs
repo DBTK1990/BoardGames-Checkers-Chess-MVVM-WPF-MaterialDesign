@@ -319,14 +319,15 @@ namespace Chess0.Model.Peices
             switch (player)
             {
                 case State.White:
-                    TempPath = "";
+                    TempPath = @"pack://application:,,,/Chess0;component/Resources/Man_White.png";
                     break;
                 case State.Black:
-                    TempPath = "";
+                    TempPath = @"pack://application:,,,/Chess0;component/Resources/Man_Black.png";
                     break;
                 default:
                     break;
             }
+
 
             base.initProprties(Pos, Player, TempPath);
 
@@ -387,10 +388,10 @@ namespace Chess0.Model.Peices
             switch (player)
             {
                 case State.White:
-                    TempPath = "";
+                    TempPath = @"pack://application:,,,/Chess0;component/Resources/FlyKing_White.png";
                     break;
                 case State.Black:
-                    TempPath = "";
+                    TempPath = @"pack://application:,,,/Chess0;component/Resources/FlyKing_Black.png";
                     break;
                 default:
                     break;

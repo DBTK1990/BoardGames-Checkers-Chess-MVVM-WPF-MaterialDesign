@@ -39,7 +39,7 @@
             </ListBox>
 
 
-        <ItemsControl x:Name="BoardUI" ItemsSource="{Binding DataContext.Tiles ,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" DockPanel.Dock="Bottom">
+            <ItemsControl x:Name="BoardUI" ItemsSource="{Binding DataContext.Tiles ,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" DockPanel.Dock="Bottom">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Grid HorizontalAlignment="Center" Width="640" Height="640">
@@ -74,7 +74,9 @@
                         <Border x:Name="Border" BorderThickness="2" BorderBrush="#FF703E3E">
                             <Canvas x:Name="Canvas"  Background="{Binding Color}">
                                 <Button Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" Command="{Binding DataContext.TileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}" CommandParameter="{Binding Pos}" Background="{Binding Background ,ElementName=Canvas}">
-                                    <Image Source="{Binding Piece.ImagePiece}" RenderTransformOrigin="0.636,4.091" />
+                                    <Image Source="{Binding Piece.ImagePiece}"  Cursor="Hand" Margin="-8,0" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"   />
+
+                            
                                 </Button>
                                 <Rectangle Visibility="{Binding MarkVisibility}" Stroke="{Binding MarkColor}"  Width="{Binding ActualWidth, ElementName=Canvas}" Height="{Binding ActualHeight, ElementName=Canvas}" StrokeThickness="2"/>
 
@@ -102,21 +104,21 @@
 
 
             <ListBox MinWidth="25" MinHeight="25" ItemsSource="{Binding DataContext.DeadBlack ,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BoardUC}}}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
                         <Image Width="25" Height="25" Source="{Binding ImagePiece}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
 
 
-          
+
 
 
         </StackPanel>

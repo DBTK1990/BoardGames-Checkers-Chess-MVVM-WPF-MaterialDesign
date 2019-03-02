@@ -83,6 +83,26 @@ namespace Chess0.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FlyKing_Black {
+            get {
+                object obj = ResourceManager.GetObject("FlyKing_Black", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FlyKing_White {
+            get {
+                object obj = ResourceManager.GetObject("FlyKing_White", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap King_Black {
             get {
                 object obj = ResourceManager.GetObject("King_Black", resourceCulture);
@@ -116,6 +136,26 @@ namespace Chess0.Properties {
         internal static System.Drawing.Bitmap Knight_White {
             get {
                 object obj = ResourceManager.GetObject("Knight_White", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Man_Black {
+            get {
+                object obj = ResourceManager.GetObject("Man_Black", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Man_White {
+            get {
+                object obj = ResourceManager.GetObject("Man_White", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
