@@ -342,12 +342,33 @@ namespace Chess0.Model.Peices
             {
                 case State.White:
 
-          
+                    int directionWhiteIndex = 7;
+
+                    while (directionWhiteIndex >= 1)
+                    {
+                        Check = Direction[directionWhiteIndex] + Pos;
+
+                        if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
+                        {
+                            paths.Add(Direction[directionWhiteIndex]);
+                            paths.Add(Direction[directionWhiteIndex]);
+                        }
+                        
+
+                        directionWhiteIndex -= 6;
+                        
+                    }
                     break;
                 case State.Black:
-                  
-
-
+                    for (var directionBlackIndex = 3; directionBlackIndex <= 5; directionBlackIndex+=2)
+                    {
+                        Check = Direction[directionBlackIndex] + Pos;
+                        if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
+                        {
+                                paths.Add((Direction[directionBlackIndex]));
+                                paths.Add((Direction[directionBlackIndex]));
+                        }
+                    }
                     break;
             }
 
@@ -381,23 +402,19 @@ namespace Chess0.Model.Peices
 
         public override List<MyPoint> PossiablePath()
         {
-
             List<MyPoint> paths = new List<MyPoint>();
-            MyPoint Check = null;
-
-            switch (Player)
+            for (var diraction = 7; diraction >= 1; diraction -= 2)
             {
-                case State.White:
+                for (var moves = 1; moves <= 7; moves++)
+                {
 
+                    MyPoint Check = (Direction[diraction] * moves) + Pos;
 
-                    break;
-                case State.Black:
+                    if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
+                        paths.Add(Direction[diraction]);
+                }
 
-
-
-                    break;
             }
-
 
             return paths;
         }
