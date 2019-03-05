@@ -5,7 +5,7 @@ using Chess0.ViewModel.Rules.Chess;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Chess0.ViewModel.Rules
+namespace Chess0.ViewModel.Rules.Chess
 {
     class Rules_Chess: Compass, IRules 
     {
@@ -24,15 +24,14 @@ namespace Chess0.ViewModel.Rules
 
         }
 
-        public void SimulatePath(TileModel Me , ObservableBoardCollection<TileModel> Tiles)
+        public void SimulatePath(TileModel Me , ObservableBoardCollection<TileModel> Tiles, List<MyPoint> _path = null)
         {
             HashSet<MyPoint> BlockedPath = new HashSet<MyPoint>();
-            List<MyPoint> PossiablePath = Me.Piece.PossiablePath();
+            List<MyPoint> PossiablePath =_path?? Me.Piece.PossiablePath();
 
             MyPoint Pos = Me.Pos;
 
-            foreach (TileModel mark_off in Tiles)
-                mark_off.MarkVisibility = "Hidden";
+           
 
 
 
@@ -110,7 +109,7 @@ namespace Chess0.ViewModel.Rules
             ObservableCollection<IPiece> DeadPieces = (ObservableCollection<IPiece>)ob;
 
             foreach(IPiece piece in DeadPieces)
-                check = piece is Piece_Queen_M ? true : false;
+                check = piece is Piece_King_M ? true : false;
       
             return check;
         }
@@ -159,6 +158,45 @@ namespace Chess0.ViewModel.Rules
 
 
             }
+
+
+        }
+
+
+        public void MovePiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles)
+        {
+
+            Tiles[moveTo].Piece = Tiles[point].Piece;
+            Tiles[point].Piece.Pos = moveTo;
+
+            Tiles[point].Piece = null;
+
+            Tiles[moveTo].Piece.MovesMade++;
+
+           
+
+
+
+
+
+        }
+
+        public void EatPiece( MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles,ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite)
+        {
+
+            switch (Tiles[moveTo].Piece.Player)
+            {
+                case State.Black:
+                    DeadBlack.Add(Tiles[moveTo].Piece);
+                    break;
+                case State.White:
+                    DeadWhite.Add(Tiles[moveTo].Piece);
+                    break;
+
+            }
+
+           MovePiece(point, moveTo, Tiles);
+          
 
 
         }

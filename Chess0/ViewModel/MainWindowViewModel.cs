@@ -1,7 +1,8 @@
 ﻿
 using System.Windows.Input;
 using Chess0.Helper;
-using Chess0.ViewModel.Rules;
+using Chess0.ViewModel.Rules.Chess;
+using Chess0.ViewModel.Rules.Checkers;
 
 namespace Chess0.ViewModel
 {
@@ -12,8 +13,8 @@ namespace Chess0.ViewModel
 
         #region Proprties
 
-        private BoardViewModel boardviewmodel;
-        public BoardViewModel BoardViewModel
+        private BaseBoardGameViewModel boardviewmodel;
+        public BaseBoardGameViewModel BoardViewModel
         {
             get
             {
@@ -52,7 +53,7 @@ namespace Chess0.ViewModel
         public MainWindowViewModel()
         {
        
-            BoardViewModel = new BoardViewModel(new Rules_Chess());
+            BoardViewModel = new ChessBoardViewModel(new Rules_Chess());
             ChooseGame = new RelayCommand(OnChooseGame);
             RestartGameCommand = BoardViewModel.RestartCommand;
 
@@ -66,11 +67,11 @@ namespace Chess0.ViewModel
             
             if (Game.Chess.ToString() == game as string)
             {
-                BoardViewModel = new BoardViewModel(new Rules_Chess());
+                BoardViewModel = new ChessBoardViewModel(new Rules_Chess());
             }
             else if (Game.Checkers.ToString() == game as string)
             {
-                BoardViewModel = null;
+                BoardViewModel = new CheckersBoardViewModel(new Rules_Checkers());
             }
         }
         #endregion Command

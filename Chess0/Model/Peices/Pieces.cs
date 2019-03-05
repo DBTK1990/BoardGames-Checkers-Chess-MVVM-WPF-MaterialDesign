@@ -30,8 +30,11 @@ namespace Chess0.Model.Peices
         
         }
 
-        public override List<MyPoint> PossiablePath()
+        public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
+
+
+          MyPoint usePos = TargetPos ?? Pos;
             List<MyPoint> paths = new List<MyPoint>();
 
             foreach (MyPoint direction in Direction)
@@ -77,13 +80,16 @@ namespace Chess0.Model.Peices
 
 
 
-        public override List<MyPoint> PossiablePath()
+        public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
+
+
+          MyPoint usePos = TargetPos ?? Pos;
             List<MyPoint> paths = new List<MyPoint>();
 
                 foreach (MyPoint direction in Direction)
                 {
-                    MyPoint Check = (direction) + Pos;
+                    MyPoint Check = (direction) + usePos;
 
                     if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                         paths.Add(direction);
@@ -122,15 +128,18 @@ namespace Chess0.Model.Peices
 
         }
 
-        public override List<MyPoint> PossiablePath()
+        public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
+
+
+          MyPoint usePos = TargetPos ?? Pos;
             List<MyPoint> paths = new List<MyPoint>();
             for (var diraction = 6; diraction >= 0; diraction -= 2)
             {
             
                 for (var moves = 1; moves<=7; moves++)
                 {
-                    MyPoint Check = (Direction[diraction] * moves) + Pos;
+                    MyPoint Check = (Direction[diraction] * moves) + usePos;
 
                     if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                         paths.Add(Direction[diraction]);
@@ -164,15 +173,19 @@ namespace Chess0.Model.Peices
 
         }
 
-        public override List<MyPoint> PossiablePath()
+        public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
+
+
+          MyPoint usePos = TargetPos ?? Pos;
+
             List<MyPoint> paths = new List<MyPoint>();
             for (var diraction = 7; diraction >= 1; diraction -= 2)
             {
                 for (var moves = 1; moves <= 7; moves++)
                 {
 
-                    MyPoint Check = (Direction[diraction] * moves) + Pos;
+                    MyPoint Check = (Direction[diraction] * moves) + usePos;
 
                     if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                         paths.Add(Direction[diraction]);
@@ -206,19 +219,22 @@ namespace Chess0.Model.Peices
 
         }
 
-        public override List<MyPoint> PossiablePath()
+        public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
+
+
+          MyPoint usePos = TargetPos ?? Pos;
             List<MyPoint> paths = new List<MyPoint>();
             MyPoint[] temp = { new MyPoint(1, 2), new MyPoint(2, 1)};
 
             for (var directionIndex = 7; directionIndex >= 1; directionIndex -= 2)
             {
-                MyPoint Check = (Direction[directionIndex]*temp[0]) + Pos;
+                MyPoint Check = (Direction[directionIndex]*temp[0]) + usePos;
 
                 if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                     paths.Add(Direction[directionIndex] * temp[0]);
 
-                Check = (Direction[directionIndex] * temp[1]) + Pos;
+                Check = (Direction[directionIndex] * temp[1]) + usePos;
                 if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                     paths.Add(Direction[directionIndex] * temp[1]);
             }
@@ -250,10 +266,13 @@ namespace Chess0.Model.Peices
             base.initProprties(Pos, Player, TempPath);
 
         }
-        
-        public override List<MyPoint> PossiablePath()
+
+        public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
-         
+
+
+            MyPoint usePos = TargetPos ?? Pos;
+
             List<MyPoint> paths = new List<MyPoint>();
             MyPoint Check = null;
 
@@ -265,7 +284,7 @@ namespace Chess0.Model.Peices
 
                     while (directionWhiteIndex >= 0)
                     {
-                        Check = Direction[directionWhiteIndex] + Pos;
+                        Check = Direction[directionWhiteIndex] + usePos;
                         if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                         {
                             if (MovesMade == 0 && directionWhiteIndex == 0)
@@ -284,7 +303,7 @@ namespace Chess0.Model.Peices
                 case State.Black:
                     for (var directionBlackIndex = 3; directionBlackIndex <= 5; directionBlackIndex++)
                     {
-                        Check = Direction[directionBlackIndex] + Pos;
+                        Check = Direction[directionBlackIndex] + usePos;
                         if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                         {
                             if (MovesMade == 0 && directionBlackIndex == 4)
@@ -329,12 +348,16 @@ namespace Chess0.Model.Peices
             }
 
 
-            base.initProprties(Pos, Player, TempPath);
+            base.initProprties(pos, player, TempPath);
 
         }
 
-        public override List<MyPoint> PossiablePath()
+
+        public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
+
+
+          MyPoint usePos = TargetPos ?? Pos;
 
             List<MyPoint> paths = new List<MyPoint>();
             MyPoint Check = null;
@@ -347,7 +370,7 @@ namespace Chess0.Model.Peices
 
                     while (directionWhiteIndex >= 1)
                     {
-                        Check = Direction[directionWhiteIndex] + Pos;
+                        Check = Direction[directionWhiteIndex] + usePos;
 
                         if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                         {
@@ -363,7 +386,7 @@ namespace Chess0.Model.Peices
                 case State.Black:
                     for (var directionBlackIndex = 3; directionBlackIndex <= 5; directionBlackIndex+=2)
                     {
-                        Check = Direction[directionBlackIndex] + Pos;
+                        Check = Direction[directionBlackIndex] + usePos;
                         if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                         {
                                 paths.Add((Direction[directionBlackIndex]));
@@ -397,19 +420,23 @@ namespace Chess0.Model.Peices
                     break;
             }
 
-            base.initProprties(Pos, Player, TempPath);
+            base.initProprties(pos, player, TempPath);
 
         }
 
-        public override List<MyPoint> PossiablePath()
+        public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
-            List<MyPoint> paths = new List<MyPoint>();
+
+
+            MyPoint usePos =(TargetPos!=null)?TargetPos:Pos;
+
+            List <MyPoint> paths = new List<MyPoint>();
             for (var diraction = 7; diraction >= 1; diraction -= 2)
             {
                 for (var moves = 1; moves <= 7; moves++)
                 {
 
-                    MyPoint Check = (Direction[diraction] * moves) + Pos;
+                    MyPoint Check = (Direction[diraction] * moves) + usePos;
 
                     if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                         paths.Add(Direction[diraction]);

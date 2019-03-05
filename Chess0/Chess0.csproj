@@ -80,8 +80,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\BoardViewModel.cs" />
+    <Compile Include="ViewModel\BaseBoardGameViewModel.cs" />
+    <Compile Include="ViewModel\ChessBoardViewModel.cs" />
+    <Compile Include="ViewModel\CheckersBoardViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\Rules\Checkers\CheckersPlayer.cs" />
+    <Compile Include="ViewModel\Rules\Checkers\Rules_Checkers.cs" />
     <Compile Include="ViewModel\Rules\Chess\ChessPlayer.cs" />
     <Compile Include="ViewModel\Rules\IRules.cs" />
     <Compile Include="ViewModel\Rules\Chess\Rules_Chess.cs" />
@@ -210,5 +214,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

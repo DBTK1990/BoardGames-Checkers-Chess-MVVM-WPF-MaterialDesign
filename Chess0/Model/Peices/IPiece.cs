@@ -15,7 +15,7 @@ namespace Chess0.Model.Peices
         State Player { get; set; }
         int MovesMade { get; set; }
 
-        List<MyPoint> PossiablePath();
+        List<MyPoint> PossiablePath(MyPoint TargetPos=null);
     }
 
     

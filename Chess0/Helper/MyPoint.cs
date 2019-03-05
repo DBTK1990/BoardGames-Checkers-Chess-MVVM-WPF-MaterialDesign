@@ -8,28 +8,33 @@ namespace Chess0.Helper
 {
 
     public class MyPoint
-        {
-            public double X { get; set; }
-            public double Y { get; set; }
+    {
+        private double x;
+        public double X { get => x; set=>x=value; }
+
+        private double y;
+        public double Y { get=>y; set=>y=value; }
 
 
-            public MyPoint(double x, double y)
-            {
-                X = x;
-                Y = y;
-            }
+        public MyPoint(double x, double y)
+         {
+            X = x;
+            Y = y;
+         }
+
+  
 
 
-            public static MyPoint operator *(MyPoint a, double b)
-            {
+         public static MyPoint operator *(MyPoint a, double b)
+         {
                 return new MyPoint(a.X * b, a.Y * b);
-            }
+         }
 
 
-            public static MyPoint operator *(MyPoint a, MyPoint b)
-            {
+         public static MyPoint operator *(MyPoint a, MyPoint b)
+         {
             return new MyPoint(a.X * b.X, a.Y * b.Y);
-            }
+         }
 
         public static MyPoint operator +(MyPoint a, MyPoint b)
             {
@@ -38,22 +43,25 @@ namespace Chess0.Helper
 
         public static bool operator ==(MyPoint a, MyPoint b)
         {
-          
-            return a.X == b.X && a.Y == b.Y ?true:false;
+            if (Object.ReferenceEquals(a, null))
+                return Object.ReferenceEquals(b, null);
+
+            return a.Equals(b);
 
         }
         public static bool operator !=(MyPoint a, MyPoint b)
         {
-
-          
-                return a.X != b.X || a.Y != b.Y ? true : false;
-          
+           
+                return !a.Equals(b);
           
         }
 
         public override bool Equals(object obj)
         {
+            
+
             return base.Equals(obj);
+
         }
 
         public override int GetHashCode()

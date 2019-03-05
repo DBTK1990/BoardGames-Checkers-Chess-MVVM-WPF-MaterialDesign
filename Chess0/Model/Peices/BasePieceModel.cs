@@ -7,7 +7,7 @@ using Chess0.ViewModel;
 
 namespace Chess0.Model.Peices
 {
-     abstract class BasePieceModel : Compass,IPiece
+    abstract class BasePieceModel : Compass, IPiece
     {
 
         private MyPoint pos;
@@ -38,7 +38,7 @@ namespace Chess0.Model.Peices
             set => imagepiece = value;
         }
 
-    
+
         protected void initProprties(MyPoint pos, State player, string path)
         {
             ImagePiece = new BitmapImage();
@@ -50,6 +50,7 @@ namespace Chess0.Model.Peices
             Player = player;
             Pos = pos;
         }
-        public abstract List<MyPoint> PossiablePath();
+        
+        public abstract List<MyPoint> PossiablePath(MyPoint TargetPos = null);
     }
 }

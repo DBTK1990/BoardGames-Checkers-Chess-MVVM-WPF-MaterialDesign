@@ -33,8 +33,6 @@ namespace Chess0.ViewModel.Rules.Chess
         private void CreateBlackPieces(State state)
         {
 
-
-
             Pieces.Add(new Piece_Rook_M(new MyPoint(0, 0), state));
             Pieces.Add(new Piece_Knight_M(new MyPoint(0, 1), state));
             Pieces.Add(new Piece_Bishop_M(new MyPoint(0, 2), state));
