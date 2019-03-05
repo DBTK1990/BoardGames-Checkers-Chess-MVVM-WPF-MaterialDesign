@@ -16,8 +16,6 @@ namespace Chess0.ViewModel
     
         #region Constructor
         public ChessBoardViewModel(IRules play) : base(play) { }
- 
-      
         #endregion Constructor
 
         #region Commands
@@ -73,13 +71,7 @@ namespace Chess0.ViewModel
 
         #endregion Commands
 
-        #region Helpr Function
 
-
-
-       
-
-        #endregion  Helpr Function
 
         #region Testing
 

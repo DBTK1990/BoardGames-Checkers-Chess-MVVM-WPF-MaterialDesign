@@ -65,9 +65,14 @@ namespace Chess0.ViewModel.Rules.Chess
                         }
                         else if (Tiles[Pos].Piece.Player != Me.Piece.Player)
                         {
-                            BlockedPath.Add(Check);
-                            Tiles[Pos].MarkColor = "Red";
-                            Tiles[Pos].MarkVisibility = "Visible";
+                            if (Me.Piece is Piece_Pawn_M && (Check == Direction[(int)CompassE.North] || Check == Direction[(int)CompassE.South]))
+                                BlockedPath.Add(Check);
+                            else
+                            {
+                                BlockedPath.Add(Check);
+                                Tiles[Pos].MarkColor = "Red";
+                                Tiles[Pos].MarkVisibility = "Visible";
+                            }
                         }
                     }
                 }
@@ -83,7 +88,7 @@ namespace Chess0.ViewModel.Rules.Chess
         public State PlayerTurnSwitch( TileModel focus,  ObservableBoardCollection<TileModel> tiles)
         {
 
-            this.CheckQueenTherthend(focus.Piece.Player,tiles);
+            this.CheckKingTherthend(focus.Piece.Player,tiles);
           
             State PlayerTurn = focus.Piece.Player;
             switch (PlayerTurn)
@@ -114,7 +119,7 @@ namespace Chess0.ViewModel.Rules.Chess
             return check;
         }
 
-        private void CheckQueenTherthend(State PlayerTurn, ObservableBoardCollection<TileModel> Tiles)
+        private void CheckKingTherthend(State PlayerTurn, ObservableBoardCollection<TileModel> Tiles)
         {
 
 
@@ -135,7 +140,7 @@ namespace Chess0.ViewModel.Rules.Chess
                         {
                             Pos += Check;
                             if (Tiles[Pos].Piece != null)
-                                if (Tiles[Pos].Piece is Piece_Queen_M && Tiles[Pos].Piece.Player != PlayerTurn)
+                                if (Tiles[Pos].Piece is Piece_King_M && Tiles[Pos].Piece.Player != PlayerTurn)
                                 {
                                     BlockedPath.Add(Check);
                                     Tiles[tileIndex].MarkColor = "Purple";
