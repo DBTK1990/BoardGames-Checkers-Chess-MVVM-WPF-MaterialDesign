@@ -30,13 +30,15 @@ namespace Chess0.ViewModel
                 if (Tiles[tileIndex].MarkColor == "Green")
                 {
                     Rules.MovePiece(Focus.Pos, tileIndex,Tiles);
-                    Focus = Tiles[tileIndex];
+                    
                 }
                 else if (Tiles[tileIndex].MarkColor == "Red")
                 {
                     Rules.EatPiece(Focus.Pos, tileIndex,Tiles,DeadBlack,DeadWhite);
-                    Focus = Tiles[tileIndex];
+                  
                 }
+
+                Focus = Tiles[tileIndex];
 
                 //hide all marking on the board
                 foreach (TileModel tile in Tiles)

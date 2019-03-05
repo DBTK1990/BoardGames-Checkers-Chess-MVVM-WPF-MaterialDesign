@@ -22,8 +22,15 @@ namespace Chess0.Helper
             Y = y;
          }
 
-  
+        public static MyPoint operator /(MyPoint a, double b)
+        {
+               return new MyPoint(a.X / b, a.Y / b);
+        }
 
+        public static MyPoint operator -(MyPoint a, MyPoint b)
+        {
+            return new MyPoint(a.X - b.X, a.Y - b.Y);
+        }
 
          public static MyPoint operator *(MyPoint a, double b)
          {
@@ -45,22 +52,25 @@ namespace Chess0.Helper
         {
             if (Object.ReferenceEquals(a, null))
                 return Object.ReferenceEquals(b, null);
+            else if(Object.ReferenceEquals(b, null))
+                return Object.ReferenceEquals(a, null);
 
-            return a.Equals(b);
+
+            return a.X == b.X && a.Y == b.Y;
 
         }
         public static bool operator !=(MyPoint a, MyPoint b)
         {
            
-                return !a.Equals(b);
+                return !(a==b);
           
         }
 
         public override bool Equals(object obj)
         {
-            
 
-            return base.Equals(obj);
+
+            return this == obj as MyPoint;
 
         }
 

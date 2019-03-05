@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Chess0.Helper;
 using Chess0.Model;
 using Chess0.Model.Peices;
@@ -14,7 +13,10 @@ namespace Chess0.ViewModel.Rules.Checkers
     {
 
 
-        private List<MyPoint> CapturedPiece = new List<MyPoint>();
+        private Dictionary<MyPoint,MyPoint> capturedpieces = new Dictionary<MyPoint, MyPoint>();
+
+        public bool isCapturedPiecesEmpty=> (capturedpieces.Count() == 0) ? true : false;        
+       
         private MyPoint _focus = null;
 
         public void InitPieces(ObservableBoardCollection<TileModel> Tiles)
@@ -48,7 +50,7 @@ namespace Chess0.ViewModel.Rules.Checkers
             }
 
             focus = null;
-
+            capturedpieces.Clear();
             return PlayerTurn;
         }
 
@@ -59,9 +61,10 @@ namespace Chess0.ViewModel.Rules.Checkers
 
             MyPoint Pos = Me.Pos;
             MyPoint Capture = null;
+        
 
             if (_focus != Pos)
-                CapturedPiece.Clear();
+                capturedpieces.Clear();
 
             for (var CheckIndex = 0; CheckIndex < PossiablePath.Count; CheckIndex++)
             {
@@ -72,40 +75,35 @@ namespace Chess0.ViewModel.Rules.Checkers
                     Pos += Check;
                     if (Tiles[Pos].Piece == null)
                     {
-                        if (Capture == null)
-                        {
+                     
                             BlockedPath.Add(Check);
                             Tiles[Pos].MarkColor = "Green";
                             Tiles[Pos].MarkVisibility = "Visible";
-                        }
-                        else
-                        {
-                            Tiles[Pos].MarkColor = "Red";
-                            Tiles[Pos].MarkVisibility = "Visible";
-                            Capture = null;
-                          
-                        }
-
+                      
+                      
                     }
                     else
                     {
                         if (Tiles[Pos].Piece.Player == Me.Piece.Player)
                         {
-                            if (Capture == null)
-                            {
                                 BlockedPath.Add(Check);
-                            }
                          
                         }
                         else if (Tiles[Pos].Piece.Player != Me.Piece.Player)
                         {
+
                             if (Capture == null)
                             {
+                                Tiles[Pos].MarkColor = "Red";
+                                Tiles[Pos].MarkVisibility = "Visible";
+                                capturedpieces.Add(Pos, Check);
                                 Capture = Pos;
-                                CapturedPiece.Add(Pos);
                             }
-                           
-
+                            else
+                            {
+                                Tiles[Capture].MarkVisibility = "Hidden";
+                                capturedpieces.Remove(Capture);
+                            }
                         }
                     }
                 }
@@ -126,27 +124,61 @@ namespace Chess0.ViewModel.Rules.Checkers
             return (DeadPieces.Count()==12)?true:false;
         }
 
+        private double getDistence(MyPoint a,MyPoint b)
+        {
+
+            MyPoint res = a - b;
+
+            res.X *= res.X;
+            res.Y *= res.Y;
+
+            return Math.Sqrt(res.X + res.Y);
+
+
+        }
+
 
         public void EatPiece( MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite)
         {
-            switch (Tiles[moveTo].Piece.Player)
+
+
+            MyPoint direction = ((moveTo - point) / Math.Floor(getDistence(point, moveTo)));
+      
+
+            foreach( KeyValuePair<MyPoint,MyPoint> CanIeat  in capturedpieces)
             {
-                case State.Black:
-                    DeadBlack.Add(Tiles[moveTo].Piece);
-                    break;
-                case State.White:
-                    DeadWhite.Add(Tiles[moveTo].Piece);
-                    break;
+                if (CanIeat.Value == direction)
+                {
+                    switch (Tiles[CanIeat.Key].Piece.Player)
+                    {
+                        case State.Black:
+                            DeadBlack.Add(Tiles[CanIeat.Key].Piece);
+                            break;
+                        case State.White:
+                            DeadWhite.Add(Tiles[CanIeat.Key].Piece);
+                            break;
+                    }
+
+                    Tiles[CanIeat.Key].Piece = null;
+                }
 
             }
+          
            
-
            MovePiece(point, moveTo, Tiles);
         }
 
         public void MovePiece( MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles)
         {
-            throw new NotImplementedException();
+            Tiles[moveTo].Piece = Tiles[point].Piece;
+            Tiles[point].Piece.Pos = moveTo;
+
+            Tiles[point].Piece = null;
+
+            Tiles[moveTo].Piece.MovesMade++;
+
         }
     }
+
+
 }
