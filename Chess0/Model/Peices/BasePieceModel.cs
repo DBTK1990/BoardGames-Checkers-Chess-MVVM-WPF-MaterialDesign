@@ -50,7 +50,7 @@ namespace Chess0.Model.Peices
             Player = player;
             Pos = pos;
         }
-        
+
         public abstract List<MyPoint> PossiablePath(MyPoint TargetPos = null);
     }
 }

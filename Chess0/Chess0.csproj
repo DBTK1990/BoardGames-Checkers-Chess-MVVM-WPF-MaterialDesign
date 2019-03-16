@@ -70,6 +70,7 @@
     <Compile Include="Helper\MyPoint.cs" />
     <Compile Include="Helper\ObservableBoardCollection.cs" />
     <Compile Include="Model\DialogGameOverModel.cs" />
+    <Compile Include="Model\Peices\BasePieceModel.cs" />
     <Compile Include="Model\Peices\Compass.cs" />
     <Compile Include="Model\Peices\Pieces.cs" />
     <Compile Include="Model\Peices\IPiece.cs" />
