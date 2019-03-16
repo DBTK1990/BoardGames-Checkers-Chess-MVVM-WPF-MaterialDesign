@@ -66,11 +66,24 @@ namespace Chess0.Helper
           
         }
 
+        public static double getDistence(MyPoint a, MyPoint b)
+        {
+
+            MyPoint res = b - a;
+
+            res.X *= res.X;
+            res.Y *= res.Y;
+            //size of one unit 1 on 1 so we convert the result to match our unit
+            return Math.Sqrt(res.X + res.Y) / Math.Sqrt(2);
+
+
+        }
+
         public override bool Equals(object obj)
         {
 
 
-            return this == obj as MyPoint;
+            return this as MyPoint == obj as MyPoint;
 
         }
 

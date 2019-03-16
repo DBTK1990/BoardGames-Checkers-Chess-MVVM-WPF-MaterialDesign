@@ -70,7 +70,6 @@
     <Compile Include="Helper\MyPoint.cs" />
     <Compile Include="Helper\ObservableBoardCollection.cs" />
     <Compile Include="Model\DialogGameOverModel.cs" />
-    <Compile Include="Model\Peices\BasePieceModel.cs" />
     <Compile Include="Model\Peices\Compass.cs" />
     <Compile Include="Model\Peices\Pieces.cs" />
     <Compile Include="Model\Peices\IPiece.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="ViewModel\ChessBoardViewModel.cs" />
     <Compile Include="ViewModel\CheckersBoardViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\Rules\Checkers\BaseRules_Checkers.cs" />
     <Compile Include="ViewModel\Rules\Checkers\CheckersPlayer.cs" />
     <Compile Include="ViewModel\Rules\Checkers\Rules_Checkers.cs" />
     <Compile Include="ViewModel\Rules\Chess\ChessPlayer.cs" />

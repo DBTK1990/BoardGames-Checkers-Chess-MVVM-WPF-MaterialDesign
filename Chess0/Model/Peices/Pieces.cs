@@ -165,8 +165,7 @@ namespace Chess0.Model.Peices
                 case State.Black:
                     TempPath = @"pack://application:,,,/Chess0;component/Resources/Bishop_Black.png";
                     break;
-                default:
-                    break;
+               
             }
 
             base.initProprties(pos, player, TempPath);
@@ -290,7 +289,7 @@ namespace Chess0.Model.Peices
                             if (MovesMade == 0 && directionWhiteIndex == 0)
                             {
                                 paths.Add(Direction[directionWhiteIndex]);
-                                paths.Add(Direction[directionWhiteIndex]);
+                                paths.Add(Direction[directionWhiteIndex]); //THIS IS A PROBLEM
                             }
                             else
                                 paths.Add(Direction[directionWhiteIndex]);
@@ -356,41 +355,41 @@ namespace Chess0.Model.Peices
         public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
 
-
-          MyPoint usePos = TargetPos ?? Pos;
-
             List<MyPoint> paths = new List<MyPoint>();
-            MyPoint Check = null;
+            MyPoint Check = Pos;
 
             switch (Player)
             {
                 case State.White:
 
-                    int directionWhiteIndex = 7;
-
-                    while (directionWhiteIndex >= 1)
+                   
+                    for (var moves = 1; moves <= 2; moves++)
                     {
-                        Check = Direction[directionWhiteIndex] + usePos;
-
-                        if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
+                        int directionWhiteIndex = 7;
+                        while (directionWhiteIndex >= 1)
                         {
-                            paths.Add(Direction[directionWhiteIndex]);
-                            paths.Add(Direction[directionWhiteIndex]);
+                        
+                            Check = Direction[directionWhiteIndex]*moves+Check;
+                            if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
+                                paths.Add(Direction[directionWhiteIndex]);
+                        
+                            Check = Pos;
+                            directionWhiteIndex -= 6;
+                        
                         }
-                        
-
-                        directionWhiteIndex -= 6;
-                        
                     }
                     break;
                 case State.Black:
-                    for (var directionBlackIndex = 3; directionBlackIndex <= 5; directionBlackIndex+=2)
+
+                    for (var moves = 1; moves <= 2; moves++)
                     {
-                        Check = Direction[directionBlackIndex] + usePos;
-                        if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
+                        for (var directionBlackIndex = 3; directionBlackIndex <= 5; directionBlackIndex+=2)
                         {
+                            Check = Direction[directionBlackIndex] * moves + Check;
+                            if ((0 <= Check.X && Check.X < 8) && (0 <= Check.Y && Check.Y < 8))
                                 paths.Add((Direction[directionBlackIndex]));
-                                paths.Add((Direction[directionBlackIndex]));
+                     
+                            Check = Pos;
                         }
                     }
                     break;

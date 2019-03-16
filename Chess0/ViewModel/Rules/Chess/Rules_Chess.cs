@@ -24,10 +24,10 @@ namespace Chess0.ViewModel.Rules.Chess
 
         }
 
-        public void SimulatePath(TileModel Me , ObservableBoardCollection<TileModel> Tiles, List<MyPoint> _path = null)
+        public void SimulatePath(TileModel Me , ObservableBoardCollection<TileModel> Tiles)
         {
             HashSet<MyPoint> BlockedPath = new HashSet<MyPoint>();
-            List<MyPoint> PossiablePath =_path?? Me.Piece.PossiablePath();
+            List<MyPoint> PossiablePath =Me.Piece.PossiablePath();
 
             MyPoint Pos = Me.Pos;
 

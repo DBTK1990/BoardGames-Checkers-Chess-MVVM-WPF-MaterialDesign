@@ -9,16 +9,20 @@ using Chess0.Model.Peices;
 
 namespace Chess0.ViewModel.Rules.Checkers
 {
-    class Rules_Checkers : IRules
+    class Rules_Checkers :  IRules
     {
 
+        protected Dictionary<MyPoint, MyPoint> capturedpieces = new Dictionary<MyPoint, MyPoint>();
 
-        private Dictionary<MyPoint,MyPoint> capturedpieces = new Dictionary<MyPoint, MyPoint>();
+        private MyPoint _lock = null;
+        public MyPoint Lock
+        {
+            get => _lock;
+            protected set => _lock = value;
+        }
+        public bool isCapturedPiecesEmpty => (capturedpieces.Count() == 0) ? true : false;
 
-        public bool isCapturedPiecesEmpty=> (capturedpieces.Count() == 0) ? true : false;        
-       
-        private MyPoint _focus = null;
-
+        //this is fine
         public void InitPieces(ObservableBoardCollection<TileModel> Tiles)
         {
             CheckersPlayer white = new CheckersPlayer(State.White);
@@ -38,83 +42,181 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         public State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles)
         {
-            State PlayerTurn = focus.Piece.Player;
-            switch (PlayerTurn)
-            {
-                case State.Black:
-                    PlayerTurn = State.White;
-                    break;
-                case State.White:
-                    PlayerTurn = State.Black;
-                    break;
-            }
 
-            focus = null;
-            capturedpieces.Clear();
+
+
+            //check if focus piece can eat another piece
+            //if true then
+            //:
+            //lock=focus.pos 
+            //SimulatePath
+            //:
+            //if false then
+            //:
+            //change player
+            //focus=null
+            //:
+            State PlayerTurn;
+
+            if (Lock == null)
+            {
+                PlayerTurn = focus.Piece.Player;
+
+                switch (PlayerTurn)
+                {
+                    case State.Black:
+                        PlayerTurn = State.White;
+                        break;
+                    case State.White:
+                        PlayerTurn = State.Black;
+                        break;
+                }
+                focus = null;
+            }
+            else
+            {
+                focus = tiles[Lock];
+                PlayerTurn = focus.Piece.Player;
+                
+            }
             return PlayerTurn;
         }
 
-        public void SimulatePath(TileModel Me, ObservableBoardCollection<TileModel> Tiles, List<MyPoint> _path=null)
+        public void SimulatePath(TileModel Me, ObservableBoardCollection<TileModel> Tiles)
         {
             HashSet<MyPoint> BlockedPath = new HashSet<MyPoint>();
-            List<MyPoint> PossiablePath = _path ?? Me.Piece.PossiablePath();
-
+            List<MyPoint> PossiablePath = Me.Piece.PossiablePath();
+            HashSet<MyPoint> MoveList = new HashSet<MyPoint>();
             MyPoint Pos = Me.Pos;
-            MyPoint Capture = null;
-        
+            Dictionary<MyPoint, int> moves = new Dictionary<MyPoint, int>();
+           
+           
+     
+            capturedpieces.Clear();
+            foreach (MyPoint dir in PossiablePath)
+            {
+                try
+                {
+                    moves.Add(dir, 0);
+                    System.Console.WriteLine("SimulatePath() method: dir not exist");
+                }
+                catch (ArgumentException e)
+                {
+                    System.Console.WriteLine("SimulatePath() method: dir exist");
 
-            if (_focus != Pos)
-                capturedpieces.Clear();
+                }
+            }
+
 
             for (var CheckIndex = 0; CheckIndex < PossiablePath.Count; CheckIndex++)
             {
                 MyPoint Check = PossiablePath[CheckIndex];
+                    moves[Check]++;
+
 
                 if (!BlockedPath.Contains(Check))
                 {
-                    Pos += Check;
+                    Pos=Pos+ (Check*moves[Check]);
                     if (Tiles[Pos].Piece == null)
                     {
-                     
-                            BlockedPath.Add(Check);
-                            Tiles[Pos].MarkColor = "Green";
-                            Tiles[Pos].MarkVisibility = "Visible";
-                      
-                      
+                        if (Me.Piece is Piece_Man_M)
+                        {
+                            if (moves[Check] == 1 && !capturedpieces.ContainsKey(Check))
+                            {
+                                MoveList.Add(Pos);
+                                BlockedPath.Add(Check);
+                            }
+                            else if (moves[Check] == 2 && !isCapturedPiecesEmpty)
+                                MoveList.Add(Pos);
+                        }
+                        else if (Me.Piece is Piece_FlyingKingC_M)
+                            MoveList.Add(Pos);
+
+
+
                     }
                     else
                     {
                         if (Tiles[Pos].Piece.Player == Me.Piece.Player)
                         {
+                   
+                            
                                 BlockedPath.Add(Check);
-                         
+                            
                         }
-                        else if (Tiles[Pos].Piece.Player != Me.Piece.Player)
+                        else if (Tiles[Pos].Piece.Player != Me.Piece.Player )
                         {
-
-                            if (Capture == null)
+                            if (Me.Piece is Piece_Man_M && moves[Check] == 1 && CheckBound(Pos))
+                                capturedpieces.Add(Check, Pos);
+                            else if (Me.Piece is Piece_FlyingKingC_M && CheckBound(Pos))
                             {
-                                Tiles[Pos].MarkColor = "Red";
-                                Tiles[Pos].MarkVisibility = "Visible";
-                                capturedpieces.Add(Pos, Check);
-                                Capture = Pos;
+                                try { capturedpieces.Add(Check, Pos); }
+                                catch (ArgumentException e)
+                                {
+                                    BlockedPath.Add(Check);
+                                }
                             }
-                            else
+                            
+                          
+
+
+                        }
+
+                        MyPoint tempCapture = null;
+                        capturedpieces.TryGetValue(Check, out tempCapture);
+                        if (tempCapture != null)
+                        {
+                            if (Math.Floor(MyPoint.getDistence(tempCapture, Pos)) == 1)
                             {
-                                Tiles[Capture].MarkVisibility = "Hidden";
-                                capturedpieces.Remove(Capture);
+                                capturedpieces.Remove(Check);
+                                BlockedPath.Add(Check);
                             }
                         }
                     }
                 }
-                if ((CheckIndex + 1) < PossiablePath.Count && PossiablePath[CheckIndex] != PossiablePath[CheckIndex + 1])
-                {
-                    Pos = Me.Pos;
-                }
+
+
+
+                Pos = Me.Pos;
 
             }
 
-            _focus = Me.Pos;
+            if (isCapturedPiecesEmpty)
+            {
+                foreach (MyPoint move in MoveList)
+                {
+
+                    Tiles[move].MarkColor = "Green";
+                    Tiles[move].MarkVisibility = "Visible";
+
+                }
+
+            }
+            else
+            {
+                foreach(KeyValuePair<MyPoint,MyPoint> Capture in capturedpieces)
+                {
+              
+                    Tiles[Capture.Value].MarkColor = "Red";
+                    Tiles[Capture.Value].MarkVisibility = "Visible";
+                    MyPoint pathGreen = Capture.Value + Capture.Key;
+
+                    foreach (MyPoint move in MoveList)
+                    {
+                        if (pathGreen == move)
+                        {
+                            Tiles[pathGreen].MarkColor = "Green";
+                            Tiles[pathGreen].MarkVisibility = "Visible";
+                            pathGreen = pathGreen + Capture.Key;
+                        }
+
+                    }
+                    
+
+
+                }
+            }
+            
 
         }
 
@@ -124,59 +226,87 @@ namespace Chess0.ViewModel.Rules.Checkers
             return (DeadPieces.Count()==12)?true:false;
         }
 
-        private double getDistence(MyPoint a,MyPoint b)
+        
+
+        private bool CheckBound(MyPoint boundCheck)
         {
-
-            MyPoint res = a - b;
-
-            res.X *= res.X;
-            res.Y *= res.Y;
-
-            return Math.Sqrt(res.X + res.Y);
-
-
+            return boundCheck.X != 0 && boundCheck.Y != 0 && boundCheck.X != 7 && boundCheck.Y != 7?true:false;
+           
         }
 
 
-        public void EatPiece( MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite)
+        public void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite)
         {
 
 
-            MyPoint direction = ((moveTo - point) / Math.Floor(getDistence(point, moveTo)));
-      
+            MyPoint direction =  (moveTo - point) /Math.Floor( MyPoint.getDistence(point, moveTo) );
+        
 
-            foreach( KeyValuePair<MyPoint,MyPoint> CanIeat  in capturedpieces)
+            foreach (KeyValuePair<MyPoint, MyPoint> CanIeat in capturedpieces)
             {
-                if (CanIeat.Value == direction)
+                if (CanIeat.Key == direction)
                 {
-                    switch (Tiles[CanIeat.Key].Piece.Player)
+                    switch (Tiles[CanIeat.Value].Piece.Player)
                     {
                         case State.Black:
-                            DeadBlack.Add(Tiles[CanIeat.Key].Piece);
+                            DeadBlack.Add(Tiles[CanIeat.Value].Piece);
                             break;
                         case State.White:
-                            DeadWhite.Add(Tiles[CanIeat.Key].Piece);
+                            DeadWhite.Add(Tiles[CanIeat.Value].Piece);
                             break;
                     }
 
-                    Tiles[CanIeat.Key].Piece = null;
+                    Tiles[CanIeat.Value].Piece = null;
                 }
 
             }
-          
+
+
+            MovePiece(point, moveTo, Tiles);
+            //setlock to postison if anohter eat possiable
+
+            if (moveTo.X != 0 && moveTo.X != 7)
+            {
+                SimulatePath(Tiles[moveTo], Tiles);
+            }
+
+            if (isCapturedPiecesEmpty)
+            {
+                foreach (TileModel tile in Tiles)
+                {
+                    tile.MarkVisibility = "Hidden";
+                    tile.MarkColor = "White";
+                }
+                    Lock = null;
+                    capturedpieces.Clear();
+            }
+                else
+                {
+                    Lock = moveTo;
+                }
            
-           MovePiece(point, moveTo, Tiles);
+           
+
+        
+
         }
 
         public void MovePiece( MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles)
         {
-            Tiles[moveTo].Piece = Tiles[point].Piece;
-            Tiles[point].Piece.Pos = moveTo;
-
+            if (moveTo.X==0 || moveTo.X==7)
+            {
+                Tiles[moveTo].Piece = new Piece_FlyingKingC_M(moveTo, Tiles[point].Piece.Player);
+            }
+            else
+            {
+                Tiles[moveTo].Piece = Tiles[point].Piece;
+                Tiles[point].Piece.Pos = moveTo;
+            }
             Tiles[point].Piece = null;
 
             Tiles[moveTo].Piece.MovesMade++;
 
+            capturedpieces.Clear();
         }
     }
 
