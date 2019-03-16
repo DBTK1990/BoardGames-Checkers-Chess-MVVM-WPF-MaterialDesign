@@ -18,8 +18,8 @@ namespace Chess0.ViewModel.Rules.Checkers
             protected set => _lock1 = value;
         }
         //LOCK2: CONTROL HAS TO EAT RULE
-        private MyPoint _lock2 = null;
-        public MyPoint Lock2
+        private List<MyPoint> _lock2 = new List<MyPoint>();
+        public List<MyPoint> Lock2
         {
             get => _lock2;
             protected set => _lock2 = value;

@@ -1,6 +1,8 @@
 ﻿using Chess0.Helper;
 using Chess0.Model;
-using Chess0.Model.Peices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Chess0.ViewModel.Rules;
 using Chess0.ViewModel.Rules.Checkers;
 using System;
@@ -55,14 +57,21 @@ namespace Chess0.ViewModel
                     else
                         PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
 
+                MyPoint PTempFocus2 = null;
+                if ((Rules as Rules_Checkers).Lock1 != null)
+                    PTempFocus2 = (Rules as Rules_Checkers).Lock1;
+                else if ((Rules as Rules_Checkers).Lock2.Count != 0)
+                    PTempFocus2 =(Rules as Rules_Checkers).Lock2.First();
+                    
+                
+
                 //chosse next turn focus
-                MyPoint PTempFocus2 = (Rules as Rules_Checkers).Lock1 ?? (Rules as Rules_Checkers).Lock2 ;
                 Focus = (PTempFocus2!=null) ?Tiles[PTempFocus2] : null;
 
             }
             else if (Tiles[tileIndex].Piece != null)
             {
-                if (Focus == null && Tiles[tileIndex].Piece.Player == PlayerTurn || (Focus != null && Tiles[tileIndex].Piece.Player == PlayerTurn))
+                if (Tiles[tileIndex].Piece.Player == PlayerTurn)
                 {
 
                     foreach (TileModel tile in Tiles)
@@ -73,13 +82,26 @@ namespace Chess0.ViewModel
 
 
                     //convertor to my point to check if null
+                    MyPoint PTempFocus = null;
+                    if ((Rules as Rules_Checkers).Lock1 != null)
+                        PTempFocus = (Rules as Rules_Checkers).Lock1;
+                    else if ((Rules as Rules_Checkers).Lock2.Count != 0)
+                    {
+                        if ((Rules as Rules_Checkers).Lock2.Contains(tileIndex))
+                            PTempFocus = tileIndex;
+
+                    }
+                    else
+                    {
+                        PTempFocus = tileIndex;
+                    }
 
 
-                    MyPoint PTempFocus = (Rules as Rules_Checkers).Lock1 ?? (Rules as Rules_Checkers).Lock2 ?? tileIndex;
-                    Focus = Tiles[PTempFocus];
+                    Focus = PTempFocus!=null ? Tiles[PTempFocus]:Focus;
 
                     Rules.SimulatePath(Focus, Tiles);
                 }
+              
             }
 
             

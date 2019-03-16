@@ -63,26 +63,37 @@ namespace Chess0.ViewModel.Rules.Checkers
 
                 foreach (TileModel CanEat in tiles)
                 {
-                    if(CanEat.Piece!=null && CanEat.Piece.Player==PlayerTurn)
-                    SimulatePath(CanEat,tiles);
+                   
 
-                    if (isCapturedPiecesEmpty)
+                    if (CanEat.Piece != null && CanEat.Piece.Player == PlayerTurn)
                     {
+                        SimulatePath(CanEat, tiles);
+
                         foreach (TileModel tile in tiles)
                         {
                             tile.MarkVisibility = "Hidden";
                             tile.MarkColor = "White";
                         }
-                        Lock2 = null;
+
+                        if (isCapturedPiecesEmpty && Lock2.Count() == 0)
+                        {
+                            Lock2.Clear();   
+                        }
+                        else if(!isCapturedPiecesEmpty)
+                        {
+                            Lock2.Add(CanEat.Pos);
+                            
+
+                        }
                         capturedpieces.Clear();
-                    }
-                    else
-                    {
-                        Lock2 = CanEat.Pos;
-                        break;
                     }
 
                 }
+
+                if (Lock2.Count() !=0)
+                    SimulatePath(tiles[Lock2.First()], tiles);
+               
+
             }
             else
             {
@@ -278,7 +289,11 @@ namespace Chess0.ViewModel.Rules.Checkers
             //setlock to postison if anohter eat possiable
 
 
-            if ( Tiles[moveTo].Piece is Piece_FlyingKingC_M && Tiles[moveTo].Piece.MovesMade!=0)
+            if (Tiles[moveTo].Piece is Piece_FlyingKingC_M && Tiles[moveTo].Piece.MovesMade != 0)
+            {
+                SimulatePath(Tiles[moveTo], Tiles);
+            }
+            else if (Tiles[moveTo].Piece is Piece_Man_M)
             {
                 SimulatePath(Tiles[moveTo], Tiles);
             }
@@ -300,8 +315,13 @@ namespace Chess0.ViewModel.Rules.Checkers
                 {
                     Lock1 = moveTo;
                 }
-           
-           
+
+            if (Lock2.Count != 0)
+            {
+                Lock2.Clear();
+
+
+            }
 
         
 

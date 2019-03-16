@@ -163,7 +163,7 @@ namespace Chess0.ViewModel
             DeadWhite = new ObservableCollection<IPiece>();
 
             //who starts the game
-            PlayerTurn = State.White;
+            PlayerTurn = State.Black;
 
             //Commant init
             TileCommand = new RelayCommand(MyOnClick);
