@@ -152,14 +152,18 @@ namespace Chess0.ViewModel
             InitBoard();
 
             //Init all piece of the desire game
-            Rules.InitPieces(Tiles);
+            if (Rules is Rules_Chess)
+                Rules.InitPieces(Tiles);
+            else
+                (Rules as Rules.Checkers.Rules_Checkers).testPieces(Tiles);
+            //testinghere
 
             //lists of dead pieces
             DeadBlack = new ObservableCollection<IPiece>();
-            dead_white = new ObservableCollection<IPiece>();
+            DeadWhite = new ObservableCollection<IPiece>();
 
             //who starts the game
-            PlayerTurn = State.Black;
+            PlayerTurn = State.White;
 
             //Commant init
             TileCommand = new RelayCommand(MyOnClick);
@@ -192,8 +196,10 @@ namespace Chess0.ViewModel
             }
 
             //initNewGame
-            Rules.InitPieces(Tiles);
-
+            
+                Rules.InitPieces(Tiles);
+          
+               
             PlayerTurn = State.Black;
         }
 

@@ -66,6 +66,12 @@ namespace Chess0.Helper
           
         }
 
+        public static bool CheckBound(MyPoint boundCheck, int border)
+        {
+            return boundCheck.X != 0 && boundCheck.Y != 0 && boundCheck.X != border && boundCheck.Y != border ? true : false;
+
+        }
+
         public static double getDistence(MyPoint a, MyPoint b)
         {
 
@@ -74,7 +80,7 @@ namespace Chess0.Helper
             res.X *= res.X;
             res.Y *= res.Y;
             //size of one unit 1 on 1 so we convert the result to match our unit
-            return Math.Sqrt(res.X + res.Y) / Math.Sqrt(2);
+            return Math.Sqrt(res.X + res.Y) / 1.4;
 
 
         }

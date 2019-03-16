@@ -14,18 +14,24 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         public List<IPiece> Pieces { get => pieces; }
 
-        public CheckersPlayer(State state)
+        public CheckersPlayer()
         {
-            switch (state)
-            {
-                case State.Black:
-                    this.CreatePieces(state, 1, 3, CreateBlackPieces);
-                    break;
-                case State.White:
-                    this.CreatePieces(state, 6, 8, CreateWhitePieces);
-                    break;
+            this.CreateTestPieces();
+        }
+        public CheckersPlayer(State state, string test = "")
+        {
+        
+                switch (state)
+                {
+                    case State.Black:
+                        this.CreatePieces(state, 1, 3, CreateBlackPieces);
+                        break;
+                    case State.White:
+                        this.CreatePieces(state, 6, 8, CreateWhitePieces);
+                        break;
 
-            }
+                }
+           
 
         }
         private void CreatePieces(State state, int startRow, int endRow, Action<int, int, int, State> enterPieces)
@@ -59,8 +65,17 @@ namespace Chess0.ViewModel.Rules.Checkers
             else if (indexRow != middle && indexCol % 2 == 0)
                 Pieces.Add(new Piece_Man_M(new MyPoint(indexRow - 1, indexCol - 1), state));
         }
-        
-      
 
+
+        private void CreateTestPieces()
+        {
+            Pieces.Add(new Piece_Man_M(new MyPoint(1, 2), State.Black));
+            Pieces.Add(new Piece_Man_M(new MyPoint(1, 4), State.Black));
+            Pieces.Add(new Piece_Man_M(new MyPoint(4, 5), State.White));
+            Pieces.Add(new Piece_FlyingKingC_M(new MyPoint(3, 0), State.White));
+            Pieces[3].MovesMade=2;
+            
+
+        }
     }
 }

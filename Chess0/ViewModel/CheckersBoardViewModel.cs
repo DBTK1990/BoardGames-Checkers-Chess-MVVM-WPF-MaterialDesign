@@ -44,7 +44,7 @@ namespace Chess0.ViewModel
                 else//if capture is 0 do move
                     Rules.MovePiece(Focus.Pos, tileIndex, Tiles);
 
-
+                //shift focus to move/eat pos
                 Focus = Tiles[tileIndex];
 
                 //hide all marking on the board
@@ -54,6 +54,10 @@ namespace Chess0.ViewModel
                         base.ShowGameOverDialog();
                     else
                         PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
+
+                //chosse next turn focus
+                MyPoint PTempFocus2 = (Rules as Rules_Checkers).Lock1 ?? (Rules as Rules_Checkers).Lock2 ;
+                Focus = (PTempFocus2!=null) ?Tiles[PTempFocus2] : null;
 
             }
             else if (Tiles[tileIndex].Piece != null)
@@ -71,12 +75,14 @@ namespace Chess0.ViewModel
                     //convertor to my point to check if null
 
 
-                    MyPoint PTempFocus = (Rules as Rules_Checkers).Lock ?? tileIndex;
+                    MyPoint PTempFocus = (Rules as Rules_Checkers).Lock1 ?? (Rules as Rules_Checkers).Lock2 ?? tileIndex;
                     Focus = Tiles[PTempFocus];
 
                     Rules.SimulatePath(Focus, Tiles);
                 }
             }
+
+            
 
         }
     }

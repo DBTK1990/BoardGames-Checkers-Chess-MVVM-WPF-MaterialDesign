@@ -46,7 +46,7 @@ namespace Chess0.Model.Peices
             ImagePiece.UriSource = new Uri(path);
             ImagePiece.EndInit();
 
-            MovesMade = 0;///dont forget to update thissssss with commit or somthing
+            MovesMade = 0;
             Player = player;
             Pos = pos;
         }

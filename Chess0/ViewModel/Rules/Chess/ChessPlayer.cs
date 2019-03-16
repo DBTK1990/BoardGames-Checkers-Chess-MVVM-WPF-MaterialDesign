@@ -4,6 +4,7 @@ using Chess0.Model.Peices;
 using System.Collections.Generic;
 
 
+
 namespace Chess0.ViewModel.Rules.Chess
 {
 

@@ -44,6 +44,7 @@ namespace Chess0.ViewModel
             set
             {
                 restart_game_command = value;
+                OnPropertyChanged("RestartGameCommand");
             }
         }
 
@@ -68,11 +69,14 @@ namespace Chess0.ViewModel
             if (Game.Chess.ToString() == game as string)
             {
                 BoardViewModel = new ChessBoardViewModel(new Rules_Chess());
+                
             }
             else if (Game.Checkers.ToString() == game as string)
             {
                 BoardViewModel = new CheckersBoardViewModel(new Rules_Checkers());
+                
             }
+            RestartGameCommand = BoardViewModel.RestartCommand;
         }
         #endregion Command
     }

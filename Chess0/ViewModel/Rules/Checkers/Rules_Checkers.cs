@@ -9,18 +9,9 @@ using Chess0.Model.Peices;
 
 namespace Chess0.ViewModel.Rules.Checkers
 {
-    class Rules_Checkers :  IRules
+    class Rules_Checkers : BaseRules_Checkers, IRules
     {
 
-        protected Dictionary<MyPoint, MyPoint> capturedpieces = new Dictionary<MyPoint, MyPoint>();
-
-        private MyPoint _lock = null;
-        public MyPoint Lock
-        {
-            get => _lock;
-            protected set => _lock = value;
-        }
-        public bool isCapturedPiecesEmpty => (capturedpieces.Count() == 0) ? true : false;
 
         //this is fine
         public void InitPieces(ObservableBoardCollection<TileModel> Tiles)
@@ -28,13 +19,23 @@ namespace Chess0.ViewModel.Rules.Checkers
             CheckersPlayer white = new CheckersPlayer(State.White);
             CheckersPlayer black = new CheckersPlayer(State.Black);
 
-
-           
-            for (var i = 0; i < 12; i++)
+            for (var i = 0; i < white.Pieces.Count(); i++)
             {
                 Tiles[white.Pieces[i].Pos].Piece = white.Pieces[i];
                 Tiles[black.Pieces[i].Pos].Piece = black.Pieces[i];
 
+            }
+        }
+
+        public void testPieces(ObservableBoardCollection<TileModel> Tiles)
+        {
+
+            CheckersPlayer test = new CheckersPlayer();
+
+            foreach (IPiece newPiece in test.Pieces)
+            {
+                Tiles[newPiece.Pos].Piece = newPiece;
+          
             }
         }
 
@@ -43,22 +44,9 @@ namespace Chess0.ViewModel.Rules.Checkers
         public State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles)
         {
 
-
-
-            //check if focus piece can eat another piece
-            //if true then
-            //:
-            //lock=focus.pos 
-            //SimulatePath
-            //:
-            //if false then
-            //:
-            //change player
-            //focus=null
-            //:
             State PlayerTurn;
 
-            if (Lock == null)
+            if (Lock1 == null)
             {
                 PlayerTurn = focus.Piece.Player;
 
@@ -72,13 +60,41 @@ namespace Chess0.ViewModel.Rules.Checkers
                         break;
                 }
                 focus = null;
+
+                foreach (TileModel CanEat in tiles)
+                {
+                    if(CanEat.Piece!=null && CanEat.Piece.Player==PlayerTurn)
+                    SimulatePath(CanEat,tiles);
+
+                    if (isCapturedPiecesEmpty)
+                    {
+                        foreach (TileModel tile in tiles)
+                        {
+                            tile.MarkVisibility = "Hidden";
+                            tile.MarkColor = "White";
+                        }
+                        Lock2 = null;
+                        capturedpieces.Clear();
+                    }
+                    else
+                    {
+                        Lock2 = CanEat.Pos;
+                        break;
+                    }
+
+                }
             }
             else
             {
-                focus = tiles[Lock];
+                focus = tiles[Lock1];
                 PlayerTurn = focus.Piece.Player;
-                
+
+               
+
+
             }
+
+           
             return PlayerTurn;
         }
 
@@ -146,9 +162,9 @@ namespace Chess0.ViewModel.Rules.Checkers
                         }
                         else if (Tiles[Pos].Piece.Player != Me.Piece.Player )
                         {
-                            if (Me.Piece is Piece_Man_M && moves[Check] == 1 && CheckBound(Pos))
+                            if (Me.Piece is Piece_Man_M && moves[Check] == 1 && MyPoint.CheckBound(Pos,7))
                                 capturedpieces.Add(Check, Pos);
-                            else if (Me.Piece is Piece_FlyingKingC_M && CheckBound(Pos))
+                            else if (Me.Piece is Piece_FlyingKingC_M && MyPoint.CheckBound(Pos,7))
                             {
                                 try { capturedpieces.Add(Check, Pos); }
                                 catch (ArgumentException e)
@@ -228,11 +244,7 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         
 
-        private bool CheckBound(MyPoint boundCheck)
-        {
-            return boundCheck.X != 0 && boundCheck.Y != 0 && boundCheck.X != 7 && boundCheck.Y != 7?true:false;
-           
-        }
+       
 
 
         public void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite)
@@ -260,15 +272,19 @@ namespace Chess0.ViewModel.Rules.Checkers
                 }
 
             }
-
+          
 
             MovePiece(point, moveTo, Tiles);
             //setlock to postison if anohter eat possiable
 
-            if (moveTo.X != 0 && moveTo.X != 7)
+
+            if ( Tiles[moveTo].Piece is Piece_FlyingKingC_M && Tiles[moveTo].Piece.MovesMade!=0)
             {
                 SimulatePath(Tiles[moveTo], Tiles);
             }
+           
+                
+
 
             if (isCapturedPiecesEmpty)
             {
@@ -277,12 +293,12 @@ namespace Chess0.ViewModel.Rules.Checkers
                     tile.MarkVisibility = "Hidden";
                     tile.MarkColor = "White";
                 }
-                    Lock = null;
+                    Lock1 = null;
                     capturedpieces.Clear();
             }
                 else
                 {
-                    Lock = moveTo;
+                    Lock1 = moveTo;
                 }
            
            
@@ -293,7 +309,7 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         public void MovePiece( MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles)
         {
-            if (moveTo.X==0 || moveTo.X==7)
+            if ((moveTo.X==0 || moveTo.X==7) && (Tiles[point].Piece is Piece_Man_M))
             {
                 Tiles[moveTo].Piece = new Piece_FlyingKingC_M(moveTo, Tiles[point].Piece.Player);
             }
@@ -301,10 +317,12 @@ namespace Chess0.ViewModel.Rules.Checkers
             {
                 Tiles[moveTo].Piece = Tiles[point].Piece;
                 Tiles[point].Piece.Pos = moveTo;
+                Tiles[moveTo].Piece.MovesMade++;
             }
             Tiles[point].Piece = null;
 
-            Tiles[moveTo].Piece.MovesMade++;
+           
+
 
             capturedpieces.Clear();
         }

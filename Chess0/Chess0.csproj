@@ -87,6 +87,7 @@
     <Compile Include="ViewModel\Rules\Checkers\BaseRules_Checkers.cs" />
     <Compile Include="ViewModel\Rules\Checkers\CheckersPlayer.cs" />
     <Compile Include="ViewModel\Rules\Checkers\Rules_Checkers.cs" />
+    <Compile Include="ViewModel\Rules\Chess\BaseRules_Chess.cs" />
     <Compile Include="ViewModel\Rules\Chess\ChessPlayer.cs" />
     <Compile Include="ViewModel\Rules\IRules.cs" />
     <Compile Include="ViewModel\Rules\Chess\Rules_Chess.cs" />
