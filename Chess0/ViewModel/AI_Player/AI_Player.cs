@@ -8,8 +8,11 @@ using Chess0.Model;
 
 namespace Chess0.ViewModel.AI_Player
 {
-    class AI_Player
+    
+    class AI_Player_Checkers
     {
+
+        private ObservableBoardCollection<TileModel> RootStateOfBoard;
         /*
          * 
          * struct MinMaxRes
@@ -30,7 +33,7 @@ namespace Chess0.ViewModel.AI_Player
                     for each move of allpossibleMove(piece)
                         eval = minimax(move, depth - 1, alpha, beta, false)
                         if(eval[MinMaxRes.maxEval]>maxEval)
-                            maxEval = eval[MinMaxRes.maxEval]
+                            maxEval = eval[MinMaxRes.maxEval];
                             eval[MinMaxRes.BestNextMove]=move;
                         alpha = max(alpha, eval)
                         if beta <= alpha
@@ -58,29 +61,24 @@ namespace Chess0.ViewModel.AI_Player
     //moveto helper file
     class PathData : ICloneable
         {
-        public ObservableBoardCollection<TileModel> Tiles;
-        
-        public HashSet<MyPoint> Moves;
-        public List<Dictionary<MyPoint, MyPoint>> capturedPieces=new List<Dictionary<MyPoint, MyPoint>>();
 
-        public PathData(ObservableBoardCollection<TileModel> _Tiles, HashSet<MyPoint> _Moves,Dictionary<MyPoint, MyPoint> _capturedPieces)
+
+        public HashSet<MyPoint> Moves=null;
+        public Dictionary<MyPoint, MyPoint> capturedPieces=null;
+
+        
+        public PathData( HashSet<MyPoint> _Moves, Dictionary<MyPoint, MyPoint> _capturedPieces=null)
         {
-            Tiles = _Tiles;
-            Moves = _Moves;
-            capturedPieces.Add(_capturedPieces);
-        }
-        public PathData(ObservableBoardCollection<TileModel> _Tiles, HashSet<MyPoint> _Moves, List<Dictionary<MyPoint, MyPoint>> _capturedPieces=null)
-        {
-            Tiles = _Tiles;
-            Moves = _Moves;
-            capturedPieces=_capturedPieces;
+           
+            Moves =(_Moves==null)?null:new HashSet<MyPoint>(_Moves);
+            capturedPieces=(_capturedPieces==null)? _capturedPieces : new Dictionary<MyPoint, MyPoint>(_capturedPieces);
 
         }
 
         object ICloneable.Clone()
         {
             
-            return new PathData(Tiles,Moves,capturedPieces);
+            return new PathData(Moves,capturedPieces);
         }
     }
 }

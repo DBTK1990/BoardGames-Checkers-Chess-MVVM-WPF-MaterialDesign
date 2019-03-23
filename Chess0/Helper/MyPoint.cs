@@ -50,10 +50,10 @@ namespace Chess0.Helper
 
         public static bool operator ==(MyPoint a, MyPoint b)
         {
-            if (Object.ReferenceEquals(a, null))
-                return Object.ReferenceEquals(b, null);
-            else if(Object.ReferenceEquals(b, null))
-                return Object.ReferenceEquals(a, null);
+            if (a is null)
+                return b is null;
+            else if(b is null)
+                return a is null;
 
 
             return a.X == b.X && a.Y == b.Y;
@@ -72,7 +72,7 @@ namespace Chess0.Helper
 
         }
 
-        public static double getDistence(MyPoint a, MyPoint b)
+        public static double GetDistence(MyPoint a, MyPoint b)
         {
 
             MyPoint res = b - a;
@@ -95,7 +95,11 @@ namespace Chess0.Helper
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            int x_Hash = (int)X+100;
+            int y_Hash = (int)Y+100;
+
+            int res = ((x_Hash + y_Hash) * (x_Hash + y_Hash + 1))/2;
+            return y_Hash+res;
         }
     }
     

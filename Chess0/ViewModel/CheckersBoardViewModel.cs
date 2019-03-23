@@ -6,6 +6,7 @@ using System.Linq;
 using Chess0.ViewModel.Rules;
 using Chess0.ViewModel.Rules.Checkers;
 using System;
+using Chess0.Model.Peices;
 
 namespace Chess0.ViewModel
 {
@@ -19,13 +20,15 @@ namespace Chess0.ViewModel
         #endregion Constructor
 
 
-       
+        int count = 0;
+
+
         protected override void MyOnClick(object o)
         {
             MyPoint tileIndex = (MyPoint)o;
 
             object[] dead = { DeadWhite, DeadBlack };
-
+            
 
 
             if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visible" && Tiles[tileIndex].MarkColor == "Green")
@@ -35,7 +38,7 @@ namespace Chess0.ViewModel
 
            
                 //dismantel capture pieces var
-                MyPoint CheckCapture = tileIndex - (tileIndex - Focus.Pos) / Math.Floor(MyPoint.getDistence(Focus.Pos, tileIndex));
+                MyPoint CheckCapture = tileIndex - (tileIndex - Focus.Pos) / Math.Floor(MyPoint.GetDistence(Focus.Pos, tileIndex));
                 if(Tiles[CheckCapture].Pos == Focus.Pos )
                     Rules.MovePiece(Focus.Pos, tileIndex, Tiles);
                 else if (Tiles[CheckCapture].MarkVisibility == "Visible" && Tiles[CheckCapture].MarkColor == "Red")
@@ -48,25 +51,34 @@ namespace Chess0.ViewModel
                 //hide all marking on the board
 
                 //control win and turn switch
+
+                foreach (TileModel tile in Tiles)
+                {
+                    tile.MarkVisibility = "Hidden";
+                }
                 if (Rules.WinCondition(dead[((int)PlayerTurn + 1) % 2]))
+                {
+                 
+
                     base.ShowGameOverDialog();
+                }
                 else
                     PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
 
 
                 MyPoint PTempFocus2 = null;
                 if ((Rules as BaseRules_Checkers).Lock1 != null)
-                {
                     PTempFocus2 = (Rules as BaseRules_Checkers).Lock1;
-                }
                 else if (!(Rules as BaseRules_Checkers).IsLock2Empty())
-                {
                     PTempFocus2 = (Rules as BaseRules_Checkers).Lock2.First();
-                }
+
                 
 
                 //chosse next turn focus
                 Focus = (PTempFocus2!=null) ?Tiles[PTempFocus2] : null;
+
+                if (Focus != null)
+                    Rules.SimulatePath(Focus, Tiles);
 
             }
             else if (Tiles[tileIndex].Piece != null)
@@ -102,7 +114,9 @@ namespace Chess0.ViewModel
                     Rules.SimulatePath(Focus, Tiles);
                     
                 }
-              
+
+           
+
             }
 
             /*if(AI_Player!=null)
@@ -120,6 +134,42 @@ namespace Chess0.ViewModel
                    }
                */
 
+            /*  if (count == 1)
+              {
+
+                  IEnumerator<ObservableBoardCollection<TileModel>> stateofgame = (Rules as Rules_Checkers).GetPieceAllPossiableMove(Tiles, new MyPoint(4, 4),0);
+
+
+                  while (stateofgame.MoveNext())
+                  {
+
+                      foreach (TileModel checkinpurple in Tiles)
+                      {
+                          if (stateofgame.Current[checkinpurple.Pos].Piece != checkinpurple.Piece)
+                          {
+                              if (stateofgame.Current[checkinpurple.Pos].Piece is Piece_FlyingKingC_M)
+                              {
+                                  checkinpurple.MarkColor = "Blue";
+                              }
+                              else
+                                  checkinpurple.MarkColor = "Purple";
+
+                              checkinpurple.MarkVisibility = "Visible";
+
+
+                          }
+                      }
+                  }
+
+
+              }
+              else
+              {
+                  count++;
+              }*/
+
         }
+
+
     }
 }
