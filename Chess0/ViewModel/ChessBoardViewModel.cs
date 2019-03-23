@@ -75,21 +75,6 @@ namespace Chess0.ViewModel
 
 
 
-        #region Testing
-
-        private void testdeadPieces()
-        {
-            ChessPlayer white = new ChessPlayer(State.White);
-            ChessPlayer black = new ChessPlayer(State.Black);
-
-            for (var i = 0; i < white.Pieces.Count; i++)
-            {
-                DeadWhite.Add(white.Pieces[i]);
-                DeadBlack.Add(black.Pieces[i]);
-            }
-
-        }
-
-        #endregion
+    
     }
 }

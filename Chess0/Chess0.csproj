@@ -80,6 +80,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\AI_Player\AI_Player.cs" />
+    <Compile Include="ViewModel\AI_Player\ICapability_AI.cs" />
     <Compile Include="ViewModel\BaseBoardGameViewModel.cs" />
     <Compile Include="ViewModel\ChessBoardViewModel.cs" />
     <Compile Include="ViewModel\CheckersBoardViewModel.cs" />

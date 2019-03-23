@@ -5,6 +5,8 @@ using System;
 using Chess0.ViewModel;
 using System.Collections.Generic;
 
+//making player class as factorys
+
 namespace Chess0.ViewModel.Rules.Checkers
 {
     class CheckersPlayer
@@ -18,7 +20,7 @@ namespace Chess0.ViewModel.Rules.Checkers
         {
             this.CreateTestPieces();
         }
-        public CheckersPlayer(State state, string test = "")
+        public CheckersPlayer(State state)
         {
         
                 switch (state)
@@ -69,10 +71,10 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         private void CreateTestPieces()
         {
-            Pieces.Add(new Piece_Man_M(new MyPoint(0, 3), State.Black));
-            Pieces.Add(new Piece_Man_M(new MyPoint(2, 5), State.White));
-            Pieces.Add(new Piece_Man_M(new MyPoint(2, 1), State.White));
-            Pieces.Add(new Piece_Man_M(new MyPoint(2, 3), State.White));
+            Pieces.Add(new Piece_Man_M(new MyPoint(1, 1), State.Black));
+            Pieces.Add(new Piece_Man_M(new MyPoint(2, 2), State.Black));
+            Pieces.Add(new Piece_Man_M(new MyPoint(4, 4), State.White));
+            Pieces.Add(new Piece_Man_M(new MyPoint(5, 5), State.White));
            
             
 

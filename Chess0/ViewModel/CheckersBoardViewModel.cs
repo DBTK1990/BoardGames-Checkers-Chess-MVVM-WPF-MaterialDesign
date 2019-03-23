@@ -1,6 +1,6 @@
 ﻿using Chess0.Helper;
 using Chess0.Model;
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using Chess0.ViewModel.Rules;
@@ -19,6 +19,7 @@ namespace Chess0.ViewModel
         #endregion Constructor
 
 
+       
         protected override void MyOnClick(object o)
         {
             MyPoint tileIndex = (MyPoint)o;
@@ -32,19 +33,14 @@ namespace Chess0.ViewModel
 
                 //move it to method inside base viewmodel
 
-                foreach (TileModel tile in Tiles)
-                {
-                    tile.MarkVisibility = "Hidden";
-                    tile.MarkColor = "White";
-                }
-
-
-
-                //not good the capture dont cover in case of direction
-                if (!(Rules as Rules_Checkers).isCapturedPiecesEmpty)
-                    Rules.EatPiece(Focus.Pos, tileIndex, Tiles, DeadBlack, DeadWhite);
-                else//if capture is 0 do move
+           
+                //dismantel capture pieces var
+                MyPoint CheckCapture = tileIndex - (tileIndex - Focus.Pos) / Math.Floor(MyPoint.getDistence(Focus.Pos, tileIndex));
+                if(Tiles[CheckCapture].Pos == Focus.Pos )
                     Rules.MovePiece(Focus.Pos, tileIndex, Tiles);
+                else if (Tiles[CheckCapture].MarkVisibility == "Visible" && Tiles[CheckCapture].MarkColor == "Red")
+                    Rules.EatPiece(Focus.Pos, tileIndex, Tiles, DeadBlack, DeadWhite);
+         
 
                 //shift focus to move/eat pos
                 Focus = Tiles[tileIndex];
@@ -53,16 +49,20 @@ namespace Chess0.ViewModel
 
                 //control win and turn switch
                 if (Rules.WinCondition(dead[((int)PlayerTurn + 1) % 2]))
-                        base.ShowGameOverDialog();
-                    else
-                        PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
+                    base.ShowGameOverDialog();
+                else
+                    PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
+
 
                 MyPoint PTempFocus2 = null;
-                if ((Rules as Rules_Checkers).Lock1 != null)
-                    PTempFocus2 = (Rules as Rules_Checkers).Lock1;
-                else if ((Rules as Rules_Checkers).Lock2.Count != 0)
-                    PTempFocus2 =(Rules as Rules_Checkers).Lock2.First();
-                    
+                if ((Rules as BaseRules_Checkers).Lock1 != null)
+                {
+                    PTempFocus2 = (Rules as BaseRules_Checkers).Lock1;
+                }
+                else if (!(Rules as BaseRules_Checkers).IsLock2Empty())
+                {
+                    PTempFocus2 = (Rules as BaseRules_Checkers).Lock2.First();
+                }
                 
 
                 //chosse next turn focus
@@ -100,11 +100,25 @@ namespace Chess0.ViewModel
                     Focus = PTempFocus!=null ? Tiles[PTempFocus]:Focus;
 
                     Rules.SimulatePath(Focus, Tiles);
+                    
                 }
               
             }
 
-            
+            /*if(AI_Player!=null)
+                   {
+                    AI_Player.ChossePathToGo(Tiles,IRules); -output:pointToMoveto
+
+
+                       if(AI_Player.move==true)
+                            Rules.MovePiece(piece to move, point to moveto, Tiles);
+                       else if(AI_Player.eat==truee) 
+                            Rules.EatPiece(Focus.Pos, tileIndex, Tiles, DeadBlack, DeadWhite);
+
+
+                       PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
+                   }
+               */
 
         }
     }

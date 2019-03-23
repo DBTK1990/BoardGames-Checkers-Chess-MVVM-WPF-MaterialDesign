@@ -1,5 +1,7 @@
 ﻿using Chess0.Model;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -7,8 +9,8 @@ namespace Chess0.Helper
 {
     public class ObservableBoardCollection<T> : ObservableCollection<T>
     {
-
-        private int RowColLength { get; set; }
+        private int _row;
+        private int RowColLength { get => _row; set => _row = value; }
 
         public ObservableBoardCollection(int RowColLength) : base()
         {
@@ -47,8 +49,18 @@ namespace Chess0.Helper
             }
         }
 
-        
 
+        public ObservableBoardCollection<T> Clone()
+        {
+            ObservableBoardCollection<T> clone = new ObservableBoardCollection<T>(this.RowColLength);
+
+            foreach (T org in this)
+                clone.Add((T)(org as ICloneable).Clone());
+
+            return clone;
+
+
+        }
 
     }
 }

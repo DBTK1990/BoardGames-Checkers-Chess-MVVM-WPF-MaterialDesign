@@ -1,14 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Chess0.Helper;
+using Chess0.Model;
+using Chess0.Model.Peices;
+using Chess0.ViewModel.AI_Player;
 
 namespace Chess0.ViewModel.Rules.Checkers
 {
-     class BaseRules_Checkers
+     abstract class BaseRules_Checkers: IRules, ICapability_AI
     {
 
 
-        protected Dictionary<MyPoint, MyPoint> capturedpieces = new Dictionary<MyPoint, MyPoint>();
+      
 
         //LOCK1: CONTROL CONSACTIVE EATS
         private MyPoint _lock1 = null;
@@ -24,9 +28,17 @@ namespace Chess0.ViewModel.Rules.Checkers
             get => _lock2;
             protected set => _lock2 = value;
         }
-        public bool isCapturedPiecesEmpty => (capturedpieces.Count() == 0) ? true : false;
+     
+        public bool IsLock2Empty() => (Lock2.Count() == 0) ? true : false;
 
-
-
+        protected abstract void Restriction1_IsThisPieceCanEatAnotherEnemy(ObservableBoardCollection<TileModel> tiles,MyPoint CheckPiece);
+        protected abstract void Restriction2_IsAnyPieceHasToEatEnemy(ObservableBoardCollection<TileModel> tiles,State PlayerTurn);
+        public abstract void InitPieces(ObservableBoardCollection<TileModel> Tiles);
+        public abstract void SimulatePath(TileModel Me, ObservableBoardCollection<TileModel> Tiles);
+        public abstract State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles);
+        public abstract bool WinCondition(object ob);
+        public abstract void MovePiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles);
+        public abstract void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite);
+        public abstract IEnumerator<PathData> GetPieceAllPossiableMove(ObservableBoardCollection<TileModel> StateOfBoard, MyPoint PieceToCheck);
     }
 }

@@ -155,7 +155,7 @@ namespace Chess0.ViewModel
             if (Rules is Rules_Chess)
                 Rules.InitPieces(Tiles);
             else
-                (Rules as Rules.Checkers.Rules_Checkers).testPieces(Tiles);
+                (Rules as Rules.Checkers.Rules_Checkers).TestPieces(Tiles);
             //testinghere
 
             //lists of dead pieces
@@ -244,7 +244,7 @@ namespace Chess0.ViewModel
 
         #region Testing
 
-        protected void testdeadPieces()
+        protected void TestdeadPieces()
         {
             ChessPlayer white = new ChessPlayer(State.White);
             ChessPlayer black = new ChessPlayer(State.Black);

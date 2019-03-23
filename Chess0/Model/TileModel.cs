@@ -1,12 +1,14 @@
 ﻿
-using System.Windows;
+
+
 using Chess0.Helper;
 using Chess0.Model.Peices;
-
+using System;
 
 namespace Chess0.Model
 {
-     class TileModel : NotifyPropertyChanged
+     class TileModel : NotifyPropertyChanged , ICloneable
+
 
     {
         private string color;
@@ -68,14 +70,29 @@ namespace Chess0.Model
             }
         }
 
+      
 
-        public TileModel(string color,MyPoint pos, IPiece piece=null)
+        public TileModel(MyPoint pos, IPiece piece = null)
         {
             Piece = piece;
+            Pos = pos;
+        }
+
+
+        public TileModel(string color,MyPoint pos)
+        {
+            Piece = null;
             Color = color;
             Pos = pos;
             MarkVisibility = "Hidden";
-            MarkColor="Green";
+            MarkColor="White";
+            
+        }
+
+  
+        object ICloneable.Clone()
+        {
+            return new TileModel(Pos, Piece);
         }
     }
 }
