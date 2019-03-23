@@ -71,14 +71,17 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         private void CreateTestPieces()
         {
-            Pieces.Add(new Piece_Man_M(new MyPoint(1, 1), State.Black));
-            Pieces.Add(new Piece_Man_M(new MyPoint(2, 2), State.Black));
-            Pieces.Add(new Piece_Man_M(new MyPoint(1, 3), State.Black));
-            Pieces.Add(new Piece_Man_M(new MyPoint(4, 4), State.White));
+         
             Pieces.Add(new Piece_Man_M(new MyPoint(5, 5), State.White));
-            
-           
-            
+            Pieces.Add(new Piece_Man_M(new MyPoint(3, 3), State.White));
+
+            Pieces.Add(new Piece_Man_M(new MyPoint(0, 2), State.Black));;
+            Pieces.Add(new Piece_Man_M(new MyPoint(0, 4), State.Black));
+            Pieces.Add(new Piece_Man_M(new MyPoint(1, 3), State.Black));
+
+
+
+
 
         }
     }

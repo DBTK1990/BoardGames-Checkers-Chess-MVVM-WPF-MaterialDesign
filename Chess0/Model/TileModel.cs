@@ -92,7 +92,13 @@ namespace Chess0.Model
   
         object ICloneable.Clone()
         {
-            return new TileModel(Pos, Piece);
+            if(Piece is Piece_Man_M )
+                return new TileModel(Pos, ((Piece as Piece_Man_M).Clone()) as IPiece);
+            else if(Piece is Piece_FlyingKingC_M )
+                return new TileModel(Pos, ((Piece as Piece_FlyingKingC_M).Clone()) as IPiece);
+            else if(Piece==null)
+                return new TileModel(Pos, Piece);
+            throw new NotImplementedException();
         }
     }
 }

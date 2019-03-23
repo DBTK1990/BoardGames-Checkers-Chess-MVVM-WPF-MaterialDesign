@@ -32,8 +32,8 @@ namespace Chess0.ViewModel.Rules.Checkers
      
         public bool IsLock2Empty() => (Lock2.Count() == 0) ? true : false;
 
-        protected abstract MyPoint Restriction1_IsThisPieceCanEatAnotherEnemy(ObservableBoardCollection<TileModel> tiles,MyPoint CheckPiece);
-        protected abstract List<MyPoint> Restriction2_IsAnyPieceHasToEatEnemy(ObservableBoardCollection<TileModel> tiles,State PlayerTurn);
+        public abstract MyPoint Restriction1_IsThisPieceCanEatAnotherEnemy(ObservableBoardCollection<TileModel> tiles,MyPoint CheckPiece);
+        public abstract List<MyPoint> Restriction2_IsAnyPieceHasToEatEnemy(ObservableBoardCollection<TileModel> tiles,State PlayerTurn);
         public abstract void InitPieces(ObservableBoardCollection<TileModel> Tiles);
         public abstract void SimulatePath(TileModel Me, ObservableBoardCollection<TileModel> Tiles);
         public abstract State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles);

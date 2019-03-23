@@ -327,7 +327,7 @@ namespace Chess0.Model.Peices
     #region Checkers Pieces
 
 
-    class Piece_Man_M : BasePieceModel
+    class Piece_Man_M : BasePieceModel ,ICloneable
     {
       
         public Piece_Man_M(MyPoint pos, State player)
@@ -351,6 +351,10 @@ namespace Chess0.Model.Peices
 
         }
 
+        public object Clone()
+        {
+            return new Piece_Man_M(this.Pos, this.Player);
+        }
 
         public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)
         {
@@ -400,7 +404,7 @@ namespace Chess0.Model.Peices
         }
     }
 
-    class Piece_FlyingKingC_M : BasePieceModel
+    class Piece_FlyingKingC_M : BasePieceModel, ICloneable
     {
 
         public Piece_FlyingKingC_M(MyPoint pos, State player)
@@ -421,6 +425,11 @@ namespace Chess0.Model.Peices
 
             base.initProprties(pos, player, TempPath);
 
+        }
+
+        public object Clone()
+        {
+            return new Piece_FlyingKingC_M(this.Pos, this.Player);
         }
 
         public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)

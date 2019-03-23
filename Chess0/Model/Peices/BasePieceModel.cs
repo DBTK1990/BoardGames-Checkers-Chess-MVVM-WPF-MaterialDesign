@@ -52,5 +52,7 @@ namespace Chess0.Model.Peices
         }
 
         public abstract List<MyPoint> PossiablePath(MyPoint TargetPos = null);
+
+      
     }
 }

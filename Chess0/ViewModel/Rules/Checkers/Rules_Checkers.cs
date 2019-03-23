@@ -242,8 +242,28 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         public override bool WinCondition(object ob)
         {
-            ObservableCollection<IPiece> DeadPieces = (ObservableCollection<IPiece>)ob;
-            return (DeadPieces.Count() == 12) ? true : false;
+            ObservableBoardCollection<TileModel> CheckPieces = (ObservableBoardCollection<TileModel>)ob;
+            int[] count = {0,0};
+            foreach (TileModel tile in CheckPieces)
+            {
+                if (tile.Piece != null)
+                {
+                  
+                    if (tile.Piece.Player == State.Black)
+                    {
+                        count[(int)State.Black]++;
+                    }
+                    else
+                    {
+                        count[(int)State.White]++;
+                    }
+
+                }
+            }
+
+
+
+            return (count[(int)State.Black]==0 || count[(int)State.White]==0) ? true : false;
         }
 
 
@@ -311,7 +331,7 @@ namespace Chess0.ViewModel.Rules.Checkers
 
 
 
-        protected override MyPoint Restriction1_IsThisPieceCanEatAnotherEnemy(ObservableBoardCollection<TileModel> Tiles, MyPoint CheckPiece)
+        public override MyPoint Restriction1_IsThisPieceCanEatAnotherEnemy(ObservableBoardCollection<TileModel> Tiles, MyPoint CheckPiece)
         {
             MyPoint lock1 = null;
             PathData viablePath = new PathData(null, null);
@@ -331,7 +351,7 @@ namespace Chess0.ViewModel.Rules.Checkers
             return lock1;
         }
     
-        protected override List<MyPoint> Restriction2_IsAnyPieceHasToEatEnemy(ObservableBoardCollection<TileModel> Tiles, State PlayerTurn)
+        public override List<MyPoint> Restriction2_IsAnyPieceHasToEatEnemy(ObservableBoardCollection<TileModel> Tiles, State PlayerTurn)
         {
             List<MyPoint> lock2 = new List<MyPoint>();
             foreach (TileModel CanEat in Tiles)

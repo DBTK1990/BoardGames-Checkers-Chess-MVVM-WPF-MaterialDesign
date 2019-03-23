@@ -7,6 +7,7 @@ using Chess0.ViewModel.Rules;
 using Chess0.ViewModel.Rules.Checkers;
 using System;
 using Chess0.Model.Peices;
+using Chess0.ViewModel.AI_Player;
 
 namespace Chess0.ViewModel
 {
@@ -53,15 +54,10 @@ namespace Chess0.ViewModel
                 //control win and turn switch
 
                 foreach (TileModel tile in Tiles)
-                {
                     tile.MarkVisibility = "Hidden";
-                }
-                if (Rules.WinCondition(dead[((int)PlayerTurn + 1) % 2]))
-                {
-                 
 
+                if (Rules.WinCondition(Tiles.Clone()))
                     base.ShowGameOverDialog();
-                }
                 else
                     PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
 
@@ -80,6 +76,8 @@ namespace Chess0.ViewModel
                 if (Focus != null)
                     Rules.SimulatePath(Focus, Tiles);
 
+                count = 0;
+
             }
             else if (Tiles[tileIndex].Piece != null)
             {
@@ -92,7 +90,7 @@ namespace Chess0.ViewModel
                         tile.MarkColor = "White";
                     }
 
-
+                    
                     //convertor to my point to check if null
                     MyPoint PTempFocus = null;
                     if ((Rules as Rules_Checkers).Lock1 != null)
@@ -112,7 +110,42 @@ namespace Chess0.ViewModel
                     Focus = PTempFocus!=null ? Tiles[PTempFocus]:Focus;
 
                     Rules.SimulatePath(Focus, Tiles);
-                    
+
+                    //somthing isnt right in min max but working partaly its somthing about the pieces
+                    if (count == 0 && Focus.Piece.Player == State.Black)
+                    {
+                        if (PlayerTurn == State.Black)
+                        {
+
+
+
+
+                            DataMinMax movetodo = new DataMinMax();
+
+                            movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(), 3, int.MinValue, int.MaxValue, State.Black, Rules as Rules_Checkers);
+
+                            foreach (TileModel checkinpurple in Tiles)
+                            {
+                                if (movetodo.Move[checkinpurple.Pos].Piece != checkinpurple.Piece)
+                                {
+                                    if (movetodo.Move[checkinpurple.Pos].Piece is Piece_FlyingKingC_M)
+                                    {
+                                        checkinpurple.MarkColor = "Blue";
+                                    }
+                                    else
+                                        checkinpurple.MarkColor = "Purple";
+
+                                    checkinpurple.MarkVisibility = "Visible";
+
+
+                                }
+                            }
+
+                            count++;
+                        }
+
+
+                    }
                 }
 
            
@@ -134,39 +167,8 @@ namespace Chess0.ViewModel
                    }
                */
 
-            /*  if (count == 1)
-              {
-
-                  IEnumerator<ObservableBoardCollection<TileModel>> stateofgame = (Rules as Rules_Checkers).GetPieceAllPossiableMove(Tiles, new MyPoint(4, 4),0);
-
-
-                  while (stateofgame.MoveNext())
-                  {
-
-                      foreach (TileModel checkinpurple in Tiles)
-                      {
-                          if (stateofgame.Current[checkinpurple.Pos].Piece != checkinpurple.Piece)
-                          {
-                              if (stateofgame.Current[checkinpurple.Pos].Piece is Piece_FlyingKingC_M)
-                              {
-                                  checkinpurple.MarkColor = "Blue";
-                              }
-                              else
-                                  checkinpurple.MarkColor = "Purple";
-
-                              checkinpurple.MarkVisibility = "Visible";
-
-
-                          }
-                      }
-                  }
-
-
-              }
-              else
-              {
-                  count++;
-              }*/
+              
+          
 
         }
 

@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 
 
 
+
 namespace Chess0.Model.Peices
 {
     public interface IPiece
