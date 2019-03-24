@@ -429,7 +429,9 @@ namespace Chess0.Model.Peices
 
         public object Clone()
         {
-            return new Piece_FlyingKingC_M(this.Pos, this.Player);
+            Piece_FlyingKingC_M temp= new Piece_FlyingKingC_M(this.Pos, this.Player);
+            temp.MovesMade = this.MovesMade;
+            return temp;
         }
 
         public override List<MyPoint> PossiablePath(MyPoint TargetPos = null)

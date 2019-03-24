@@ -111,44 +111,51 @@ namespace Chess0.ViewModel
 
                     Rules.SimulatePath(Focus, Tiles);
 
-                    //somthing isnt right in min max but working partaly its somthing about the pieces
-                    if (count == 0 && Focus.Piece.Player == State.Black)
+                  
+                }
+
+
+                if (count == 0 && Focus.Piece.Player == State.Black)
+                {
+                    if (PlayerTurn == State.Black)
                     {
-                        if (PlayerTurn == State.Black)
+
+
+                        foreach (TileModel tile in Tiles)
+                        {
+                            tile.MarkVisibility = "Hidden";
+                            tile.MarkColor = "White";
+                        }
+
+                        DataMinMax movetodo = new DataMinMax();
+
+                        movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(), 3, int.MinValue, int.MaxValue, State.Black, Rules as Rules_Checkers);
+
+
+                        foreach (TileModel checkinpurple in Tiles)
                         {
 
+                            checkinpurple.Piece = movetodo.Move[checkinpurple.Pos].Piece;
 
-
-
-                            DataMinMax movetodo = new DataMinMax();
-
-                            movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(), 3, int.MinValue, int.MaxValue, State.Black, Rules as Rules_Checkers);
-
-                            foreach (TileModel checkinpurple in Tiles)
-                            {
-                                if (movetodo.Move[checkinpurple.Pos].Piece != checkinpurple.Piece)
-                                {
-                                    if (movetodo.Move[checkinpurple.Pos].Piece is Piece_FlyingKingC_M)
-                                    {
-                                        checkinpurple.MarkColor = "Blue";
-                                    }
-                                    else
-                                        checkinpurple.MarkColor = "Purple";
-
-                                    checkinpurple.MarkVisibility = "Visible";
-
-
-                                }
-                            }
-
-                            count++;
+                          
                         }
 
 
-                    }
-                }
+                        PlayerTurn = State.White;
 
-           
+                        foreach (TileModel checkpos in Tiles)
+                        {
+                            if (checkpos.Piece != null)
+                                if (checkpos.Pos != checkpos.Piece.Pos)
+                                    Console.WriteLine("SOMTHING IS VERY WRONG");
+
+                        }
+
+                        count++;
+                    }
+
+
+                }
 
             }
 

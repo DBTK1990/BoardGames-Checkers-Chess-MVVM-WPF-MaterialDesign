@@ -37,7 +37,26 @@ namespace Chess0.Model.Peices
             get => imagepiece;
             set => imagepiece = value;
         }
+        public static bool operator==(BasePieceModel a, BasePieceModel b)
+        {
 
+            if (a is null)
+                return b is null;
+            else if (b is null)
+                return a is null;
+
+
+
+            if (a.Pos == b.Pos && a.Player == b.Player && a.MovesMade == b.movesmade && a.ImagePiece.GetHashCode() == b.ImagePiece.GetHashCode())
+                return true;
+
+
+            return false;
+        }
+        public static bool operator !=(BasePieceModel a, BasePieceModel b)
+        {
+            return !(a==b);
+        }
 
         protected void initProprties(MyPoint pos, State player, string path)
         {

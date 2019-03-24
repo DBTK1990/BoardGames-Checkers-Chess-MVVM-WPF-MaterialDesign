@@ -17,9 +17,11 @@ namespace Chess0.ViewModel.AI_Player
 
         public object Clone()
         {
-            DataMinMax Clone = new DataMinMax();
-            Clone.Move = Move.Clone();
-            Clone.Eval = Eval;
+            DataMinMax Clone = new DataMinMax
+            {
+                Move = Move.Clone(),
+                Eval = Eval
+            };
             return Clone;
         }
     }
@@ -27,11 +29,12 @@ namespace Chess0.ViewModel.AI_Player
     class AI_Player_Checkers
     {
 
-
+        static int count = 0;
 
 
         private static DataMinMax EvaluateStateOfBoard(ObservableBoardCollection<TileModel> StateOfBoard)
         {
+           
             DataMinMax Evel_arg = new DataMinMax();
             Evel_arg.Move = StateOfBoard;
             Evel_arg.Eval = 0;
@@ -61,11 +64,13 @@ namespace Chess0.ViewModel.AI_Player
 
         public static DataMinMax MinMaxDriver(ObservableBoardCollection<TileModel> StateOfBoard,int depth,int alpha,int beta,State PlayerTurn,Rules_Checkers rules)
         {
+            count++;
+            Console.WriteLine($"index case number:{count}");
             if (depth == 0 || rules.WinCondition(StateOfBoard))
             {
                 return EvaluateStateOfBoard(StateOfBoard);
             }
-
+            ;
 
             if (PlayerTurn == State.Black)
             {

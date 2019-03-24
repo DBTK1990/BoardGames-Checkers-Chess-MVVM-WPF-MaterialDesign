@@ -95,11 +95,11 @@ namespace Chess0.ViewModel.Rules.Checkers
                 try
                 {
                     moves.Add(dir, 0);
-                    System.Console.WriteLine("SimulatePath() method: dir not exist");
+                 
                 }
                 catch (ArgumentException e)
                 {
-                    System.Console.WriteLine("SimulatePath() method: dir exist");
+                   
 
                 }
             }
