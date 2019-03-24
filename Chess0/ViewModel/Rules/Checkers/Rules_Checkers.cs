@@ -430,7 +430,16 @@ namespace Chess0.ViewModel.Rules.Checkers
             }
             else
             {
+            //now it is fine no shadow cases
+            if(depth==0)
+            {
+                yield break;
+            }
+            else
+            {
                 yield return rootStateOfBoard.Clone();
+            }
+                
 
             }
         }
