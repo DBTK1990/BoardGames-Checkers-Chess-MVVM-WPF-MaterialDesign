@@ -36,7 +36,7 @@ namespace Chess0.ViewModel.Rules.Checkers
         public abstract List<MyPoint> Restriction2_IsAnyPieceHasToEatEnemy(ObservableBoardCollection<TileModel> tiles,State PlayerTurn);
         public abstract void InitPieces(ObservableBoardCollection<TileModel> Tiles);
         public abstract void SimulatePath(TileModel Me, ObservableBoardCollection<TileModel> Tiles);
-        public abstract State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles);
+        public abstract State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles,State playerturn);
         public abstract bool WinCondition(object ob);
         public abstract void MovePiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles);
         public abstract void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack=null, ObservableCollection<IPiece> DeadWhite=null);

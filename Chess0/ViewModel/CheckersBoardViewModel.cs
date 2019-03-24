@@ -20,9 +20,120 @@ namespace Chess0.ViewModel
 
         #endregion Constructor
 
+        State AI = State.Black;
 
-        int count = 0;
+        private string print_Board_ToString(ObservableBoardCollection<TileModel> print)
+        {
+            string strboard = $"{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}<";
+            bool firstTime = false;
+            foreach (TileModel print_tile in print)
+            {
+                if(firstTime)
+                strboard += ",";
 
+                firstTime = true;
+
+                if (print_tile.Piece == null)
+                    strboard += " -- ";
+                else if (print_tile.Piece is Piece_Man_M)
+                    if (print_tile.Piece.Player==State.Black)
+                        strboard += " mb ";
+                    else
+                        strboard += " mw ";
+                else if (print_tile.Piece is Piece_FlyingKingC_M)
+                    if (print_tile.Piece.Player == State.Black)
+                        strboard += " fb ";
+                    else
+                        strboard += " fw ";
+
+                if(print_tile.Pos.Y==7)
+                    strboard += $">{Environment.NewLine}";
+
+
+
+            }
+            strboard += $"{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}";
+            return strboard;
+        }
+
+        private void AI_Move()
+        {
+
+            if (PlayerTurn == State.Black)
+            {
+
+
+                foreach (TileModel tile in Tiles)
+                {
+                    tile.MarkVisibility = "Hidden";
+                    tile.MarkColor = "White";
+                }
+
+                DataMinMax movetodo = new DataMinMax();
+
+                movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(), 1, int.MinValue, int.MaxValue, State.Black, Rules as Rules_Checkers);
+
+                //eatPieces
+                Console.WriteLine($"/n/n/n{print_Board_ToString(movetodo.Move)}/n/n/n");
+                Console.WriteLine($"/n/n/n{print_Board_ToString(Tiles)}/n/n/n");
+
+
+                MyPoint focus_pos=null;
+                MyPoint moveto=null;
+                bool capture=false;
+
+                foreach (TileModel check in Tiles)
+                {
+
+
+
+                    if (check.Piece != null)
+                    {
+                        if (movetodo.Move[check.Pos].Piece == null && check.Piece.Player == AI)
+                            focus_pos = check.Pos;
+                        else if (movetodo.Move[check.Pos].Piece == null && check.Piece.Player == State.White)
+                            capture = true;
+                    }
+
+                    if (movetodo.Move[check.Pos].Piece != null)
+                        if (check.Piece == null && movetodo.Move[check.Pos].Piece.Player == AI)
+                            moveto = check.Pos;
+
+                 
+                }
+
+
+                //commit to move
+
+                if (capture)
+                {
+                    Rules.EatPiece(focus_pos, moveto, Tiles, DeadBlack, DeadWhite);
+
+                }
+                else
+                {
+                    Rules.MovePiece(focus_pos, moveto, Tiles);
+                }
+
+                //playerTURNswitch
+
+                PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles, PlayerTurn);
+                //test that everything is all right
+
+                foreach (TileModel checkpos in Tiles)
+                {
+                    if (checkpos.Piece != null)
+                        if (checkpos.Pos != checkpos.Piece.Pos)
+                            throw new Exception("SOMTHING IS VERY WRONG");
+
+                }
+
+               
+
+
+
+            }
+        }
 
         protected override void MyOnClick(object o)
         {
@@ -59,8 +170,7 @@ namespace Chess0.ViewModel
                 if (Rules.WinCondition(Tiles.Clone()))
                     base.ShowGameOverDialog();
                 else
-                    PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
-
+                    PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles, PlayerTurn);
 
                 MyPoint PTempFocus2 = null;
                 if ((Rules as BaseRules_Checkers).Lock1 != null)
@@ -76,7 +186,7 @@ namespace Chess0.ViewModel
                 if (Focus != null)
                     Rules.SimulatePath(Focus, Tiles);
 
-                count = 0;
+           
 
             }
             else if (Tiles[tileIndex].Piece != null)
@@ -113,52 +223,12 @@ namespace Chess0.ViewModel
 
                   
                 }
+           
 
 
-                if (count == 0 && Focus.Piece.Player == State.Black)
-                {
-                    if (PlayerTurn == State.Black)
-                    {
-
-
-                        foreach (TileModel tile in Tiles)
-                        {
-                            tile.MarkVisibility = "Hidden";
-                            tile.MarkColor = "White";
-                        }
-
-                        DataMinMax movetodo = new DataMinMax();
-
-                        movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(), 3, int.MinValue, int.MaxValue, State.Black, Rules as Rules_Checkers);
-
-
-                        foreach (TileModel checkinpurple in Tiles)
-                        {
-
-                            checkinpurple.Piece = movetodo.Move[checkinpurple.Pos].Piece;
-
-                          
-                        }
-
-
-                        PlayerTurn = State.White;
-
-                        foreach (TileModel checkpos in Tiles)
-                        {
-                            if (checkpos.Piece != null)
-                                if (checkpos.Pos != checkpos.Piece.Pos)
-                                    Console.WriteLine("SOMTHING IS VERY WRONG");
-
-                        }
-
-                        count++;
-                    }
-
-
-                }
 
             }
-
+            AI_Move();
             /*if(AI_Player!=null)
                    {
                     AI_Player.ChossePathToGo(Tiles,IRules); -output:pointToMoveto
@@ -174,8 +244,8 @@ namespace Chess0.ViewModel
                    }
                */
 
-              
-          
+
+
 
         }
 

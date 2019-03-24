@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Chess0.Helper
 {
 
-    public class MyPoint
+    public class MyPoint : ICloneable
     {
         private double x;
         public double X { get => x; set=>x=value; }
@@ -100,6 +100,11 @@ namespace Chess0.Helper
 
             int res = ((x_Hash + y_Hash) * (x_Hash + y_Hash + 1))/2;
             return y_Hash+res;
+        }
+
+        public object Clone()
+        {
+            return new MyPoint(this.X, this.Y);
         }
     }
     

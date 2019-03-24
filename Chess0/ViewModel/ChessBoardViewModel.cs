@@ -49,7 +49,7 @@ namespace Chess0.ViewModel
                 if (Rules.WinCondition(dead[((int)PlayerTurn+1) % 2]))
                     base.ShowGameOverDialog();
                 else
-                    PlayerTurn =Rules.PlayerTurnSwitch(Focus,  Tiles);
+                    PlayerTurn =Rules.PlayerTurnSwitch(Focus,  Tiles,PlayerTurn);
 
 
                 

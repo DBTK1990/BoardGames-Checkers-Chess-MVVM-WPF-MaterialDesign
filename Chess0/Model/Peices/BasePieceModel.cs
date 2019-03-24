@@ -47,7 +47,7 @@ namespace Chess0.Model.Peices
 
 
 
-            if (a.Pos == b.Pos && a.Player == b.Player && a.MovesMade == b.movesmade && a.ImagePiece.GetHashCode() == b.ImagePiece.GetHashCode())
+            if (a.Pos == b.Pos && a.Player == b.Player && a.MovesMade == b.movesmade && a.ImagePiece.UriSource == b.ImagePiece.UriSource)
                 return true;
 
 

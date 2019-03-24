@@ -43,19 +43,19 @@ namespace Chess0.ViewModel.Rules.Checkers
 
 
 
-        public override State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles)
+        public override State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles,State playerturn)
         {
 
 
 
 
-            State PlayerTurn;
+            State PlayerTurn=State.Black;//defualt
 
             if (Lock1 == null)
             {
-                PlayerTurn = focus.Piece.Player;
+               
 
-                switch (PlayerTurn)
+                switch (playerturn)
                 {
                     case State.Black:
                         PlayerTurn = State.White;
@@ -67,12 +67,12 @@ namespace Chess0.ViewModel.Rules.Checkers
                 focus = null;
 
 
-                Lock2=Restriction2_IsAnyPieceHasToEatEnemy(tiles, PlayerTurn);
+                Lock2=Restriction2_IsAnyPieceHasToEatEnemy(tiles, playerturn);
             }
             else
             {
                 focus = tiles[Lock1];
-                PlayerTurn = focus.Piece.Player;
+                PlayerTurn = playerturn;
             }
 
 

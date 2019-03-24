@@ -6,10 +6,10 @@ using System.Collections.ObjectModel;
 
 namespace Chess0.ViewModel.Rules.Chess
 {
-    class Rules_Chess: BaseRules_Chess, IRules 
+    class Rules_Chess: BaseRules_Chess
     {
        
-        public void InitPieces(ObservableBoardCollection<TileModel> Tiles)
+        public override void InitPieces(ObservableBoardCollection<TileModel> Tiles)
         {
             ChessPlayer white = new ChessPlayer(State.White);
             ChessPlayer black = new ChessPlayer(State.Black);
@@ -23,7 +23,7 @@ namespace Chess0.ViewModel.Rules.Chess
 
         }
 
-        public void SimulatePath(TileModel Me , ObservableBoardCollection<TileModel> Tiles)
+        public override void SimulatePath(TileModel Me , ObservableBoardCollection<TileModel> Tiles)
         {
             HashSet<MyPoint> BlockedPath = new HashSet<MyPoint>();
             List<MyPoint> PossiablePath =Me.Piece.PossiablePath();
@@ -84,13 +84,14 @@ namespace Chess0.ViewModel.Rules.Chess
 
         }
 
-        public State PlayerTurnSwitch( TileModel focus,  ObservableBoardCollection<TileModel> tiles)
+        public override State PlayerTurnSwitch( TileModel focus,  ObservableBoardCollection<TileModel> tiles,State playerturn)
         {
 
             this.CheckKingTherthend(focus.Piece.Player,tiles);
           
-            State PlayerTurn = focus.Piece.Player;
-            switch (PlayerTurn)
+            State PlayerTurn = State.Black;
+
+            switch (playerturn)
             {
                 case State.Black:
                     PlayerTurn= State.White;
@@ -106,7 +107,7 @@ namespace Chess0.ViewModel.Rules.Chess
 
         }
 
-        public bool WinCondition(object ob)
+        public override bool WinCondition(object ob)
         {
 
             bool check = false;
@@ -120,7 +121,7 @@ namespace Chess0.ViewModel.Rules.Chess
 
         
 
-        public void MovePiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles)
+        public override void MovePiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles)
         {
 
             Tiles[moveTo].Piece = Tiles[point].Piece;
@@ -138,7 +139,7 @@ namespace Chess0.ViewModel.Rules.Chess
 
         }
 
-        public void EatPiece( MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles,ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite)
+        public override void EatPiece( MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles,ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite)
         {
 
             switch (Tiles[moveTo].Piece.Player)

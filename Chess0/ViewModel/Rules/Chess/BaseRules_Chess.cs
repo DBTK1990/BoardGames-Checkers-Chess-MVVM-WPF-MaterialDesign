@@ -2,13 +2,19 @@
 using Chess0.Model;
 using Chess0.Model.Peices;
 using System.Collections.Generic;
-
+using System.Collections.ObjectModel;
 
 namespace Chess0.ViewModel.Rules.Chess
 {
-    class BaseRules_Chess  : Compass
+    abstract class BaseRules_Chess  : Compass, IRules
     {
 
+        public abstract void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack, ObservableCollection<IPiece> DeadWhite);
+        public abstract void InitPieces(ObservableBoardCollection<TileModel> Tiles);
+        public abstract void MovePiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles);
+        public abstract State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles, State playerturn = State.Black);
+        public abstract void SimulatePath(TileModel Me, ObservableBoardCollection<TileModel> Tiles);
+        public abstract bool WinCondition(object ob);
         protected void CheckKingTherthend(State PlayerTurn, ObservableBoardCollection<TileModel> Tiles)
         {
 
