@@ -75,8 +75,8 @@ namespace Chess0.ViewModel.Rules.Checkers
             Pieces.Add(new Piece_Man_M(new MyPoint(5, 5), State.White));
             Pieces.Add(new Piece_Man_M(new MyPoint(3, 3), State.White));
 
-            Pieces.Add(new Piece_Man_M(new MyPoint(0, 2), State.Black));;
-            Pieces.Add(new Piece_Man_M(new MyPoint(0, 4), State.Black));
+            Pieces.Add(new Piece_FlyingKingC_M(new MyPoint(0, 2), State.Black));;
+          
             Pieces.Add(new Piece_Man_M(new MyPoint(1, 3), State.Black));
 
 

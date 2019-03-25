@@ -77,10 +77,11 @@ namespace Chess0.ViewModel
                 Console.WriteLine($"/n/n/n{print_Board_ToString(movetodo.Move)}/n/n/n");
                 Console.WriteLine($"/n/n/n{print_Board_ToString(Tiles)}/n/n/n");
 
-
+                //genrate ai move
                 MyPoint focus_pos=null;
                 MyPoint moveto=null;
                 bool capture=false;
+
 
                 foreach (TileModel check in Tiles)
                 {
@@ -103,7 +104,7 @@ namespace Chess0.ViewModel
                 }
 
 
-                //commit to move
+                
 
                 if (capture)
                 {
@@ -117,18 +118,26 @@ namespace Chess0.ViewModel
 
                 //playerTURNswitch
 
-                PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles, PlayerTurn);
-                //test that everything is all right
+                if (Rules.WinCondition(Tiles.Clone()))
+                    base.ShowGameOverDialog();
+                else
+                    PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles, PlayerTurn);
 
-                foreach (TileModel checkpos in Tiles)
-                {
-                    if (checkpos.Piece != null)
-                        if (checkpos.Pos != checkpos.Piece.Pos)
-                            throw new Exception("SOMTHING IS VERY WRONG");
+                MyPoint PTempFocus2 = null;
+                if ((Rules as BaseRules_Checkers).Lock1 != null)
+                    PTempFocus2 = (Rules as BaseRules_Checkers).Lock1;
+                else if (!(Rules as BaseRules_Checkers).IsLock2Empty())
+                    PTempFocus2 = (Rules as BaseRules_Checkers).Lock2.First();
 
-                }
 
-               
+
+                //chosse next turn focus
+                Focus = (PTempFocus2 != null) ? Tiles[PTempFocus2] : null;
+
+                if (Focus != null)
+                    Rules.SimulatePath(Focus, Tiles);
+
+
 
 
 
