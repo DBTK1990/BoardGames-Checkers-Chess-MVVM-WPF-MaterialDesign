@@ -71,50 +71,37 @@ namespace Chess0.ViewModel
 
                 DataMinMax movetodo = new DataMinMax();
 
-                movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(), 1, int.MinValue, int.MaxValue, State.Black, Rules as Rules_Checkers);
+                movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(), 3, int.MinValue, int.MaxValue, State.Black, Rules as Rules_Checkers);
 
                 //eatPieces
-                Console.WriteLine($"/n/n/n{print_Board_ToString(movetodo.Move)}/n/n/n");
+                Console.WriteLine($"/n/n/n{print_Board_ToString(movetodo.StateOfTheBoard)}/n/n/n");
                 Console.WriteLine($"/n/n/n{print_Board_ToString(Tiles)}/n/n/n");
 
                 //genrate ai move
                 MyPoint focus_pos=null;
                 MyPoint moveto=null;
-                bool capture=false;
+                bool capture = (MyPoint.GetDistence(movetodo.Moves[0], movetodo.Moves[1])>=2)?true:false;
 
 
-                foreach (TileModel check in Tiles)
+                for (int movesloop = 0; movesloop < movetodo.Moves.Count-1; movesloop++)
                 {
+                    focus_pos = movetodo.Moves[movesloop];
+                    moveto= movetodo.Moves[movesloop+1];
 
-
-
-                    if (check.Piece != null)
+                    if (capture)
                     {
-                        if (movetodo.Move[check.Pos].Piece == null && check.Piece.Player == AI)
-                            focus_pos = check.Pos;
-                        else if (movetodo.Move[check.Pos].Piece == null && check.Piece.Player == State.White)
-                            capture = true;
+                        Console.WriteLine($"capture happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
+                        Rules.EatPiece(focus_pos, moveto, Tiles, DeadBlack, DeadWhite);
+
+                    }
+                    else
+                    {
+                        Rules.MovePiece(focus_pos, moveto, Tiles);
                     }
 
-                    if (movetodo.Move[check.Pos].Piece != null)
-                        if (check.Piece == null && movetodo.Move[check.Pos].Piece.Player == AI)
-                            moveto = check.Pos;
-
-                 
                 }
 
-
-                
-
-                if (capture)
-                {
-                    Rules.EatPiece(focus_pos, moveto, Tiles, DeadBlack, DeadWhite);
-
-                }
-                else
-                {
-                    Rules.MovePiece(focus_pos, moveto, Tiles);
-                }
+               
 
                 //playerTURNswitch
 
@@ -122,6 +109,7 @@ namespace Chess0.ViewModel
                     base.ShowGameOverDialog();
                 else
                     PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles, PlayerTurn);
+
 
                 MyPoint PTempFocus2 = null;
                 if ((Rules as BaseRules_Checkers).Lock1 != null)

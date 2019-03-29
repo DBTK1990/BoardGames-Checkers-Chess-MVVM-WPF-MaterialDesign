@@ -9,7 +9,7 @@ using Chess0.ViewModel.AI_Player;
 
 namespace Chess0.ViewModel.Rules.Checkers
 {
-     abstract class BaseRules_Checkers: IRules, ICapability_AI
+     abstract class BaseRules_Checkers: IRules
     {
 
 
@@ -40,10 +40,9 @@ namespace Chess0.ViewModel.Rules.Checkers
         public abstract bool WinCondition(object ob);
         public abstract void MovePiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles);
         public abstract void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack=null, ObservableCollection<IPiece> DeadWhite=null);
-        public abstract IEnumerator<ObservableBoardCollection<TileModel>> GetPieceAllPossiableMove(ObservableBoardCollection<TileModel> StateOfBoard, MyPoint PieceToCheck, int depth = 0);
+   
 
 
-       
-        
+
     }
 }

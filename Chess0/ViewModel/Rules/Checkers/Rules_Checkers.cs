@@ -43,17 +43,17 @@ namespace Chess0.ViewModel.Rules.Checkers
 
 
 
-        public override State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles,State playerturn)
+        public override State PlayerTurnSwitch(TileModel focus, ObservableBoardCollection<TileModel> tiles, State playerturn)
         {
 
 
 
 
-            State PlayerTurn=State.Black;//defualt
+            State PlayerTurn = State.Black;//defualt
 
             if (Lock1 == null)
             {
-               
+
 
                 switch (playerturn)
                 {
@@ -67,7 +67,7 @@ namespace Chess0.ViewModel.Rules.Checkers
                 focus = null;
 
 
-                Lock2=Restriction2_IsAnyPieceHasToEatEnemy(tiles, playerturn);
+                Lock2 = Restriction2_IsAnyPieceHasToEatEnemy(tiles, PlayerTurn);
             }
             else
             {
@@ -80,7 +80,7 @@ namespace Chess0.ViewModel.Rules.Checkers
         }
 
 
-        private PathData ViablePath(TileModel Me, ObservableBoardCollection<TileModel> Tiles)
+        public static PathData ViablePath(TileModel Me, ObservableBoardCollection<TileModel> Tiles)
         {
             HashSet<MyPoint> BlockedPath = new HashSet<MyPoint>();
             List<MyPoint> PossiablePath = Me.Piece.PossiablePath();
@@ -95,11 +95,11 @@ namespace Chess0.ViewModel.Rules.Checkers
                 try
                 {
                     moves.Add(dir, 0);
-                 
+
                 }
                 catch (ArgumentException e)
                 {
-                   
+                    Console.WriteLine(e.Message);
 
                 }
             }
@@ -243,12 +243,12 @@ namespace Chess0.ViewModel.Rules.Checkers
         public override bool WinCondition(object ob)
         {
             ObservableBoardCollection<TileModel> CheckPieces = (ObservableBoardCollection<TileModel>)ob;
-            int[] count = {0,0};
+            int[] count = { 0, 0 };
             foreach (TileModel tile in CheckPieces)
             {
                 if (tile.Piece != null)
                 {
-                  
+
                     if (tile.Piece.Player == State.Black)
                     {
                         count[(int)State.Black]++;
@@ -263,7 +263,7 @@ namespace Chess0.ViewModel.Rules.Checkers
 
 
 
-            return (count[(int)State.Black]==0 || count[(int)State.White]==0) ? true : false;
+            return (count[(int)State.Black] == 0 || count[(int)State.White] == 0) ? true : false;
         }
 
 
@@ -271,16 +271,16 @@ namespace Chess0.ViewModel.Rules.Checkers
 
 
 
-        public override void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack=null, ObservableCollection<IPiece> DeadWhite=null)
+        public override void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack = null, ObservableCollection<IPiece> DeadWhite = null)
         {
 
 
             MyPoint direction = (moveTo - point) / Math.Floor(MyPoint.GetDistence(point, moveTo));
 
             PathData viablepath = ViablePath(Tiles[point], Tiles);
-           
 
-         
+
+
             MyPoint eat = viablepath.capturedPieces[direction];
 
             if (DeadBlack != null && DeadWhite != null)
@@ -295,8 +295,8 @@ namespace Chess0.ViewModel.Rules.Checkers
                         break;
                 }
             }
-                    Tiles[eat].Piece = null;
-               
+            Tiles[eat].Piece = null;
+
 
 
 
@@ -305,7 +305,7 @@ namespace Chess0.ViewModel.Rules.Checkers
             //setlock to postison if anohter eat possiable
 
             if (DeadBlack != null && DeadWhite != null)
-                Lock1=Restriction1_IsThisPieceCanEatAnotherEnemy(Tiles, moveTo);
+                Lock1 = Restriction1_IsThisPieceCanEatAnotherEnemy(Tiles, moveTo);
 
 
         }
@@ -350,7 +350,7 @@ namespace Chess0.ViewModel.Rules.Checkers
 
             return lock1;
         }
-    
+
         public override List<MyPoint> Restriction2_IsAnyPieceHasToEatEnemy(ObservableBoardCollection<TileModel> Tiles, State PlayerTurn)
         {
             List<MyPoint> lock2 = new List<MyPoint>();
@@ -362,7 +362,7 @@ namespace Chess0.ViewModel.Rules.Checkers
                 {
                     PathData viablePath = ViablePath(CanEat, Tiles);
 
-                    if (viablePath.capturedPieces == null && lock2.Count()==0)
+                    if (viablePath.capturedPieces == null && lock2.Count() == 0)
                         lock2.Clear();
                     else if (viablePath.capturedPieces != null)
                     {
@@ -378,72 +378,5 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         }
 
-        public override IEnumerator<ObservableBoardCollection<TileModel>> GetPieceAllPossiableMove(ObservableBoardCollection<TileModel> rootStateOfBoard, MyPoint PieceToCheck, int depth )
-        {
-
-            //clone stateofBOARD
-
-            PathData viablepath = ViablePath(rootStateOfBoard[PieceToCheck], rootStateOfBoard);
-            ObservableBoardCollection<TileModel> TempStateOfBoard = null;
-
-
-
-            if (viablepath.capturedPieces == null && depth == 0)
-            {
-                foreach (MyPoint move in viablepath.Moves)
-                {
-                    TempStateOfBoard = rootStateOfBoard.Clone();
-                    MovePiece(PieceToCheck, move, TempStateOfBoard);
-
-                    yield return TempStateOfBoard.Clone();
-
-                }
-
-            }
-            else if (viablepath.capturedPieces != null)
-            {
-                foreach (KeyValuePair<MyPoint, MyPoint> Capture in viablepath.capturedPieces)
-                {
-                    MyPoint NextMove = Capture.Value + Capture.Key;
-
-                    foreach (MyPoint move in viablepath.Moves)
-                    {
-                        if (NextMove == move)
-                        {
-                            TempStateOfBoard = rootStateOfBoard.Clone();
-
-                            EatPiece(PieceToCheck, move, TempStateOfBoard);
-                            IEnumerator<ObservableBoardCollection<TileModel>> CanEatAnotherPiece = GetPieceAllPossiableMove(TempStateOfBoard, move, depth = depth + 1);
-                            while (CanEatAnotherPiece.MoveNext())
-                            {
-                                yield return CanEatAnotherPiece.Current;
-                            }
-                           
-
-                            NextMove = NextMove + Capture.Key;
-                        }
-
-                    }
-
-                }
-
-            }
-            else
-            {
-            //now it is fine no shadow cases
-            if(depth==0)
-            {
-                yield break;
-            }
-            else
-            {
-                yield return rootStateOfBoard.Clone();
-            }
-                
-
-            }
-        }
-
-       
     }
 }

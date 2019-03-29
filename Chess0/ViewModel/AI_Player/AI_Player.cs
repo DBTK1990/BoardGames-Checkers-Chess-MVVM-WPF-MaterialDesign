@@ -12,15 +12,20 @@ namespace Chess0.ViewModel.AI_Player
     
     struct DataMinMax: ICloneable
     {
-       public ObservableBoardCollection<TileModel> Move;
-       public int Eval;
+        public ObservableBoardCollection<TileModel> StateOfTheBoard;
+        public List<MyPoint> Moves;
+     
+        public int Eval;
 
+        //fix clone
         public object Clone()
         {
             DataMinMax Clone = new DataMinMax
             {
-                Move = Move.Clone(),
-                Eval = Eval
+                StateOfTheBoard = StateOfTheBoard.Clone(),
+                Eval = Eval,
+              
+                Moves=Moves==null?null:new List<MyPoint>(Moves)
             };
             return Clone;
         }
@@ -30,17 +35,17 @@ namespace Chess0.ViewModel.AI_Player
     {
 
         static int count = 0;
-        int fsdd;
+     
 
         private static DataMinMax EvaluateStateOfBoard(ObservableBoardCollection<TileModel> StateOfBoard)
         {
            
             DataMinMax Evel_arg = new DataMinMax();
-            Evel_arg.Move = StateOfBoard;
+            Evel_arg.StateOfTheBoard = StateOfBoard;
             Evel_arg.Eval = 0;
 
 
-            foreach (TileModel tile in Evel_arg.Move)
+            foreach (TileModel tile in Evel_arg.StateOfTheBoard)
             {
                 if (tile.Piece != null)
                 {
@@ -56,7 +61,7 @@ namespace Chess0.ViewModel.AI_Player
 
                 }
             }
-            return (DataMinMax)Evel_arg.Clone();
+            return Evel_arg;
 
 
 
@@ -70,43 +75,46 @@ namespace Chess0.ViewModel.AI_Player
             {
                 return EvaluateStateOfBoard(StateOfBoard);
             }
-            ;
+            
+
+
+            #region AI_Lock2_Checkrers
+            List<TileModel> lock2 = new List<TileModel>();
+            foreach (MyPoint lockerPos in rules.Restriction2_IsAnyPieceHasToEatEnemy(StateOfBoard, PlayerTurn))
+                lock2.Add(StateOfBoard[lockerPos]);
+
+            IList<TileModel> res = null;
+            if (lock2.Count != 0)
+                res = lock2;
+            else
+                res = StateOfBoard;
+
+            #endregion
 
             if (PlayerTurn == State.Black)
             {
-                DataMinMax MaxEvel=new DataMinMax();
-                MaxEvel.Eval = int.MinValue;
-               
-                List<TileModel> lock2 = new List<TileModel>();
-                foreach (MyPoint lockerPos in rules.Restriction2_IsAnyPieceHasToEatEnemy(StateOfBoard, PlayerTurn))
+                DataMinMax MaxEvel=new DataMinMax()
                 {
-                    lock2.Add(StateOfBoard[lockerPos]);
-                }
-
-               
-
-                IList<TileModel> res=null;
-                if (lock2.Count != 0)
-                    res = lock2;
-                else
-                    res = StateOfBoard;
-
+                    Eval = int.MinValue
+                };
+                
                 DataMinMax CheckNewEval=new DataMinMax();
+
                 foreach (TileModel tile in res)
                 {
                     if (tile.Piece != null)
                     {
                         if(tile.Piece.Player==PlayerTurn )
                         {
-                            IEnumerator<ObservableBoardCollection<TileModel>> PossiableMoveIteretor = rules.GetPieceAllPossiableMove(StateOfBoard, tile.Pos, 0);
+                            IEnumerator<DataMinMax> PossiableMoveIteretor = GetPieceAllPossiableMove(StateOfBoard, tile.Pos, 0, rules);
                            
                             while (PossiableMoveIteretor.MoveNext())
                             {
-                                CheckNewEval = MinMaxDriver(PossiableMoveIteretor.Current, depth - 1, alpha, beta, State.White, rules) ;
-                                CheckNewEval.Move = PossiableMoveIteretor.Current;
+                                CheckNewEval = MinMaxDriver(PossiableMoveIteretor.Current.StateOfTheBoard, depth - 1, alpha, beta, State.White, rules) ;
+                                CheckNewEval = PossiableMoveIteretor.Current;
 
                                 if (CheckNewEval.Eval > MaxEvel.Eval)
-                                    MaxEvel = (DataMinMax)CheckNewEval.Clone();
+                                    MaxEvel = CheckNewEval;
 
                                 alpha = Math.Max(alpha, CheckNewEval.Eval);
 
@@ -129,39 +137,28 @@ namespace Chess0.ViewModel.AI_Player
             }
             else
             {
-                DataMinMax MinEvel = new DataMinMax();
-                MinEvel.Eval = int.MaxValue;
-                
-
-                List<TileModel> lock2 = new List<TileModel>();
-                foreach (MyPoint lockerPos in rules.Restriction2_IsAnyPieceHasToEatEnemy(StateOfBoard, PlayerTurn))
+                DataMinMax MinEvel = new DataMinMax()
                 {
-                    lock2.Add(StateOfBoard[lockerPos]);
-                }
-
-                IList<TileModel> res = null;
-                if (lock2.Count != 0)
-                    res = lock2;
-                else
-                    res = StateOfBoard;
+                    Eval = int.MaxValue
+                };
 
                 DataMinMax CheckNewEval = new DataMinMax();
+
                 foreach (TileModel tile in res)
                 {
                     if (tile.Piece != null)
                     {
                         if (tile.Piece.Player == PlayerTurn)
                         {
-                            IEnumerator<ObservableBoardCollection<TileModel>> PossiableMoveIteretor = rules.GetPieceAllPossiableMove(StateOfBoard, tile.Pos, 0);
+                            IEnumerator<DataMinMax> PossiableMoveIteretor = GetPieceAllPossiableMove(StateOfBoard, tile.Pos, 0,rules);
 
                             while (PossiableMoveIteretor.MoveNext())
                             {
-                                CheckNewEval = MinMaxDriver(PossiableMoveIteretor.Current, depth - 1, alpha, beta, State.Black, rules);
-
-                                CheckNewEval.Move = PossiableMoveIteretor.Current;
+                                CheckNewEval = MinMaxDriver(PossiableMoveIteretor.Current.StateOfTheBoard, depth - 1, alpha, beta, State.Black, rules);
+                                CheckNewEval = PossiableMoveIteretor.Current;
 
                                 if (CheckNewEval.Eval < MinEvel.Eval)
-                                    MinEvel = (DataMinMax)CheckNewEval.Clone();
+                                    MinEvel = CheckNewEval;
 
                                 alpha = Math.Min(beta, CheckNewEval.Eval);
 
@@ -183,54 +180,102 @@ namespace Chess0.ViewModel.AI_Player
 
         }
 
-        /*
-         * 
-         * struct MinMaxRes
-         * {
-         * public int maxEval;
-         * public PathData NextMove;
-         * }
-         * 
-         * 
-                function minimax(stateOfBoard, depth, alpha, beta, PlayerTurn  )
-            if depth == 0 or game over in position
-                return static evaluation of position AND Path;  And eat or move
 
-            if PlayerTurn==state.black
-                maxEval = -infinity
-              
-                for each piece in tiles
-                    for each move of allpossibleMove(piece)
-                        eval = minimax(move, depth - 1, alpha, beta, state.White)
-                       
-                        if(eval[MinMaxRes.maxEval]>maxEval)
-                            maxEval = eval[MinMaxRes.maxEval];
-                            eval[MinMaxRes.BestNextMove]=move;
-                        alpha = max(alpha, eval)
-                        if beta <= alpha
-                               break
-                        return maxEval,BestNextMove
+        private static IEnumerator<DataMinMax> GetPieceAllPossiableMove(ObservableBoardCollection<TileModel> rootStateOfBoard, MyPoint PieceToCheck, int depth,Rules_Checkers rules)
+        {
 
+            
+
+            PathData viablepath = Rules_Checkers.ViablePath(rootStateOfBoard[PieceToCheck], rootStateOfBoard);
+
+            DataMinMax MoveResults = new DataMinMax()
+            {
+                StateOfTheBoard = rootStateOfBoard.Clone(),
+                Moves = new List<MyPoint>()
+             
+            };
+
+            if (depth == 0)
+                MoveResults.Moves.Add(PieceToCheck);
+
+                if (viablepath.capturedPieces == null && depth == 0)
+            {
+                foreach (MyPoint move in viablepath.Moves)
+                {
+                   
+                    MoveResults.Moves.Add(move);
+                
+                    rules.MovePiece(PieceToCheck, move, MoveResults.StateOfTheBoard);
+
+                    yield return (DataMinMax)MoveResults.Clone();
+
+                    MoveResults.Moves.Remove(move);
+                    MoveResults.StateOfTheBoard = rootStateOfBoard.Clone();
+
+                }
+
+            }
+            else if (viablepath.capturedPieces != null)
+            {
+                foreach (KeyValuePair<MyPoint, MyPoint> Capture in viablepath.capturedPieces)
+                {
+                    MyPoint NextMove = Capture.Value + Capture.Key;
+
+                    foreach (MyPoint move in viablepath.Moves)
+                    {
+                        if (NextMove == move)
+                        {
+                            MoveResults.Moves.Add(move);
+                          
+                            rules.EatPiece(PieceToCheck, move, MoveResults.StateOfTheBoard);
+                            IEnumerator<DataMinMax> CanEatAnotherPiece = GetPieceAllPossiableMove(MoveResults.StateOfTheBoard, move, depth = depth + 1, rules);
+                            while (CanEatAnotherPiece.MoveNext())
+                            {
+
+                                for (int movesloop = 0; movesloop < CanEatAnotherPiece.Current.Moves.Count; movesloop++)
+                                    MoveResults.Moves.Add(CanEatAnotherPiece.Current.Moves[movesloop]);
+
+                                    MoveResults.StateOfTheBoard = CanEatAnotherPiece.Current.StateOfTheBoard;
+                                    yield return (DataMinMax)MoveResults.Clone();
+
+                                for (int movesloop = 1; movesloop < CanEatAnotherPiece.Current.Moves.Count; movesloop++)
+                                    MoveResults.Moves.Remove(CanEatAnotherPiece.Current.Moves[movesloop]);
+
+                                    MoveResults.StateOfTheBoard = rootStateOfBoard.Clone();
+                            }
+                            MoveResults.Moves.Remove(move);
+
+
+                            NextMove = NextMove + Capture.Key;
+                        }
+
+                    }
+
+                }
+
+            }
             else
-                minEval = +infinity
-                 for each piece in tiles
-                    for each move of allpossibleMove(piece)
-                        eval = minimax(move, depth - 1, alpha, beta, state.Black)
-                    minEval = min(minEval, eval)
-                    beta = min(beta, eval)
-                    if beta <= alpha
-                        break
-                return minEval,null
+            {
+                if (depth == 0)
+                {
+                    yield break;
+                }
+                else
+                {
+                    
+                    yield return (DataMinMax)MoveResults.Clone();
+                }
 
 
-        // initial call
-        minimax(currentPosition, 3, -∞, +∞, true)
-         */
+            }
+        }
 
 
     }
-    //moveto helper file
-    class PathData : ICloneable
+
+
+//moveto helper file
+class PathData : ICloneable
         {
 
 
@@ -246,7 +291,7 @@ namespace Chess0.ViewModel.AI_Player
 
         }
 
-        object ICloneable.Clone()
+        public object Clone()
         {
             
             return new PathData(Moves,capturedPieces);
