@@ -9,7 +9,7 @@ using Chess0.ViewModel.Rules.Checkers;
 
 namespace Chess0.ViewModel.AI_Player
 {
-
+    
     struct DataMinMax: ICloneable
     {
        public ObservableBoardCollection<TileModel> Move;
@@ -30,7 +30,7 @@ namespace Chess0.ViewModel.AI_Player
     {
 
         static int count = 0;
-
+        int fsdd;
 
         private static DataMinMax EvaluateStateOfBoard(ObservableBoardCollection<TileModel> StateOfBoard)
         {
