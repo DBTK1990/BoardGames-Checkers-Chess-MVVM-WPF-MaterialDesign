@@ -79,14 +79,14 @@ namespace Chess0.ViewModel
         private void OnChooseGame(object game)
         {
             
-            if (Game.Chess.ToString() == game as string)
+            if (Game.Chess.ToString() == game as string && GameName != "Chess Game")
             {
                 BoardViewModel = new ChessBoardViewModel(new Rules_Chess());
                 GameName = "Chess Game";
 
 
             }
-            else if (Game.Checkers.ToString() == game as string)
+            else if (Game.Checkers.ToString() == game as string && GameName!= "Checkers Game")
             {
                 BoardViewModel = new CheckersBoardViewModel(new Rules_Checkers());
                 GameName = "Checkers Game";

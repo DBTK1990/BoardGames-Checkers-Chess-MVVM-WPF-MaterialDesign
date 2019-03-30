@@ -18,6 +18,10 @@ namespace Chess0.ViewModel
         bool _AI_thinking = false;
 
         public bool AI_thinking { get => _AI_thinking; set => _AI_thinking = value; }
+     
+
+
+
 
         #region Constructor
         public CheckersBoardViewModel(IRules play) : base(play) { }
@@ -30,9 +34,10 @@ namespace Chess0.ViewModel
       
         private void AI_Move()
         {
-            
+           
             if (PlayerTurn == State.Black && !AI_thinking)
             {
+                Massege.AI_IsThinking_Snackbar = true;
                 AI_thinking = true;
 
                 foreach (TileModel tile in Tiles)
@@ -70,8 +75,16 @@ namespace Chess0.ViewModel
                           
 
                             Console.WriteLine($"capture happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
-
-                            Rules.EatPiece(focus_pos, moveto, Tiles, DeadBlack, DeadWhite);
+                            try
+                            {
+                                Rules.EatPiece(focus_pos, moveto, Tiles, DeadBlack, DeadWhite);
+                            }
+                            catch (Exception e)
+                            {
+                                
+                                Console.WriteLine(e.Message);
+                                Console.WriteLine($"Org-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
+                            }
                             Console.WriteLine($"NextMove-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
                         });
 
@@ -84,9 +97,17 @@ namespace Chess0.ViewModel
                             App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
                             {
                                 Console.WriteLine($"move happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
+                            try
+                                {
+                                    Rules.MovePiece(focus_pos, moveto, Tiles);
+                                }
+                            catch (Exception e)
+                        {
 
-                                Rules.MovePiece(focus_pos, moveto, Tiles);
-                            });
+                            Console.WriteLine(e.Message);
+                            Console.WriteLine($"Org-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
+                        }
+                    });
 
                          
                      
@@ -120,6 +141,7 @@ namespace Chess0.ViewModel
 
 
                 AI_thinking = false;
+                Massege.AI_IsThinking_Snackbar = false;
 
 
             }
@@ -221,7 +243,15 @@ namespace Chess0.ViewModel
 
                 await Task.Run(new Action(AI_Move));
                 // AI_Move();
-           
+
+            }
+            else
+            {
+
+                     
+
+              
+                
             }
             /*if(AI_Player!=null)
                    {

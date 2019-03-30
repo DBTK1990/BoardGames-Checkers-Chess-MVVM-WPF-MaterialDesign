@@ -11,11 +11,12 @@
        
         mc:Ignorable="d"
         Title="MainWindow"
-        Width="803.612" Height="782.253" WindowStartupLocation="Manual"  ResizeMode="NoResize">
+        Width="812.612" Height="857.253" WindowStartupLocation="Manual"  ResizeMode="NoResize">
     <Window.Resources>
         <ViewModel:MainWindowViewModel x:Key="mwvm"/>
        
     </Window.Resources>
+ 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"  />
@@ -49,7 +50,9 @@
 
                 <view:BoardUC DataContext="{Binding BoardViewModel ,Source={StaticResource mwvm}}" />
 
-            </StackPanel>
+            <materialDesign:Snackbar Message="Black is thinking" IsActive="{Binding BoardViewModel.Massege.AI_IsThinking_Snackbar, Source={StaticResource mwvm}}" />
+
+        </StackPanel>
 
       
 

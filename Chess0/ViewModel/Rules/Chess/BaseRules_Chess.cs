@@ -39,7 +39,7 @@ namespace Chess0.ViewModel.Rules.Chess
                                 if (Tiles[Pos].Piece is Piece_King_M && Tiles[Pos].Piece.Player != PlayerTurn)
                                 {
                                     BlockedPath.Add(Check);
-                                    Tiles[tileIndex].MarkColor = "Purple";
+                                    Tiles[tileIndex].MarkColor = "blue";
                                     Tiles[tileIndex].MarkVisibility = "Visible";
                                 }
                                 else

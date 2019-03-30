@@ -279,26 +279,5 @@ namespace Chess0.ViewModel.AI_Player
 
 
 //moveto helper file
-class PathData : ICloneable
-        {
 
-
-        public HashSet<MyPoint> Moves=null;
-        public Dictionary<MyPoint, MyPoint> capturedPieces=null;
-
-        
-        public PathData( HashSet<MyPoint> _Moves, Dictionary<MyPoint, MyPoint> _capturedPieces=null)
-        {
-           
-            Moves =(_Moves==null)?null:new HashSet<MyPoint>(_Moves);
-            capturedPieces=(_capturedPieces==null)? _capturedPieces : new Dictionary<MyPoint, MyPoint>(_capturedPieces);
-
-        }
-
-        public object Clone()
-        {
-            
-            return new PathData(Moves,capturedPieces);
-        }
-    }
 }

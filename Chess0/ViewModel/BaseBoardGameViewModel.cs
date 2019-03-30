@@ -11,6 +11,10 @@ namespace Chess0.ViewModel
     abstract class BaseBoardGameViewModel
     {
         #region properties
+    
+        private Snackbar_AI msg;
+        public Snackbar_AI Massege { get => msg; set => msg = value; }
+
         private ObservableBoardCollection<TileModel> tiles;
         public ObservableBoardCollection<TileModel> Tiles
         {
@@ -170,6 +174,7 @@ namespace Chess0.ViewModel
 
             GameOver = new DialogGameOverModel("");
 
+            msg = new Snackbar_AI();
 
         }
 
