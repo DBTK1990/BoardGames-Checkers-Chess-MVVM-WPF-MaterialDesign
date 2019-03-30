@@ -34,17 +34,20 @@ namespace Chess0.ViewModel.AI_Player
     class AI_Player_Checkers
     {
 
-        static int count = 0;
+         static int count = 0;
      
+
 
         private static DataMinMax EvaluateStateOfBoard(ObservableBoardCollection<TileModel> StateOfBoard)
         {
-           
+            count++;
+            Console.WriteLine($"index case number:{count}");
+
             DataMinMax Evel_arg = new DataMinMax();
             Evel_arg.StateOfTheBoard = StateOfBoard;
             Evel_arg.Eval = 0;
 
-
+            Console.WriteLine($"StateOfBoard-tiles::{DiagnosticTools.print_Board_ToString(StateOfBoard)}/n/n/n");
             foreach (TileModel tile in Evel_arg.StateOfTheBoard)
             {
                 if (tile.Piece != null)
@@ -61,7 +64,8 @@ namespace Chess0.ViewModel.AI_Player
 
                 }
             }
-            return Evel_arg;
+            Console.WriteLine($"evel:{Evel_arg.Eval}");
+            return (DataMinMax)Evel_arg.Clone();
 
 
 
@@ -69,14 +73,13 @@ namespace Chess0.ViewModel.AI_Player
 
         public static DataMinMax MinMaxDriver(ObservableBoardCollection<TileModel> StateOfBoard,int depth,int alpha,int beta,State PlayerTurn,Rules_Checkers rules)
         {
-            count++;
-            Console.WriteLine($"index case number:{count}");
+            
             if (depth == 0 || rules.WinCondition(StateOfBoard))
             {
                 return EvaluateStateOfBoard(StateOfBoard);
             }
-            
 
+            Console.WriteLine($"MinMaxDriver LINE82 ::StateOfBoard-tiles::{DiagnosticTools.print_Board_ToString(StateOfBoard)}/n/n/n");
 
             #region AI_Lock2_Checkrers
             List<TileModel> lock2 = new List<TileModel>();
@@ -111,7 +114,8 @@ namespace Chess0.ViewModel.AI_Player
                             while (PossiableMoveIteretor.MoveNext())
                             {
                                 CheckNewEval = MinMaxDriver(PossiableMoveIteretor.Current.StateOfTheBoard, depth - 1, alpha, beta, State.White, rules) ;
-                                CheckNewEval = PossiableMoveIteretor.Current;
+                                CheckNewEval.Moves = PossiableMoveIteretor.Current.Moves;
+                               
 
                                 if (CheckNewEval.Eval > MaxEvel.Eval)
                                     MaxEvel = CheckNewEval;
@@ -120,6 +124,7 @@ namespace Chess0.ViewModel.AI_Player
 
                                 if (beta <= alpha)
                                 {
+                                    Console.WriteLine("pruning black");
                                     break;
                                 }
                             }
@@ -155,15 +160,16 @@ namespace Chess0.ViewModel.AI_Player
                             while (PossiableMoveIteretor.MoveNext())
                             {
                                 CheckNewEval = MinMaxDriver(PossiableMoveIteretor.Current.StateOfTheBoard, depth - 1, alpha, beta, State.Black, rules);
-                                CheckNewEval = PossiableMoveIteretor.Current;
+                                CheckNewEval.Moves = PossiableMoveIteretor.Current.Moves;
 
                                 if (CheckNewEval.Eval < MinEvel.Eval)
                                     MinEvel = CheckNewEval;
 
-                                alpha = Math.Min(beta, CheckNewEval.Eval);
+                                beta = Math.Min(beta, CheckNewEval.Eval);
 
                                 if (beta <= alpha)
                                 {
+                                    Console.WriteLine("pruning white");
                                     break;
                                 }
                             }
@@ -183,8 +189,8 @@ namespace Chess0.ViewModel.AI_Player
 
         private static IEnumerator<DataMinMax> GetPieceAllPossiableMove(ObservableBoardCollection<TileModel> rootStateOfBoard, MyPoint PieceToCheck, int depth,Rules_Checkers rules)
         {
-
             
+            Console.WriteLine($"GetPieceAllPossiableMove LINE 192 ::StateOfBoard-tiles::{DiagnosticTools.print_Board_ToString(rootStateOfBoard)}/n/n/n");
 
             PathData viablepath = Rules_Checkers.ViablePath(rootStateOfBoard[PieceToCheck], rootStateOfBoard);
 
@@ -221,14 +227,11 @@ namespace Chess0.ViewModel.AI_Player
                 {
                     MyPoint NextMove = Capture.Value + Capture.Key;
 
-                    foreach (MyPoint move in viablepath.Moves)
-                    {
-                        if (NextMove == move)
-                        {
-                            MoveResults.Moves.Add(move);
+                  
+                            MoveResults.Moves.Add(NextMove);
                           
-                            rules.EatPiece(PieceToCheck, move, MoveResults.StateOfTheBoard);
-                            IEnumerator<DataMinMax> CanEatAnotherPiece = GetPieceAllPossiableMove(MoveResults.StateOfTheBoard, move, depth = depth + 1, rules);
+                            rules.EatPiece(PieceToCheck, NextMove, MoveResults.StateOfTheBoard);
+                            IEnumerator<DataMinMax> CanEatAnotherPiece = GetPieceAllPossiableMove(MoveResults.StateOfTheBoard, NextMove, depth = depth + 1, rules);
                             while (CanEatAnotherPiece.MoveNext())
                             {
 
@@ -243,13 +246,13 @@ namespace Chess0.ViewModel.AI_Player
 
                                     MoveResults.StateOfTheBoard = rootStateOfBoard.Clone();
                             }
-                            MoveResults.Moves.Remove(move);
+                            MoveResults.Moves.Remove(NextMove);
 
 
-                            NextMove = NextMove + Capture.Key;
-                        }
+                          
+                        
 
-                    }
+                    
 
                 }
 

@@ -8,6 +8,7 @@ using Chess0.ViewModel.Rules.Checkers;
 using System;
 using Chess0.Model.Peices;
 using Chess0.ViewModel.AI_Player;
+using System.Threading.Tasks;
 
 namespace Chess0.ViewModel
 {
@@ -19,49 +20,16 @@ namespace Chess0.ViewModel
 
 
         #endregion Constructor
-
+        bool AI_thinking = false;
         State AI = State.Black;
 
-        private string print_Board_ToString(ObservableBoardCollection<TileModel> print)
-        {
-            string strboard = $"{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}<";
-            bool firstTime = false;
-            foreach (TileModel print_tile in print)
-            {
-                if(firstTime)
-                strboard += ",";
-
-                firstTime = true;
-
-                if (print_tile.Piece == null)
-                    strboard += " -- ";
-                else if (print_tile.Piece is Piece_Man_M)
-                    if (print_tile.Piece.Player==State.Black)
-                        strboard += " mb ";
-                    else
-                        strboard += " mw ";
-                else if (print_tile.Piece is Piece_FlyingKingC_M)
-                    if (print_tile.Piece.Player == State.Black)
-                        strboard += " fb ";
-                    else
-                        strboard += " fw ";
-
-                if(print_tile.Pos.Y==7)
-                    strboard += $">{Environment.NewLine}";
-
-
-
-            }
-            strboard += $"{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}";
-            return strboard;
-        }
-
+      
         private void AI_Move()
         {
-
-            if (PlayerTurn == State.Black)
+            
+            if (PlayerTurn == State.Black && !AI_thinking)
             {
-
+                AI_thinking = true;
 
                 foreach (TileModel tile in Tiles)
                 {
@@ -71,11 +39,12 @@ namespace Chess0.ViewModel
 
                 DataMinMax movetodo = new DataMinMax();
 
-                movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(), 3, int.MinValue, int.MaxValue, State.Black, Rules as Rules_Checkers);
+                movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(),3, int.MinValue, int.MaxValue, State.Black, (Rules_Checkers)(Rules as Rules_Checkers).Clone());
 
                 //eatPieces
-                Console.WriteLine($"/n/n/n{print_Board_ToString(movetodo.StateOfTheBoard)}/n/n/n");
-                Console.WriteLine($"/n/n/n{print_Board_ToString(Tiles)}/n/n/n");
+                Console.WriteLine($"Org-tiles::{DiagnosticTools.print_Board_ToString(Tiles)}/n/n/n");
+                Console.WriteLine($"NextMove-tiles::{DiagnosticTools.print_Board_ToString(movetodo.StateOfTheBoard)}/n/n/n");
+           
 
                 //genrate ai move
                 MyPoint focus_pos=null;
@@ -88,17 +57,43 @@ namespace Chess0.ViewModel
                     focus_pos = movetodo.Moves[movesloop];
                     moveto= movetodo.Moves[movesloop+1];
 
+                    
                     if (capture)
                     {
-                        Console.WriteLine($"capture happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
-                        Rules.EatPiece(focus_pos, moveto, Tiles, DeadBlack, DeadWhite);
+                        App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+                        {
+                            Console.WriteLine($"Org-tiles::{DiagnosticTools.print_Board_ToString(Tiles)}/n/n/n");
+                          
+
+                            Console.WriteLine($"capture happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
+
+                            Rules.EatPiece(focus_pos, moveto, Tiles, DeadBlack, DeadWhite);
+                            Console.WriteLine($"NextMove-tiles::{DiagnosticTools.print_Board_ToString(Tiles)}/n/n/n");
+                        });
+
 
                     }
                     else
                     {
-                        Rules.MovePiece(focus_pos, moveto, Tiles);
-                    }
+                            try
+                            {
+                            App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+                            {
+                                Console.WriteLine($"move happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
 
+                                Rules.MovePiece(focus_pos, moveto, Tiles);
+                            });
+
+                         
+                            }
+                            catch (Exception E)
+                            {
+
+                                Console.WriteLine($"Org-tiles::{DiagnosticTools.print_Board_ToString(Tiles)}/n/n/n");
+                                Console.WriteLine(E.Message);
+                            }
+                    }
+                  
                 }
 
                
@@ -126,106 +121,110 @@ namespace Chess0.ViewModel
                     Rules.SimulatePath(Focus, Tiles);
 
 
-
+                AI_thinking = false;
 
 
             }
         }
 
-        protected override void MyOnClick(object o)
+        protected async override void MyOnClick(object o)
         {
-            MyPoint tileIndex = (MyPoint)o;
-
-            object[] dead = { DeadWhite, DeadBlack };
-            
-
-
-            if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visible" && Tiles[tileIndex].MarkColor == "Green")
-            {// if captured is not 0 do eat
-
-                //move it to method inside base viewmodel
-
-           
-                //dismantel capture pieces var
-                MyPoint CheckCapture = tileIndex - (tileIndex - Focus.Pos) / Math.Floor(MyPoint.GetDistence(Focus.Pos, tileIndex));
-                if(Tiles[CheckCapture].Pos == Focus.Pos )
-                    Rules.MovePiece(Focus.Pos, tileIndex, Tiles);
-                else if (Tiles[CheckCapture].MarkVisibility == "Visible" && Tiles[CheckCapture].MarkColor == "Red")
-                    Rules.EatPiece(Focus.Pos, tileIndex, Tiles, DeadBlack, DeadWhite);
-         
-
-                //shift focus to move/eat pos
-                Focus = Tiles[tileIndex];
-
-                //hide all marking on the board
-
-                //control win and turn switch
-
-                foreach (TileModel tile in Tiles)
-                    tile.MarkVisibility = "Hidden";
-
-                if (Rules.WinCondition(Tiles.Clone()))
-                    base.ShowGameOverDialog();
-                else
-                    PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles, PlayerTurn);
-
-                MyPoint PTempFocus2 = null;
-                if ((Rules as BaseRules_Checkers).Lock1 != null)
-                    PTempFocus2 = (Rules as BaseRules_Checkers).Lock1;
-                else if (!(Rules as BaseRules_Checkers).IsLock2Empty())
-                    PTempFocus2 = (Rules as BaseRules_Checkers).Lock2.First();
-
-                
-
-                //chosse next turn focus
-                Focus = (PTempFocus2!=null) ?Tiles[PTempFocus2] : null;
-
-                if (Focus != null)
-                    Rules.SimulatePath(Focus, Tiles);
-
-           
-
-            }
-            else if (Tiles[tileIndex].Piece != null)
+            if (!AI_thinking)
             {
-                if (Tiles[tileIndex].Piece.Player == PlayerTurn)
-                {
+                MyPoint tileIndex = (MyPoint)o;
+
+                object[] dead = { DeadWhite, DeadBlack };
+
+
+
+                if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visible" && Tiles[tileIndex].MarkColor == "Green")
+                {// if captured is not 0 do eat
+
+                    //move it to method inside base viewmodel
+
+
+
+                    if ((Rules as Rules_Checkers).Capture)
+                        Rules.EatPiece(Focus.Pos, tileIndex, Tiles, DeadBlack, DeadWhite);
+                    else
+                        Rules.MovePiece(Focus.Pos, tileIndex, Tiles);
+
+                    //shift focus to move/eat pos
+                    Focus = Tiles[tileIndex];
+
+                    //hide all marking on the board
+
+                    //control win and turn switch
 
                     foreach (TileModel tile in Tiles)
-                    {
                         tile.MarkVisibility = "Hidden";
-                        tile.MarkColor = "White";
-                    }
 
-                    
-                    //convertor to my point to check if null
-                    MyPoint PTempFocus = null;
-                    if ((Rules as Rules_Checkers).Lock1 != null)
-                        PTempFocus = (Rules as Rules_Checkers).Lock1;
-                    else if ((Rules as Rules_Checkers).Lock2.Count != 0)
-                    {
-                        if ((Rules as Rules_Checkers).Lock2.Contains(tileIndex))
-                            PTempFocus = tileIndex;
-
-                    }
+                    if (Rules.WinCondition(Tiles.Clone()))
+                        base.ShowGameOverDialog();
                     else
+                        PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles, PlayerTurn);
+
+                    MyPoint PTempFocus2 = null;
+                    if ((Rules as BaseRules_Checkers).Lock1 != null)
+                        PTempFocus2 = (Rules as BaseRules_Checkers).Lock1;
+                    else if (!(Rules as BaseRules_Checkers).IsLock2Empty())
+                        PTempFocus2 = (Rules as BaseRules_Checkers).Lock2.First();
+
+
+
+                    //chosse next turn focus
+                    Focus = (PTempFocus2 != null) ? Tiles[PTempFocus2] : null;
+
+                    if (Focus != null)
+                        Rules.SimulatePath(Focus, Tiles);
+
+
+
+                }
+                else if (Tiles[tileIndex].Piece != null && !AI_thinking)
+                {
+                    if (Tiles[tileIndex].Piece.Player == PlayerTurn)
                     {
-                        PTempFocus = tileIndex;
+
+                        foreach (TileModel tile in Tiles)
+                        {
+                            tile.MarkVisibility = "Hidden";
+                            tile.MarkColor = "White";
+                        }
+
+
+                        //convertor to my point to check if null
+                        MyPoint PTempFocus = null;
+                        if ((Rules as Rules_Checkers).Lock1 != null)
+                            PTempFocus = (Rules as Rules_Checkers).Lock1;
+                        else if ((Rules as Rules_Checkers).Lock2.Count != 0)
+                        {
+                            if ((Rules as Rules_Checkers).Lock2.Contains(tileIndex))
+                                PTempFocus = tileIndex;
+
+                        }
+                        else
+                        {
+                            PTempFocus = tileIndex;
+                        }
+
+
+                        Focus = PTempFocus != null ? Tiles[PTempFocus] : Focus;
+
+                        Rules.SimulatePath(Focus, Tiles);
+
+
                     }
 
 
-                    Focus = PTempFocus!=null ? Tiles[PTempFocus]:Focus;
 
-                    Rules.SimulatePath(Focus, Tiles);
 
-                  
                 }
+
+                await Task.Run(new Action(AI_Move));
+                // AI_Move();
            
-
-
-
             }
-            AI_Move();
             /*if(AI_Player!=null)
                    {
                     AI_Player.ChossePathToGo(Tiles,IRules); -output:pointToMoveto

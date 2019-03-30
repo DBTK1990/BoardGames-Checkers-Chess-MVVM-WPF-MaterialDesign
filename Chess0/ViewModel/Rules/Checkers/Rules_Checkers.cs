@@ -208,21 +208,17 @@ namespace Chess0.ViewModel.Rules.Checkers
             {
                 foreach (KeyValuePair<MyPoint, MyPoint> Capture in viablepath.capturedPieces)
                 {
-
+                    this.Capture = true;
                     Tiles[Capture.Value].MarkColor = "Red";
                     Tiles[Capture.Value].MarkVisibility = "Visible";
+
                     MyPoint pathGreen = Capture.Value + Capture.Key;
 
-                    foreach (MyPoint move in viablepath.Moves)
-                    {
-                        if (pathGreen == move)
-                        {
-                            Tiles[pathGreen].MarkColor = "Green";
-                            Tiles[pathGreen].MarkVisibility = "Visible";
-                            pathGreen = pathGreen + Capture.Key;
-                        }
+                    Tiles[pathGreen].MarkColor = "Green";
+                    Tiles[pathGreen].MarkVisibility = "Visible";
+                 
 
-                    }
+                  
 
 
 
@@ -274,7 +270,7 @@ namespace Chess0.ViewModel.Rules.Checkers
         public override void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack = null, ObservableCollection<IPiece> DeadWhite = null)
         {
 
-
+            Capture = false;
             MyPoint direction = (moveTo - point) / Math.Floor(MyPoint.GetDistence(point, moveTo));
 
             PathData viablepath = ViablePath(Tiles[point], Tiles);
@@ -378,5 +374,9 @@ namespace Chess0.ViewModel.Rules.Checkers
 
         }
 
+        public override object Clone()
+        {
+            return new Rules_Checkers(){Lock1=this.Lock1 ,Lock2=this.Lock2};
+        }
     }
 }

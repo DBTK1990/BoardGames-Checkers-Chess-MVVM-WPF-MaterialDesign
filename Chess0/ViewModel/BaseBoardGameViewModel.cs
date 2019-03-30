@@ -152,10 +152,9 @@ namespace Chess0.ViewModel
             InitBoard();
 
             //Init all piece of the desire game
-            if (Rules is Rules_Chess)
-                Rules.InitPieces(Tiles);
-            else
-                (Rules as Rules.Checkers.Rules_Checkers).TestPieces(Tiles);
+
+            Rules.InitPieces(Tiles);
+
             //testinghere
 
             //lists of dead pieces

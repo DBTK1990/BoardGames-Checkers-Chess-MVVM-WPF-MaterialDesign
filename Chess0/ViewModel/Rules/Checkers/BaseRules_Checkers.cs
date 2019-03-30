@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,11 +10,11 @@ using Chess0.ViewModel.AI_Player;
 
 namespace Chess0.ViewModel.Rules.Checkers
 {
-     abstract class BaseRules_Checkers: IRules
+    abstract class BaseRules_Checkers : IRules, ICloneable
     {
 
 
-      
+
 
         //LOCK1: CONTROL CONSACTIVE EATS
         private MyPoint _lock1 = null;
@@ -29,7 +30,8 @@ namespace Chess0.ViewModel.Rules.Checkers
             get => _lock2;
             protected set => _lock2 = value;
         }
-     
+        private bool _capture;
+        public bool Capture{ get => _capture; set => _capture = value; }
         public bool IsLock2Empty() => (Lock2.Count() == 0) ? true : false;
 
         public abstract MyPoint Restriction1_IsThisPieceCanEatAnotherEnemy(ObservableBoardCollection<TileModel> tiles,MyPoint CheckPiece);
@@ -40,9 +42,6 @@ namespace Chess0.ViewModel.Rules.Checkers
         public abstract bool WinCondition(object ob);
         public abstract void MovePiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles);
         public abstract void EatPiece(MyPoint point, MyPoint moveTo, ObservableBoardCollection<TileModel> Tiles, ObservableCollection<IPiece> DeadBlack=null, ObservableCollection<IPiece> DeadWhite=null);
-   
-
-
-
+        public abstract object Clone();
     }
 }
