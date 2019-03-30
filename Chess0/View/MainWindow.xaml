@@ -25,24 +25,19 @@
 
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" >SETTINGS:</TextBlock>
-                <materialDesign:PopupBox ClipToBounds="True"  PopupMode="Click"  Margin="0,0,0,0"  >
-                    <materialDesign:PopupBox.PopupContent>
-                        <Menu >
-                            <Menu.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel />
-                                </ItemsPanelTemplate>
-                            </Menu.ItemsPanel>
-                        <MenuItem Header="Restart Game" Command="{Binding RestartGameCommand, Source={StaticResource mwvm}}"/>
+         
+            
+             <Menu>
+                <MenuItem  Header="Choose Game" Background="AliceBlue">
+                        <MenuItem Header="Restart Game" Command="{Binding RestartGameCommand, Source={StaticResource mwvm}}"  />
                             <MenuItem Header="Switch Game" >
-                                <MenuItem Header="Chess" Command="{Binding ChooseGame, Source={StaticResource mwvm}}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"/>
+                                <MenuItem Header="Chess" Command="{Binding ChooseGame, Source={StaticResource mwvm}}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}" />
                                 <Separator/>
                             <MenuItem Header="Checkers" Command="{Binding ChooseGame, Source={StaticResource mwvm}}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"/>
-                            </MenuItem>
-                        </Menu>
-                    </materialDesign:PopupBox.PopupContent>
-                </materialDesign:PopupBox>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+             
             
         
         </StackPanel>
