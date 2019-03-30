@@ -150,6 +150,7 @@ namespace Chess0.ViewModel.Rules.Checkers
                                 try { capturedpieces.Add(Check, Pos); }
                                 catch (ArgumentException e)
                                 {
+                                    e.ToString();
                                     BlockedPath.Add(Check);
                                 }
                             }

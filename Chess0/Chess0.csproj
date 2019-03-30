@@ -65,7 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helper\DiagnosticTools.cs" />
+    <Compile Include="Helper\MyDiagnosticTools.cs" />
     <Compile Include="Helper\NotifyPropertyChanged.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\MyPoint.cs" />

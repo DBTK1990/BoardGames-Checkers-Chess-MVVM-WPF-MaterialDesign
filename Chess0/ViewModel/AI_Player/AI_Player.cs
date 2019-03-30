@@ -17,14 +17,13 @@ namespace Chess0.ViewModel.AI_Player
      
         public int Eval;
 
-        //fix clone
+     
         public object Clone()
         {
             DataMinMax Clone = new DataMinMax
             {
                 StateOfTheBoard = StateOfTheBoard.Clone(),
                 Eval = Eval,
-              
                 Moves=Moves==null?null:new List<MyPoint>(Moves)
             };
             return Clone;
@@ -38,16 +37,19 @@ namespace Chess0.ViewModel.AI_Player
      
 
 
-        private static DataMinMax EvaluateStateOfBoard(ObservableBoardCollection<TileModel> StateOfBoard)
+        private static DataMinMax EvaluateStateOfBoard(ObservableBoardCollection<TileModel> _stateofboard)
         {
             count++;
             Console.WriteLine($"index case number:{count}");
 
-            DataMinMax Evel_arg = new DataMinMax();
-            Evel_arg.StateOfTheBoard = StateOfBoard;
-            Evel_arg.Eval = 0;
+            DataMinMax Evel_arg = new DataMinMax()
+            {
+                StateOfTheBoard= _stateofboard,
+                Eval = 0
+            };
+    
 
-            Console.WriteLine($"StateOfBoard-tiles::{DiagnosticTools.print_Board_ToString(StateOfBoard)}/n/n/n");
+            Console.WriteLine($"StateOfBoard-tiles::{MyDiagnosticTools.Print_Board_ToString(_stateofboard)}/n/n/n");
             foreach (TileModel tile in Evel_arg.StateOfTheBoard)
             {
                 if (tile.Piece != null)
@@ -65,8 +67,7 @@ namespace Chess0.ViewModel.AI_Player
                 }
             }
             Console.WriteLine($"evel:{Evel_arg.Eval}");
-            return (DataMinMax)Evel_arg.Clone();
-
+            return Evel_arg;
 
 
         }
@@ -79,7 +80,7 @@ namespace Chess0.ViewModel.AI_Player
                 return EvaluateStateOfBoard(StateOfBoard);
             }
 
-            Console.WriteLine($"MinMaxDriver LINE82 ::StateOfBoard-tiles::{DiagnosticTools.print_Board_ToString(StateOfBoard)}/n/n/n");
+            Console.WriteLine($"MinMaxDriver LINE82 ::StateOfBoard-tiles::{MyDiagnosticTools.Print_Board_ToString(StateOfBoard)}/n/n/n");
 
             #region AI_Lock2_Checkrers
             List<TileModel> lock2 = new List<TileModel>();
@@ -190,7 +191,7 @@ namespace Chess0.ViewModel.AI_Player
         private static IEnumerator<DataMinMax> GetPieceAllPossiableMove(ObservableBoardCollection<TileModel> rootStateOfBoard, MyPoint PieceToCheck, int depth,Rules_Checkers rules)
         {
             
-            Console.WriteLine($"GetPieceAllPossiableMove LINE 192 ::StateOfBoard-tiles::{DiagnosticTools.print_Board_ToString(rootStateOfBoard)}/n/n/n");
+            Console.WriteLine($"GetPieceAllPossiableMove LINE 192 ::StateOfBoard-tiles::{MyDiagnosticTools.Print_Board_ToString(rootStateOfBoard)}/n/n/n");
 
             PathData viablepath = Rules_Checkers.ViablePath(rootStateOfBoard[PieceToCheck], rootStateOfBoard);
 

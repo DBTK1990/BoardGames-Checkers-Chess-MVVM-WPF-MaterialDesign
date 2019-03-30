@@ -1,13 +1,14 @@
-﻿using Chess0.Helper;
-using Chess0.Model;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Chess0.ViewModel.AI_Player
 {
-    interface ICapability_AI 
+    interface ICapability_AI
     {
-        IEnumerator<ObservableBoardCollection<TileModel>> GetPieceAllPossiableMove(ObservableBoardCollection<TileModel> StateOfBoard/*clone to baseTilew*/,MyPoint PieceToCheck, int depth = 0);
+        bool AI_thinking { get; set; }
+        void AI_Move();
     }
 }

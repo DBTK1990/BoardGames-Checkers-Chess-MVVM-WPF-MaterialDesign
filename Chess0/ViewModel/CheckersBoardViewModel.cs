@@ -1,27 +1,31 @@
 ﻿using Chess0.Helper;
 using Chess0.Model;
 
-using System.Collections.Generic;
+
 using System.Linq;
 using Chess0.ViewModel.Rules;
 using Chess0.ViewModel.Rules.Checkers;
+
 using System;
-using Chess0.Model.Peices;
+
 using Chess0.ViewModel.AI_Player;
 using System.Threading.Tasks;
 
 namespace Chess0.ViewModel
 {
-    class CheckersBoardViewModel : BaseBoardGameViewModel
+    class CheckersBoardViewModel : BaseBoardGameViewModel,ICapability_AI
     {
+        bool _AI_thinking = false;
+
+        public bool AI_thinking { get => _AI_thinking; set => _AI_thinking = value; }
 
         #region Constructor
         public CheckersBoardViewModel(IRules play) : base(play) { }
 
 
         #endregion Constructor
-        bool AI_thinking = false;
-        State AI = State.Black;
+  
+       
 
       
         private void AI_Move()
@@ -42,8 +46,8 @@ namespace Chess0.ViewModel
                 movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(),3, int.MinValue, int.MaxValue, State.Black, (Rules_Checkers)(Rules as Rules_Checkers).Clone());
 
                 //eatPieces
-                Console.WriteLine($"Org-tiles::{DiagnosticTools.print_Board_ToString(Tiles)}/n/n/n");
-                Console.WriteLine($"NextMove-tiles::{DiagnosticTools.print_Board_ToString(movetodo.StateOfTheBoard)}/n/n/n");
+                Console.WriteLine($"Org-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
+                Console.WriteLine($"NextMove-tiles::{MyDiagnosticTools.Print_Board_ToString(movetodo.StateOfTheBoard)}/n/n/n");
            
 
                 //genrate ai move
@@ -62,21 +66,21 @@ namespace Chess0.ViewModel
                     {
                         App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
                         {
-                            Console.WriteLine($"Org-tiles::{DiagnosticTools.print_Board_ToString(Tiles)}/n/n/n");
+                            Console.WriteLine($"Org-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
                           
 
                             Console.WriteLine($"capture happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
 
                             Rules.EatPiece(focus_pos, moveto, Tiles, DeadBlack, DeadWhite);
-                            Console.WriteLine($"NextMove-tiles::{DiagnosticTools.print_Board_ToString(Tiles)}/n/n/n");
+                            Console.WriteLine($"NextMove-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
                         });
 
 
                     }
                     else
                     {
-                            try
-                            {
+                          
+                            
                             App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
                             {
                                 Console.WriteLine($"move happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
@@ -85,13 +89,7 @@ namespace Chess0.ViewModel
                             });
 
                          
-                            }
-                            catch (Exception E)
-                            {
-
-                                Console.WriteLine($"Org-tiles::{DiagnosticTools.print_Board_ToString(Tiles)}/n/n/n");
-                                Console.WriteLine(E.Message);
-                            }
+                     
                     }
                   
                 }
@@ -245,6 +243,9 @@ namespace Chess0.ViewModel
 
         }
 
-
+        void ICapability_AI.AI_Move()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

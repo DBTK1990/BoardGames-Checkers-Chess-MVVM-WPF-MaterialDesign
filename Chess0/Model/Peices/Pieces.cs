@@ -25,7 +25,7 @@ namespace Chess0.Model.Peices
                     break;
             }
 
-            base.initProprties(pos, player, TempPath);
+            base.InitProprties(pos, player, TempPath);
 
         
         }
@@ -73,7 +73,7 @@ namespace Chess0.Model.Peices
             }
 
 
-            base.initProprties(pos, player, TempPath);
+            base.InitProprties(pos, player, TempPath);
 
         }
 
@@ -123,7 +123,7 @@ namespace Chess0.Model.Peices
                     break;
             }
 
-            base.initProprties(pos, player, TempPath);
+            base.InitProprties(pos, player, TempPath);
 
 
         }
@@ -168,7 +168,7 @@ namespace Chess0.Model.Peices
                
             }
 
-            base.initProprties(pos, player, TempPath);
+            base.InitProprties(pos, player, TempPath);
 
         }
 
@@ -214,7 +214,7 @@ namespace Chess0.Model.Peices
                     break;
             }
 
-            base.initProprties(pos, player, TempPath);
+            base.InitProprties(pos, player, TempPath);
 
         }
 
@@ -262,7 +262,7 @@ namespace Chess0.Model.Peices
                     break;
             }
 
-            base.initProprties(Pos, Player, TempPath);
+            base.InitProprties(Pos, Player, TempPath);
 
         }
 
@@ -347,7 +347,7 @@ namespace Chess0.Model.Peices
             }
 
 
-            base.initProprties(pos, player, TempPath);
+            base.InitProprties(pos, player, TempPath);
 
         }
 
@@ -423,7 +423,7 @@ namespace Chess0.Model.Peices
                     break;
             }
 
-            base.initProprties(pos, player, TempPath);
+            base.InitProprties(pos, player, TempPath);
 
         }
 

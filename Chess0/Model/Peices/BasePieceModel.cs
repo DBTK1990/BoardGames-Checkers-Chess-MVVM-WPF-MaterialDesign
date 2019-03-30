@@ -57,8 +57,9 @@ namespace Chess0.Model.Peices
         {
             return !(a==b);
         }
+     
 
-        protected void initProprties(MyPoint pos, State player, string path)
+        protected void InitProprties(MyPoint pos, State player, string path)
         {
             ImagePiece = new BitmapImage();
             ImagePiece.BeginInit();

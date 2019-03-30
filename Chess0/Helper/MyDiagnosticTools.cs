@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Chess0.Helper
 {
-    static class DiagnosticTools
+    static class MyDiagnosticTools
     {
 
-        public static string print_Board_ToString(ObservableBoardCollection<TileModel> print)
+        public static string Print_Board_ToString(ObservableBoardCollection<TileModel> print)
         {
             string strboard = $"{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}<";
             bool firstTime = false;

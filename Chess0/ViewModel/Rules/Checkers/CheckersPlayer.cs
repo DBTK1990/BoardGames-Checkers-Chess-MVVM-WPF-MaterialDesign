@@ -12,7 +12,7 @@ namespace Chess0.ViewModel.Rules.Checkers
     class CheckersPlayer
     {
 
-        private List<IPiece> pieces = new List<IPiece>();
+        readonly List<IPiece> pieces = new List<IPiece>();
 
         public List<IPiece> Pieces { get => pieces; }
 
