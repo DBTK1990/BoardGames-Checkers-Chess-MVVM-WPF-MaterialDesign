@@ -48,6 +48,18 @@ namespace Chess0.ViewModel
             }
         }
 
+        private string gamename;
+        public string GameName
+        {
+            get => gamename; 
+            
+            set
+            {
+                gamename = value;
+                OnPropertyChanged("GameName");
+            }
+        }
+
         #endregion
 
         #region constructor
@@ -56,6 +68,7 @@ namespace Chess0.ViewModel
        
             BoardViewModel = new ChessBoardViewModel(new Rules_Chess());
             ChooseGame = new RelayCommand(OnChooseGame);
+            GameName = "Chess Game";
             RestartGameCommand = BoardViewModel.RestartCommand;
 
         }
@@ -69,12 +82,14 @@ namespace Chess0.ViewModel
             if (Game.Chess.ToString() == game as string)
             {
                 BoardViewModel = new ChessBoardViewModel(new Rules_Chess());
-                
+                GameName = "Chess Game";
+
+
             }
             else if (Game.Checkers.ToString() == game as string)
             {
                 BoardViewModel = new CheckersBoardViewModel(new Rules_Checkers());
-                
+                GameName = "Checkers Game";
             }
             RestartGameCommand = BoardViewModel.RestartCommand;
         }

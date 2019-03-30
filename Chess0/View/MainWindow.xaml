@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:local="clr-namespace:Chess0"
+      
         xmlns:view="clr-namespace:Chess0.View"
         xmlns:ViewModel="clr-namespace:Chess0.ViewModel"
-        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        
        
         mc:Ignorable="d"
         Title="MainWindow"
@@ -48,7 +48,7 @@
         </StackPanel>
 
 
-        <TextBlock Grid.Row="1" HorizontalAlignment="Center" FlowDirection="RightToLeft">Chess Game</TextBlock>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{Binding GameName, Source={StaticResource mwvm}}" FlowDirection="RightToLeft"/>
 
         <StackPanel Grid.Row="2" x:Name="ChessWindow" Width="{Binding Width}" Height="{Binding Height}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0">
 
