@@ -1,10 +1,7 @@
 ﻿using Chess0.Helper;
 using Chess0.Model;
-using Chess0.Model.Peices;
 using Chess0.ViewModel.Rules;
-using Chess0.ViewModel.Rules.Chess;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
+
 
 namespace Chess0.ViewModel
 {

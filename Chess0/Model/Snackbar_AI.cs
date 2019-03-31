@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Chess0.Model
 {
-    class Snackbar_AI: NotifyPropertyChanged
+    class Snackbar_AI : NotifyPropertyChanged
     {
         private bool ai_isthinking_snackbar;
         public bool AI_IsThinking_Snackbar
