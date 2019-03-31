@@ -13,16 +13,12 @@ using System.Threading.Tasks;
 
 namespace Chess0.ViewModel
 {
-    class CheckersBoardViewModel : BaseBoardGameViewModel,ICapability_AI
+    class CheckersBoardViewModel : BaseBoardGameViewModel
     {
         bool _AI_thinking = false;
 
         public bool AI_thinking { get => _AI_thinking; set => _AI_thinking = value; }
-     
-
-
-
-
+        
         #region Constructor
         public CheckersBoardViewModel(IRules play) : base(play) { }
 
@@ -32,11 +28,10 @@ namespace Chess0.ViewModel
        
 
       
-        private void AI_Move()
+        void AI_Move()
         {
            
-            if (PlayerTurn == State.Black && !AI_thinking)
-            {
+            
                 Massege.AI_IsThinking_Snackbar = true;
                 AI_thinking = true;
 
@@ -46,16 +41,17 @@ namespace Chess0.ViewModel
                     tile.MarkColor = "White";
                 }
 
+                //res val of ai
                 DataMinMax movetodo = new DataMinMax();
 
+                //genrate ai move
                 movetodo = AI_Player_Checkers.MinMaxDriver(Tiles.Clone(),3, int.MinValue, int.MaxValue, State.Black, (Rules_Checkers)(Rules as Rules_Checkers).Clone());
 
-                //eatPieces
+                //logBoard org and choise of ai
                 Console.WriteLine($"Org-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
                 Console.WriteLine($"NextMove-tiles::{MyDiagnosticTools.Print_Board_ToString(movetodo.StateOfTheBoard)}/n/n/n");
            
 
-                //genrate ai move
                 MyPoint focus_pos=null;
                 MyPoint moveto=null;
                 bool capture = (MyPoint.GetDistence(movetodo.Moves[0], movetodo.Moves[1])>=2)?true:false;
@@ -71,8 +67,6 @@ namespace Chess0.ViewModel
                     {
                         App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
                         {
-                            Console.WriteLine($"Org-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
-                          
 
                             Console.WriteLine($"capture happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
                             try
@@ -83,9 +77,10 @@ namespace Chess0.ViewModel
                             {
                                 
                                 Console.WriteLine(e.Message);
-                                Console.WriteLine($"Org-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
+                                Console.WriteLine($"Exception NULL Ref EatPiece AI::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
+                                throw new Exception("PROBLEM IN EatPiece AI Task");
                             }
-                            Console.WriteLine($"NextMove-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
+                         
                         });
 
 
@@ -97,17 +92,17 @@ namespace Chess0.ViewModel
                             App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
                             {
                                 Console.WriteLine($"move happend: focus:({focus_pos.X},{focus_pos.Y}) , moveto:({moveto.X},{moveto.Y})");
-                            try
-                                {
-                                    Rules.MovePiece(focus_pos, moveto, Tiles);
-                                }
-                            catch (Exception e)
-                        {
-
-                            Console.WriteLine(e.Message);
-                            Console.WriteLine($"Org-tiles::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
-                        }
-                    });
+                                try
+                                    {
+                                        Rules.MovePiece(focus_pos, moveto, Tiles);
+                                    }
+                                catch (Exception e)
+                                    {
+                                        Console.WriteLine(e.Message);
+                                        Console.WriteLine($"Exception NULLRef MovePiece AI::{MyDiagnosticTools.Print_Board_ToString(Tiles)}/n/n/n");
+                                        throw new Exception("PROBLEM IN MovePiece AI Task");
+                                    }
+                            });
 
                          
                      
@@ -144,7 +139,7 @@ namespace Chess0.ViewModel
                 Massege.AI_IsThinking_Snackbar = false;
 
 
-            }
+            
         }
 
         protected async override void MyOnClick(object o)
@@ -158,11 +153,7 @@ namespace Chess0.ViewModel
 
 
                 if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visible" && Tiles[tileIndex].MarkColor == "Green")
-                {// if captured is not 0 do eat
-
-                    //move it to method inside base viewmodel
-
-
+                {
 
                     if ((Rules as Rules_Checkers).Capture)
                         Rules.EatPiece(Focus.Pos, tileIndex, Tiles, DeadBlack, DeadWhite);
@@ -172,18 +163,20 @@ namespace Chess0.ViewModel
                     //shift focus to move/eat pos
                     Focus = Tiles[tileIndex];
 
+
+
+                    
                     //hide all marking on the board
-
-                    //control win and turn switch
-
                     foreach (TileModel tile in Tiles)
                         tile.MarkVisibility = "Hidden";
-
+                   
+                    //control win and turn switch
                     if (Rules.WinCondition(Tiles.Clone()))
                         base.ShowGameOverDialog();
                     else
                         PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles, PlayerTurn);
 
+                    //restriction in checkers control focus
                     MyPoint PTempFocus2 = null;
                     if ((Rules as BaseRules_Checkers).Lock1 != null)
                         PTempFocus2 = (Rules as BaseRules_Checkers).Lock1;
@@ -195,6 +188,7 @@ namespace Chess0.ViewModel
                     //chosse next turn focus
                     Focus = (PTempFocus2 != null) ? Tiles[PTempFocus2] : null;
 
+                    //mark path for foucs on ui
                     if (Focus != null)
                         Rules.SimulatePath(Focus, Tiles);
 
@@ -240,42 +234,16 @@ namespace Chess0.ViewModel
 
 
                 }
-
-                await Task.Run(new Action(AI_Move));
-                // AI_Move();
-
-            }
-            else
-            {
-
-                     
-
-              
                 
+                // AI_Move()
+                if (PlayerTurn == State.Black && !AI_thinking)
+                {
+                    await Task.Run(new Action(AI_Move));
+                    
+                }
             }
-            /*if(AI_Player!=null)
-                   {
-                    AI_Player.ChossePathToGo(Tiles,IRules); -output:pointToMoveto
-
-
-                       if(AI_Player.move==true)
-                            Rules.MovePiece(piece to move, point to moveto, Tiles);
-                       else if(AI_Player.eat==truee) 
-                            Rules.EatPiece(Focus.Pos, tileIndex, Tiles, DeadBlack, DeadWhite);
-
-
-                       PlayerTurn = Rules.PlayerTurnSwitch(Focus, Tiles);
-                   }
-               */
-
-
-
-
+            
         }
-
-        void ICapability_AI.AI_Move()
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }
