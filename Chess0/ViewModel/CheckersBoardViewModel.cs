@@ -28,7 +28,7 @@ namespace Chess0.ViewModel
        
 
       
-        void AI_Move()
+        private bool AI_Move()
         {
            
             
@@ -104,11 +104,11 @@ namespace Chess0.ViewModel
                                     }
                             });
 
-                         
+                    
                      
                     }
-                  
-                }
+               
+            }
 
                
 
@@ -135,24 +135,25 @@ namespace Chess0.ViewModel
                     Rules.SimulatePath(Focus, Tiles);
 
 
-                AI_thinking = false;
+             
                 Massege.AI_IsThinking_Snackbar = false;
 
+            return false;
 
-            
         }
 
         protected async override void MyOnClick(object o)
         {
             if (!AI_thinking)
             {
+
+
                 MyPoint tileIndex = (MyPoint)o;
 
                 object[] dead = { DeadWhite, DeadBlack };
 
 
-
-                if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visible" && Tiles[tileIndex].MarkColor == "Green")
+                if (Focus != null && Tiles[tileIndex].MarkVisibility == "Visible" && Tiles[tileIndex].MarkColor == "Green" && PlayerTurn==State.White)
                 {
 
                     if ((Rules as Rules_Checkers).Capture)
@@ -180,7 +181,7 @@ namespace Chess0.ViewModel
                     MyPoint PTempFocus2 = null;
                     if ((Rules as BaseRules_Checkers).Lock1 != null)
                         PTempFocus2 = (Rules as BaseRules_Checkers).Lock1;
-                    else if (!(Rules as BaseRules_Checkers).IsLock2Empty())
+                    else if (!(Rules as BaseRules_Checkers).IsLock2Empty() && false)
                         PTempFocus2 = (Rules as BaseRules_Checkers).Lock2.First();
 
 
@@ -195,7 +196,7 @@ namespace Chess0.ViewModel
 
 
                 }
-                else if (Tiles[tileIndex].Piece != null && !AI_thinking)
+                else if (Tiles[tileIndex].Piece != null && !AI_thinking && PlayerTurn == State.White)
                 {
                     if (Tiles[tileIndex].Piece.Player == PlayerTurn)
                     {
@@ -231,18 +232,19 @@ namespace Chess0.ViewModel
                     }
 
 
-
+                  
 
                 }
-                
                 // AI_Move()
-                if (PlayerTurn == State.Black && !AI_thinking)
+                if (PlayerTurn == State.Black)
                 {
-                    await Task.Run(new Action(AI_Move));
-                    
+                    AI_thinking = await Task.Run(new Func<bool>(AI_Move));
+
                 }
+
+
             }
-            
+
         }
       
     }
