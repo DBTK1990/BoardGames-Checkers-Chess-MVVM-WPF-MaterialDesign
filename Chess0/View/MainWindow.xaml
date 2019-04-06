@@ -37,6 +37,10 @@
                             <MenuItem Header="Checkers" Command="{Binding ChooseGame, Source={StaticResource mwvm}}" CommandParameter="{Binding Header, RelativeSource={RelativeSource Self}}"/>
                     </MenuItem>
                 </MenuItem>
+                <MenuItem Header="TryOnlineConnection" Background="AliceBlue">
+                    <MenuItem Header="TryConnection" Command="{Binding SendMassage, Source={StaticResource mwvm}}"  />
+
+                </MenuItem>
             </Menu>
              
             

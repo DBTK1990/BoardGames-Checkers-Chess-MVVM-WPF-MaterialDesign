@@ -3,6 +3,8 @@ using System.Windows.Input;
 using Chess0.Helper;
 using Chess0.ViewModel.Rules.Chess;
 using Chess0.ViewModel.Rules.Checkers;
+using Chess0.WebSocketService;
+using System.Net.WebSockets;
 
 namespace Chess0.ViewModel
 {
@@ -48,6 +50,13 @@ namespace Chess0.ViewModel
             }
         }
 
+        private ICommand sendmassage;
+        public ICommand SendMassage
+        {
+            get { return sendmassage; }
+            set { sendmassage = value; }
+        }
+
         private string gamename;
         public string GameName
         {
@@ -70,6 +79,7 @@ namespace Chess0.ViewModel
             ChooseGame = new RelayCommand(OnChooseGame);
             GameName = "Chess Game";
             RestartGameCommand = BoardViewModel.RestartCommand;
+            SendMassage = new RelayCommand(OnTrySendMassage);
 
         }
 
@@ -93,8 +103,16 @@ namespace Chess0.ViewModel
             }
             RestartGameCommand = BoardViewModel.RestartCommand;
         }
-        #endregion Command
-    }
+        private async void OnTrySendMassage(object game)
+        {
+            
+
+
+
+        }
+
+            #endregion Command
+        }
 
 
 }
